@@ -5,7 +5,7 @@ It's only support image file type now.
 
 ## Demo
 
-[Live Demo](http://demo.lf.idv.tw/lf-ng-md-file-input/example/)
+[Live Demo](http://shuyu.github.io/lf-ng-md-file-input/example/)
 
 ## Release History
  
