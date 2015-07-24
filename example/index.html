@@ -1,0 +1,138 @@
+<html lang="en" ng-app="demo">
+    <head>
+        <meta name="viewport" content="initial-scale=1" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+
+        <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+
+        <link rel="stylesheet" href="../bower_components/angular-material-icons/angular-material-icons.css">
+        
+        <link rel="stylesheet" href="../dist/lf-ng-md-file-input.css">
+
+        <script src="../bower_components/angular/angular.js"></script>
+        
+        <script src="../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../bower_components/angular-aria/angular-aria.js"></script>
+        <script src="../bower_components/angular-material/angular-material.js"></script>
+        <script src="../bower_components/angular-material-icons/angular-material-icons.js"></script>
+
+        <script src="../dist/lf-ng-md-file-input.js"></script>
+
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+        <script type="text/javascript">
+            
+            var app = angular.module('demo', ['ngMaterial','lfNgMdFileInput','ngMdIcons']);
+
+            app.controller('DemoController',function($scope){
+                
+                $scope.$watch(function(){
+                    return $scope.files1;
+                },function(newVal){
+                    console.log(newVal);
+                },true);
+
+            });
+            
+        </script>
+
+        <style>
+            xmp{
+                -moz-border-radius: 7px;
+                -webkit-border-radius: 7px;
+                border-radius: 7px;
+                border: 2px solid #EEE;
+                display: inline-block;
+                padding: 5px 10px 5px 10px;
+            }
+            h2{
+                padding-top:20px;
+            }
+        </style>
+
+    <body layout="column">
+        
+        <md-toolbar layout="row" layout-align="center center">
+            
+            <h1>lf-ng-md-file-input</h1>
+
+        </md-toolbar>
+        
+        <div ng-view layout="column" layout-padding flex ng-controller="DemoController">
+            <!-- <div layout="column"  layout-padding flex> -->
+            <md-content>
+
+                <!-- <h3 ng-if="files1.length">Read files from lf-files.lfFile</h3>
+                <div ng-repeat="file in files1">
+                    <h4>No{{$index+1}}. Name : {{file.lfFile.name}} , Type : {{file.lfFile.type}} , Size :  {{file.lfFile.size}}</4>
+                </div> -->
+                <h2>Usage</h2>
+                    <p>
+                        lf-ng-md-file-input directive will return a array via lf-files attribute binding,
+                        the object in array contain two object are lfFile and lfDataUrl,
+                        that you can grab file and preview dataurl easily.
+                    </p>
+                <h2>Basic</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files01" ></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files1" multiple></lf-ng-md-file-input>
+
+
+                <h2>Multiple</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files02" multiple></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files02" multiple></lf-ng-md-file-input>
+
+                <h2>Custom placeholder</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files03" lf-placeholder="my placeholder" ></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files03" lf-placeholder="my placeholder" ></lf-ng-md-file-input>
+
+                <h2>Preview</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files04" preview ></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files04" preview ></lf-ng-md-file-input>
+
+                <h2>Drag</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files05" dragable preview ></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files05" drag preview ></lf-ng-md-file-input>
+
+                <h2>Combination</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files06" lf-placeholder="Pick Image" multiple dragable preview ></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files06" lf-placeholder="Pick Image" multiple drag preview ></lf-ng-md-file-input>
+
+
+            </md-content>
+            <!-- </div> -->
+        </div>
+
+        
+
+        <div layout="row" layout-align="center">
+            <p>LF &copy; copyright</p>
+        </div>
+        
+
+    </body>
+</html>

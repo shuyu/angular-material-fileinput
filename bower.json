@@ -1,0 +1,26 @@
+{
+  "name": "lf-ng-md-fileinput",
+  "version": "0.1.0",
+  "authors": [
+    "shuyu <lfshuyu@gmail.com>"
+  ],
+  "description": "angular material file input with more feature.",
+  "keywords": [
+    "angular",
+    "material",
+    "file",
+    "input"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.10.0",
+    "angular-material-icons": "~0.5.0"
+  }
+}
