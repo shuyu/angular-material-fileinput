@@ -1,4 +1,4 @@
-# lf-ng-md-file-input
+# angular-material-fileinput
 A Html file input enhance base on angular material.
 
 It's only support image file type now.
