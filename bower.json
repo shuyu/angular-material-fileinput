@@ -21,7 +21,8 @@
     "example",
     "*.md",
     "*.rb",
-    "scss"
+    "scss",
+    "LICENSE"
   ],
   "dependencies": {
     "angular-material": "~0.10",
