@@ -44,7 +44,7 @@
                                     '--><md-button class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
                                         '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
                                         ' Browse',
-                                        '<input type="file" accept="image/*" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                        '<input type="file" accept="{{accept}}" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                     '</md-button>',
                                 '</div>',
                             '</div>',
@@ -52,10 +52,12 @@
             replace: true,
             scope:{
                 lfFiles:'=?',
-                lfPlaceholder:'@?'
+                lfPlaceholder:'@?',
+                accept:'@?'
             },
             link: function(scope,element,attrs){
 
+                scope.accept = scope.accept || 'image/*';
                 scope.lfFiles = [];
 
                 scope.bool_file_multiple = false;
