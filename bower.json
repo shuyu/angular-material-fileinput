@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/shuyu/angular-material-fileinput",
   "main": [
-    "dist"
+    "./dist/lf-ng-md-file-input.css",
+    "./dist/lf-ng-md-file-input.js"
   ]
 }
