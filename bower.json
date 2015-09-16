@@ -25,8 +25,8 @@
     "LICENSE"
   ],
   "dependencies": {
-    "angular-material": "~0.10",
-    "angular-material-icons": "~0.5"
+    "angular-material": "~0.x",
+    "angular-material-icons": "~0.x"
   },
   "homepage": "https://github.com/shuyu/angular-material-fileinput",
   "main": [

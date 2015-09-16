@@ -53,7 +53,7 @@
             scope:{
                 lfFiles:'=?',
                 lfPlaceholder:'@?',
-                accept:'@?'
+                //accept:'@?'
             },
             link: function(scope,element,attrs){
 
