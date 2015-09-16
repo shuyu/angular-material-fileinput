@@ -1,6 +1,8 @@
 (function(angular) {
     'use strict';
 
+    var version = '0.1.1';
+
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial','ngMdIcons']);
 
     lfNgMdFileinput.directive('lfNgMdFileInput',function($q){
@@ -53,7 +55,7 @@
             scope:{
                 lfFiles:'=?',
                 lfPlaceholder:'@?',
-                //accept:'@?'
+                accept:'@?'
             },
             link: function(scope,element,attrs){
 
@@ -179,10 +181,6 @@
                         });
                     }
                 });
-
-
-                //console.log('')
-                
 
                 scope.onFileRemoved = function(){
                     scope.lfFiles = [];

@@ -1,0 +1,29 @@
+{
+  "name": "lf-ng-md-file-input",
+  "version": "0.1.1",
+  "description": "angular material file input with more feature.",
+  "main": "./dist/lf-ng-md-file-input.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuyu/angular-material-fileinput.git"
+  },
+  "keywords": [
+    "angular",
+    "material",
+    "file",
+    "input"
+  ],
+  "author": "shuyu <lfshuyu@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shuyu/angular-material-fileinput/issues"
+  },
+  "homepage": "https://github.com/shuyu/angular-material-fileinput#readme"
+}
+
