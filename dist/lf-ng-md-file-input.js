@@ -39,7 +39,7 @@
                                     '</div>',
                                 '</div>',
                                 '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
-                                    '<md-button ng-hide="bool_file_null" ng-click="onFileRemoved()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
+                                    '<md-button type="button" ng-hide="bool_file_null" ng-click="onFileRemoved()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
                                         '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
                                         ' Remove',
                                     '</md-button><!--',
