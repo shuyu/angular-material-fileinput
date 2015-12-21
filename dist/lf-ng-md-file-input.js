@@ -5,7 +5,7 @@
 
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial','ngMdIcons']);
 
-    lfNgMdFileinput.directive('lfNgMdFileInput',function($q){
+    lfNgMdFileinput.directive('lfNgMdFileInput',['$q', function($q){
         return {
             restrict: 'E',
             template:  ['<div class="lf-ng-md-file-input" >',
@@ -271,9 +271,6 @@
             }
 
         }
-    });
-
-
-
+    }]);
 
 })(window.angular);
