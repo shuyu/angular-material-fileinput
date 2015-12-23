@@ -39,11 +39,11 @@
                                     '</div>',
                                 '</div>',
                                 '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
-                                    '<md-button type="button" ng-hide="bool_file_null" ng-click="removeFile()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
+                                    '<md-button type="button" ng-disabled="bool_disabled" ng-hide="bool_file_null" ng-click="removeFile()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
                                         '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
                                         ' Remove',
                                     '</md-button><!--',
-                                    '--><md-button ng-disabled="bool_disabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
+                                    '--><md-button type="button" ng-disabled="bool_disabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
                                         '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
                                         ' Browse',
                                         '<input type="file" accept="{{accept}}" ng-disabled="bool_disabled" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
@@ -210,12 +210,18 @@
                 });
 
                 scope.removeFile = function(){
+                    if(scope.bool_disabled){
+                        return;
+                    }
                     scope.lfFiles = [];
                     scope.str_file_name = '';
                     scope.bool_file_null = true;
                 };
 
                 scope.removeFileAt = function(index){
+                    if(scope.bool_disabled){
+                        return;
+                    }
                     scope.lfFiles.splice(index,1);
                     if(scope.lfFiles.length == 0){
                         scope.lfFiles = [];

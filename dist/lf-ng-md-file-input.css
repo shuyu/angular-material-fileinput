@@ -21,6 +21,10 @@
   float: none;
   text-align: right;
 }
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-x:focus {
+  outline: none;
+  border: 0;
+}
 .lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-drag {
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
@@ -122,6 +126,9 @@
   border-radius: 0 5px 5px 0;
 }
 .lf-ng-md-file-input .md-raised.lf-ng-md-file-input-button.lf-ng-md-file-input-button-remove {
+  -moz-border-radius: 0 0 0 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 0 0 0;
   z-index: 2;
 }
 .lf-ng-md-file-input .md-raised.lf-ng-md-file-input-button .lf-ng-md-file-input-type {
