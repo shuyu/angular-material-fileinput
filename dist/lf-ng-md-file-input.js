@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
 
-    var version = '0.1.1';
+    var version = '0.1.3';
 
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial','ngMdIcons']);
 
@@ -9,16 +9,16 @@
         return {
             restrict: 'E',
             template:  ['<div class="lf-ng-md-file-input" >',
-                            '<div class="lf-ng-md-file-input-preview-container" ng-show="bool_file_null && bool_file_draggable">',
+                            '<div class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':bool_disabled}" ng-show="bool_file_null && bool_file_draggable">',
                                 '<div class="lf-ng-md-file-input-drag" >',
                                     '<div class="lf-ng-md-file-input-drag-text"> Drag & drop files here ... </div>',
                                 '</div>',
                             '</div>',
-                            '<div class="lf-ng-md-file-input-preview-container" ng-hide="bool_file_null || !bool_file_preview">',
-                                '<div class="close lf-ng-md-file-input-x" ng-click="onFileRemoved()">&times;</div>',
+                            '<div class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':bool_disabled}" ng-hide="bool_file_null || !bool_file_preview">',
+                                '<div class="close lf-ng-md-file-input-x" ng-click="removeFile()">&times;</div>',
                                 '<div class="lf-ng-md-file-input-thumbnails">',
                                     '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles">',
-                                        '<div class="close lf-ng-md-file-input-x" ng-click="fileRemovedAt($index)">&times;</div>',
+                                        '<div class="close lf-ng-md-file-input-x" ng-click="removeFileAt($index)">&times;</div>',
                                         '<img ng-src={{lffile.lfDataUrl}}>',
                                         '<div class="lf-ng-md-file-input-frame-footer">',
                                             '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFile.name}}</div>',
@@ -28,7 +28,7 @@
                                 '</div>',
                             '</div>',
                             '<div class="lf-ng-md-file-input-container" >',
-                                '<div tabindex="-1" class="lf-ng-md-file-input-caption">',
+                                '<div tabindex="-1" class="lf-ng-md-file-input-caption" ng-class="{\'disabled\':bool_disabled}">',
                                     '<!--<span class="file-caption-ellipsis">&hellip;</span>-->',
                                     '<div class="lf-ng-md-file-input-caption-text" ng-hide="bool_file_null">',
                                         '<ng-md-icon icon="insert_drive_file" size="20" style="fill:black; "></ng-md-icon>',//attach_file
@@ -39,14 +39,14 @@
                                     '</div>',
                                 '</div>',
                                 '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
-                                    '<md-button type="button" ng-hide="bool_file_null" ng-click="onFileRemoved()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
+                                    '<md-button type="button" ng-hide="bool_file_null" ng-click="removeFile()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
                                         '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
                                         ' Remove',
                                     '</md-button><!--',
-                                    '--><md-button class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
+                                    '--><md-button ng-disabled="bool_disabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
                                         '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
                                         ' Browse',
-                                        '<input type="file" accept="{{accept}}" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                        '<input type="file" accept="{{accept}}" ng-disabled="bool_disabled" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                     '</md-button>',
                                 '</div>',
                             '</div>',
@@ -55,11 +55,13 @@
             scope:{
                 lfFiles:'=?',
                 lfPlaceholder:'@?',
-                accept:'@?'
+                accept:'@?',
+                ngDisabled:'=?'
             },
             link: function(scope,element,attrs){
 
                 scope.accept = scope.accept || 'image/*';
+                
                 scope.lfFiles = [];
 
                 scope.bool_file_multiple = false;
@@ -67,8 +69,18 @@
                 scope.bool_file_preview = false;
                 scope.bool_file_null = true;
 
+                scope.bool_disabled = false;
+
                 scope.str_file_name = '';
                 scope.str_caption_placeholder = 'Select file';
+
+                if (angular.isDefined(attrs.ngDisabled) ) {
+                    scope.$watch(function(){
+                        return scope.ngDisabled;
+                    }, function(isDisabled) {
+                        scope.bool_disabled = isDisabled;
+                    });
+                }
 
                 if(scope.lfPlaceholder){
                     scope.str_caption_placeholder = scope.lfPlaceholder;
@@ -108,29 +120,45 @@
                             e.stopPropagation();
                             e.preventDefault();
 
+                            if(scope.bool_disabled){
+                                return;
+                            }
+                        
                             div_drag.addClass("lf-ng-md-file-input-drag-hover");
-                            //e.target.className = (e.type == "dragover" ? "lf-md-filedrag.hover" : "lf-md-filedrag");
+
                         });
                         div_drag.bind("dragleave", function(e){
 
                             e.stopPropagation();
                             e.preventDefault();
+
+                            if(scope.bool_disabled){
+                                return;
+                            }
+
                             div_drag.removeClass("lf-ng-md-file-input-drag-hover");
-                            //e.target.className = (e.type == "dragover" ? "lf-md-filedrag.hover" : "lf-md-filedrag");
+
                         });
                         div_drag.bind("drop", function(e){
 
                             e.stopPropagation();
                             e.preventDefault();
 
+                            if(scope.bool_disabled){
+                                return;
+                            }
+
+                            div_drag.removeClass("lf-ng-md-file-input-drag-hover");
+
                             scope.lfFiles = [];
                             
                             var files_target = e.target.files || e.dataTransfer.files;
                             var files = [];
 
+                            var regexp = new RegExp(scope.accept, "i");
+
                             angular.forEach(files_target,function(obj,index){
-                                console.log(obj.type);
-                                if(obj.type.match(/^image\//)){
+                                if(obj.type.match(regexp)){
                                     files.push(obj);
                                 }
                             });
@@ -138,16 +166,15 @@
                             if(files.length>0){
                                 scope.bool_file_null = false;
                             }
-                            //var file = files[0];
-                            //console.log(files.splice(1));
+
                             if(scope.bool_file_multiple){
                                 if(files.length == 1){
-                                    scope.str_file_name = '' + files[0].name;//'file name';//scope.lfFiles[0].file.name;
+                                    scope.str_file_name = '' + files[0].name;
                                 }else{
-                                    scope.str_file_name = '' + files.length + ' files selected';//'&hellip;';
+                                    scope.str_file_name = '' + files.length + ' files selected';
                                 }
                                 for(var i=0;i<files.length;i++){
-                                    console.log(files[i]);
+                                    // console.log(files[i]);
                                     readAsDataURL(files[i],i).then(function(result){
 
                                         scope.lfFiles.push({
@@ -158,13 +185,13 @@
                                     },function(error){
 
                                     },function(notify){
-                                        console.log(notify);
+                                        // console.log(notify);
                                         //$scope.lf.progress = notify*100;
                                     });
                                 }
                             }else{
                                 if(files.length >= 1){
-                                    scope.str_file_name = '' + files[0].name;//'file name';//scope.lfFiles[0].file.name;
+                                    scope.str_file_name = '' + files[0].name;
                                     readAsDataURL(files[0],0).then(function(result){
                                         scope.lfFiles.push({
                                             "lfFile":files[result.index],
@@ -182,13 +209,13 @@
                     }
                 });
 
-                scope.onFileRemoved = function(){
+                scope.removeFile = function(){
                     scope.lfFiles = [];
                     scope.str_file_name = '';
                     scope.bool_file_null = true;
                 };
 
-                scope.fileRemovedAt = function(index){
+                scope.removeFileAt = function(index){
                     scope.lfFiles.splice(index,1);
                     if(scope.lfFiles.length == 0){
                         scope.lfFiles = [];
@@ -196,9 +223,9 @@
                         scope.bool_file_null = true;
                     }else{
                         if(scope.lfFiles.length == 1){
-                            scope.str_file_name = '' + scope.lfFiles[0].lfFile.name;//'file name';//scope.lfFiles[0].file.name;
+                            scope.str_file_name = '' + scope.lfFiles[0].lfFile.name;
                         }else{
-                            scope.str_file_name = '' + scope.lfFiles.length + ' files selected';//'&hellip;';
+                            scope.str_file_name = '' + scope.lfFiles.length + ' files selected';
                         }
                     }  
                 };
@@ -214,9 +241,9 @@
                     if(files.length>0){
 
                         if(files.length == 1){
-                            scope.str_file_name = '' + files[0].name;//'file name';//scope.lfFiles[0].file.name;
+                            scope.str_file_name = '' + files[0].name;
                         }else{
-                            scope.str_file_name = '' + files.length + ' files selected';//'&hellip;';
+                            scope.str_file_name = '' + files.length + ' files selected';
                         }
 
                         for(var i=0;i<files.length;i++){
@@ -238,11 +265,50 @@
                     
                 };
 
+                var parseFileType = function (file){
+                    var type =  file.type;
+                    var name =  file.name;
+                    if(isImageType(type,name)){
+                        return "image";
+                    }
+                    return "other";
+                };
+
+                var isImageType = function(type,name){
+                    return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
+                };
+                // image: function (vType, vName) {
+                //     return (vType !== undefined) ? vType.match('image.*') : vName.match(/\.(gif|png|jpe?g)$/i);
+                // },
+                // html: function (vType, vName) {
+                //     return (vType !== undefined) ? vType === 'text/html' : vName.match(/\.(htm|html)$/i);
+                // },
+                // text: function (vType, vName) {
+                //     return (vType !== undefined && vType.match('text.*')) || vName.match(
+                //             /\.(txt|md|csv|nfo|ini|json|php|js|css)$/i);
+                // },
+                // video: function (vType, vName) {
+                //     return (vType !== undefined && vType.match(/\.video\/(ogg|mp4|webm|3gp)$/i)) || vName.match(
+                //             /\.(og?|mp4|webm|3gp)$/i);
+                // },
+                // audio: function (vType, vName) {
+                //     return (vType !== undefined && vType.match(/\.audio\/(ogg|mp3|wav)$/i)) || vName.match(/\.(ogg|mp3|wav)$/i);
+                // },
+                // flash: function (vType, vName) {
+                //     return (vType !== undefined && vType === 'application/x-shockwave-flash') || vName.match(/\.(swf)$/i);
+                // },
+                // object: function () {
+                //     return true;
+                // },
+                // other: function () {
+                //     return true;
+                // }
+
                 var readAsDataURL = function (file,index) {
                 
                     var deferred = $q.defer();
                     
-                    var reader = new FileReader();//getReader(deferred, scope);         
+                    var reader = new FileReader();       
                     
                     reader.onloadstart = function(){
                         deferred.notify(0);

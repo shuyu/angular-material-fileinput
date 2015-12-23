@@ -47,7 +47,15 @@ gulp.task('styles', function() {
 });
 
 gulp.task('compass:watch',function(){
-	gulp.watch('./src/*.scss', ['compass']);
+    gulp.watch('./src/*.scss', ['compass']);
+});
+
+gulp.task('watch',function(){
+    gulp.watch('./src/*', ['scripts','styles']);
+});
+
+gulp.task('compass:watch',function(){
+	gulp.watch('./src/*.scss', ['styles']);
 });
 
 gulp.task('scripts:watch',function(){
