@@ -22,7 +22,10 @@
     "*.md",
     "*.rb",
     "scss",
-    "LICENSE"
+    "LICENSE",
+    "gulpfile.js",
+    "package.json",
+    "src"
   ],
   "dependencies": {
     "angular-material": "~1.0.1",
