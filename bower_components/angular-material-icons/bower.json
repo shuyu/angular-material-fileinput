@@ -1,11 +1,14 @@
 {
   "name": "angular-material-icons",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "authors": [
     "Urmil Parikh <urmil@klarsys.com>"
   ],
   "description": "AngularJS directive to use Material Design icons with custom fill color and size.",
-  "main": "angular-material-icons.min.js",
+  "main": [
+      "angular-material-icons.min.js",
+      "angular-material-icons.css"
+  ],
   "keywords": [
     "angular",
     "material",

@@ -25,12 +25,14 @@
     "LICENSE"
   ],
   "dependencies": {
-    "angular-material": "~0.x",
-    "angular-material-icons": "~0.x"
+    "angular-material": "~1.0.1",
+    "angular-material-icons": "~0.6.0"
   },
   "homepage": "https://github.com/shuyu/angular-material-fileinput",
   "main": [
     "./dist/lf-ng-md-file-input.css",
-    "./dist/lf-ng-md-file-input.js"
+    "./dist/lf-ng-md-file-input.min.css",
+    "./dist/lf-ng-md-file-input.js",
+    "./dist/lf-ng-md-file-input.min.js"
   ]
 }

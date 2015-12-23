@@ -2,20 +2,22 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.11.0
+ * v1.0.1
  */
 .md-select-menu-container {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 99;
-  opacity: 0; }
+  z-index: 90;
+  opacity: 0;
+  display: none; }
   .md-select-menu-container:not(.md-clickable) {
     pointer-events: none; }
   .md-select-menu-container md-progress-circular {
     display: table;
     margin: 24px auto !important; }
   .md-select-menu-container.md-active {
+    display: block;
     opacity: 1; }
     .md-select-menu-container.md-active md-select-menu {
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -31,7 +33,7 @@
     transition-duration: 250ms; }
 
 md-input-container > md-select {
-  margin: auto 0 0 0;
+  margin: 0;
   -webkit-order: 2;
       -ms-flex-order: 2;
           order: 2; }
@@ -41,6 +43,11 @@ md-select {
   display: -ms-flexbox;
   display: flex;
   margin: 20px 0 26px 0; }
+  md-select[disabled] .md-select-value {
+    background-position: 0 bottom;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+    margin-bottom: -1px; }
   md-select:focus {
     outline: none; }
   md-select[disabled]:hover {
@@ -73,14 +80,15 @@ md-select {
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1; }
+  .md-select-value .md-text {
+    display: inline; }
   .md-select-value *:first-child {
-    -webkit-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
+    -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+            flex: 1 0 auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: calc(100% - 2*8px);
     -webkit-transform: translate3d(0, 2px, 0);
             transform: translate3d(0, 2px, 0); }
   .md-select-value .md-select-icon {
@@ -120,7 +128,7 @@ md-select-menu {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.098), 0px 1px 5px 0px rgba(0, 0, 0, 0.084);
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   max-height: 256px;
   min-height: 48px;
   overflow-y: hidden;
@@ -169,6 +177,8 @@ md-option {
   width: auto;
   padding: 0 16px 0 16px;
   height: 48px; }
+  md-option[disabled] {
+    cursor: default; }
   md-option:focus {
     outline: none; }
   md-option .md-text {

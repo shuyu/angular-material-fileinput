@@ -1,31 +1,55 @@
-var gulp = require('gulp');
-var compass = require('gulp-compass');
-var minifycss = require('gulp-minify-css'),
+var gulp = require('gulp'),
+    uglify = require('gulp-uglify'),
+    compass = require('gulp-compass'),
+    minifycss = require('gulp-minify-css'),
 	rename = require('gulp-rename'),
 	del = require('del');
 
-gulp.task('clean', function() {  
-    del('./distTemp');
+gulp.task('default', ['clean'], function() {  
+    gulp.start('styles', 'scripts');
 });
 
-gulp.task('compass', function() {
-  	gulp.src('./scss/*.scss')
+gulp.task('clean', function() {  
+    del('./dist');
+});
+
+gulp.task('scripts', function() {  
+    gulp.src('src/*.js')
+        .pipe(
+            gulp.dest('./dist')
+        )
+        .pipe(
+            rename({suffix: '.min'})
+        )
+        .pipe(
+            uglify()
+        ).pipe(
+            gulp.dest('./dist')
+        );
+});
+
+gulp.task('styles', function() {
+  	gulp.src('./src/*.scss')
     	.pipe(
     		compass({
-	      		css: './distTemp',
-	      		sass: './scss',
-	      		image: './scss/images',
-	      		generated_images_path:'./distTemp/sprites'
+	      		css: './dist',
+	      		sass: './src',
+	      		image: './src/images',
+	      		generated_images_path:'./dist/sprites'
     		})
     	).pipe(
     		minifycss()
     	).pipe(
     		rename({suffix: '.min'})
     	).pipe(
-    		gulp.dest('./distTemp')
+    		gulp.dest('./dist')
     	);
 });
 
 gulp.task('compass:watch',function(){
-	gulp.watch('./scss/*.scss', ['compass']);
+	gulp.watch('./src/*.scss', ['compass']);
+});
+
+gulp.task('scripts:watch',function(){
+    gulp.watch('./src/*.js', ['scripts']);
 });

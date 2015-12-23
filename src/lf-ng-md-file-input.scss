@@ -1,0 +1,119 @@
+@import "compass/css3";
+
+.lf-ng-md-file-input{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+
+    .lf-ng-md-file-input-preview-container{
+        @include border-radius(5px);
+        @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
+        border: 1px solid #ddd;
+        padding: 5px;
+        margin-bottom: 10px;
+        .lf-ng-md-file-input-x{
+            float: none;
+            text-align: right;
+        }
+        .lf-ng-md-file-input-drag{
+            @include border-radius(7px);
+            height:200px;
+            line-height: 200px;
+            border: 2px dashed #DDD;
+        }
+        .lf-ng-md-file-input-drag-hover{
+            color: #ff0000;
+            border-color: #ff0000;
+            border-style: solid;
+        }
+        .lf-ng-md-file-input-drag-text{
+            font-size: 40px;
+            font-weight: 700;
+            color: rgba(0,0,0,0.26);
+            text-align: center;
+            white-space: nowrap;
+            overflow: scroll;
+        }
+        .lf-ng-md-file-input-frame{
+            @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
+            display: table;
+            margin: 8px;
+            height: 160px;
+            border: 1px solid #ddd;
+            padding: 6px;
+            float: left;
+            text-align: center;
+            vertical-align: middle;
+            >img{
+                height: 160px;
+                width:auto;
+                max-width: 100%;
+            }
+            .lf-ng-md-file-input-frame-caption{
+                padding-top: 4px;
+                font-size: 11px;
+                color: #777;
+            }
+        }
+    }
+
+    .lf-ng-md-file-input-container{
+        @include border-radius(5px);
+        @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26)); 
+        display:table;
+        position:relative;
+        .lf-ng-md-file-input-caption{
+            @include border-radius(5px 0 0 5px);
+            position:relative;
+            display:table-cell;
+            width:100%;
+            z-index: 2;
+            padding-left:12px;
+            .lf-ng-md-file-input-caption-text{
+                font-weight: 700
+            }
+            .lf-ng-md-file-input-caption-text-default{
+                color: rgba(0,0,0,0.26); 
+                font-weight: 700
+            }
+        }
+        
+    }
+
+    .md-raised{
+        ng-md-icon {
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 1;
+        }
+        &.lf-ng-md-file-input-button{
+            @include inline-block;
+            @include box-shadow(none);
+            @include border-radius(none);
+            position:relative;
+            margin: 0;
+            padding: 0;
+            min-height: initial;
+            min-width: 100px;
+            &.lf-ng-md-file-input-button-brower{
+                @include border-radius(0 5px 5px 0);
+            }
+            &.lf-ng-md-file-input-button-remove{
+                z-index:2;
+            }
+            .lf-ng-md-file-input-type{
+                @include opacity(0);
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                min-width: 100%;
+                min-height: 100%;
+                background: none repeat scroll 0 0 transparent;
+                cursor: inherit;
+            }
+        }
+    }
+    
+
+}
