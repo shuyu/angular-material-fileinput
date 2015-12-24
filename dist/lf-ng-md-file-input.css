@@ -50,7 +50,7 @@
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   display: table;
   margin: 8px;
-  height: 160px;
+  /*height: 160px;*/
   border: 1px solid #ddd;
   padding: 6px;
   float: left;

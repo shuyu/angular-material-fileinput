@@ -1,14 +1,18 @@
 (function(angular) {
     'use strict';
 
-    var version = '0.1.3';
-
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial','ngMdIcons']);
 
-    lfNgMdFileinput.directive('lfNgMdFileInput',['$q', function($q){
+    lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
+        return function(url) {
+            return $sce.trustAsResourceUrl(url);
+        };
+    }]);
+
+    lfNgMdFileinput.directive('lfNgMdFileInput',['$q', function($q,$compile){
         return {
             restrict: 'E',
-            template:  ['<div class="lf-ng-md-file-input" >',
+            template:  ['<div class="lf-ng-md-file-input">',
                             '<div class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':bool_disabled}" ng-show="bool_file_null && bool_file_draggable">',
                                 '<div class="lf-ng-md-file-input-drag" >',
                                     '<div class="lf-ng-md-file-input-drag-text"> Drag & drop files here ... </div>',
@@ -19,7 +23,14 @@
                                 '<div class="lf-ng-md-file-input-thumbnails">',
                                     '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles">',
                                         '<div class="close lf-ng-md-file-input-x" ng-click="removeFileAt($index)">&times;</div>',
-                                        '<img ng-src={{lffile.lfDataUrl}}>',
+                                            '<img ng-if="lffile.lfTagType==\'image\'" ng-src={{lffile.lfDataUrl}} >',
+                                            '<video controls ng-if="lffile.lfTagType==\'video\'">',
+                                                '<source ng-src="{{lffile.lfDataUrl | lfTrusted}}" type={{lffile.lfType}}>',
+                                            '</video>',
+                                            '<audio controls ng-if="lffile.lfTagType==\'audio\'">',
+                                                '<source ng-src="{{lffile.lfDataUrl | lfTrusted}}" type={{lffile.lfType}}>',
+                                            '</audio>',
+                                            '<object ng-if="lffile.lfTagType==\'object\'" data={{lffile.lfDataUrl}}></object>',
                                         '<div class="lf-ng-md-file-input-frame-footer">',
                                             '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFile.name}}</div>',
                                         '</div>',
@@ -60,7 +71,7 @@
             },
             link: function(scope,element,attrs){
 
-                scope.accept = scope.accept || 'image/*';
+                scope.accept = scope.accept;//|| '.png';//'image/*';
                 
                 scope.lfFiles = [];
 
@@ -73,6 +84,13 @@
 
                 scope.str_file_name = '';
                 scope.str_caption_placeholder = 'Select file';
+                // var tpl = $compile( '{{str_caption_placeholder}}' );
+                // scope.str_caption_placeholder = tpl(scope);
+                //var template = angular.element('{{str_caption_placeholder}}');
+                //cope.str_caption_placeholder = template;
+                //$compile(template)(scope);
+                //element.append(template);
+                //$compile(template)(scope);
 
                 if (angular.isDefined(attrs.ngDisabled) ) {
                     scope.$watch(function(){
@@ -84,8 +102,6 @@
 
                 if(scope.lfPlaceholder){
                     scope.str_caption_placeholder = scope.lfPlaceholder;
-                }else{
-                    scope.str_caption_placeholder = 'Select file';
                 }
 
                 if('preview' in attrs){
@@ -156,8 +172,9 @@
                             var files = [];
 
                             var regexp = new RegExp(scope.accept, "i");
-
+                            // console.log()
                             angular.forEach(files_target,function(obj,index){
+                                console.log(obj.type.match(regexp));
                                 if(obj.type.match(regexp)){
                                     files.push(obj);
                                 }
@@ -176,7 +193,7 @@
                                 for(var i=0;i<files.length;i++){
                                     // console.log(files[i]);
                                     readAsDataURL(files[i],i).then(function(result){
-
+                                        // console.log(result);
                                         scope.lfFiles.push({
                                             "lfFile":files[result.index],
                                             "lfDataUrl":result.result
@@ -254,12 +271,38 @@
 
                         for(var i=0;i<files.length;i++){
                             
+                            var count = 0;
+
                             readAsDataURL(files[i],i).then(function(result){
 
+                                var lfFile = files[result.index];
+                                var lfFileType = lfFile.type;
+                                var lfTagType = parseFileType(lfFile);
+                                var lfDataUrl = window.URL.createObjectURL(lfFile);
+                                if(lfTagType == "image"){
+                                    lfDataUrl = result.result;
+                                }
+                                //var dataUrl = result.result;
+                                //var dataPath = window.URL.createObjectURL(file);
+
+                                // console.log(dataPath);
+                                //console.log(data);
+                                // console.log(parseFileType(file));
+
                                 scope.lfFiles.push({
-                                    "lfFile":files[result.index],
-                                    "lfDataUrl":result.result
+                                    "lfFile":lfFile,
+                                    "lfFileType":lfFileType,
+                                    "lfTagType":lfTagType,
+                                    "lfDataUrl":lfDataUrl
                                 });
+
+                                count++;
+
+                                if( count == files.length ){
+                                    console.log(scope.lfFiles);
+                                }
+                                //console.log('should late');
+                                // if()
 
                             },function(error){
 
@@ -267,6 +310,8 @@
 
                             });
                         }
+
+                        //console.log('should first');
                     }
                     
                 };
@@ -274,15 +319,33 @@
                 var parseFileType = function (file){
                     var type =  file.type;
                     var name =  file.name;
+                    console.log("file type : "+type);
                     if(isImageType(type,name)){
                         return "image";
+                    }else if(isVideoType(type,name)){
+                        return "video";
+                    }else if(isAudioType(type,name)){
+                        return "audio";
                     }
-                    return "other";
+                    return "object";
                 };
 
                 var isImageType = function(type,name){
                     return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
                 };
+
+                var isVideoType = function(type,name){
+                    return (type.match('video.*') || name.match(/\.(og?|mp4|webm|3gp)$/i)) ? true : false;
+                };
+                var isAudioType = function(type,name){
+                    return (type.match('audio.*') || name.match(/\.(ogg|mp3|wav)$/i)) ? true : false;
+                };
+
+                //file_extension  A file extension starting with the STOP character, e.g: .gif, .jpg, .png, .doc
+                //audio/* All sound files are accepted
+                //video/* All video files are accepted
+                //image/* All image files are accepted
+                
                 // image: function (vType, vName) {
                 //     return (vType !== undefined) ? vType.match('image.*') : vName.match(/\.(gif|png|jpe?g)$/i);
                 // },
@@ -321,10 +384,15 @@
                     };
 
                     reader.onload = function(event){
+                        // window.URL
                         deferred.resolve({
                             'index':index,
                             'result':reader.result
                         });
+                    };
+
+                    reader.onloadend = function(){
+                        console.log('on load end');
                     };
 
                     reader.onerror = function(event){
