@@ -50,7 +50,7 @@
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   display: table;
   margin: 8px;
-  /*height: 160px;*/
+  height: 160px;
   border: 1px solid #ddd;
   padding: 6px;
   float: left;
@@ -131,7 +131,7 @@
   border-radius: 0 0 0 0;
   z-index: 2;
 }
-.lf-ng-md-file-input .md-raised.lf-ng-md-file-input-button .lf-ng-md-file-input-type {
+.lf-ng-md-file-input .md-raised.lf-ng-md-file-input-button .lf-ng-md-file-input-tag {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   display: block;

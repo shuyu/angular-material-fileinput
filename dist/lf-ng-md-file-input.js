@@ -57,7 +57,7 @@
                                     '--><md-button type="button" ng-disabled="bool_disabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
                                         '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
                                         ' Browse',
-                                        '<input type="file" accept="{{accept}}" ng-disabled="bool_disabled" class="lf-ng-md-file-input-type" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                        '<input type="file" accept="{{accept}}" ng-disabled="bool_disabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                     '</md-button>',
                                 '</div>',
                             '</div>',
@@ -91,6 +91,7 @@
                 //$compile(template)(scope);
                 //element.append(template);
                 //$compile(template)(scope);
+                var el_fileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
 
                 if (angular.isDefined(attrs.ngDisabled) ) {
                     scope.$watch(function(){
@@ -230,9 +231,47 @@
                     if(scope.bool_disabled){
                         return;
                     }
+                    
                     scope.lfFiles = [];
                     scope.str_file_name = '';
                     scope.bool_file_null = true;
+
+                    el_fileinput.val('');
+                    
+                    // console.log(element[0].querySelector('.lf-ng-md-file-input-tag'));
+                    //var el_fileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
+                    // console.log(el_fileinput.val());
+                    // console.log(el_fileinput[0].files);
+                    
+                    // console.log(el_fileinput);
+                    // console.log(el_fileinput.val());
+                    // console.log(el_fileinput[0].files);
+                    /*
+                        var self = this, $el = self.$element, $srcFrm, $tmpFrm, $tmpEl;
+                        if (isEmpty($el.val())) {
+                            return;
+                        }
+                        // Fix for IE ver < 11, that does not clear file inputs
+                        // Requires a sequence of steps to prevent IE crashing but
+                        // still allow clearing of the file input.
+                        if (self.isIE9 || self.isIE10) {
+                            $srcFrm = $el.closest('form');
+                            $tmpFrm = $(document.createElement('form'));
+                            $tmpEl = $(document.createElement('div'));
+                            $el.before($tmpEl);
+                            if ($srcFrm.length) {
+                                $srcFrm.after($tmpFrm);
+                            } else {
+                                $tmpEl.after($tmpFrm);
+                            }
+                            $tmpFrm.append($el).trigger('reset');
+                            $tmpEl.before($el).remove();
+                            $tmpFrm.remove();
+                        } else { // normal input clear behavior for other sane browsers
+                            $el.val('');
+                        }
+                        self.fileInputCleared = true;
+                    */
                 };
 
                 scope.removeFileAt = function(index){
@@ -279,6 +318,7 @@
                                 var lfFileType = lfFile.type;
                                 var lfTagType = parseFileType(lfFile);
                                 var lfDataUrl = window.URL.createObjectURL(lfFile);
+                                
                                 if(lfTagType == "image"){
                                     lfDataUrl = result.result;
                                 }
@@ -299,7 +339,12 @@
                                 count++;
 
                                 if( count == files.length ){
-                                    console.log(scope.lfFiles);
+                                    //console.log(scope.lfFiles);
+                                    //console.log()
+                                    //var el_fileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
+                                    //console.log(el_fileinput.val());
+                                    //console.log(el_fileinput[0].files);
+                                    el_fileinput.val('');
                                 }
                                 //console.log('should late');
                                 // if()
