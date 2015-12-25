@@ -17,6 +17,7 @@
         .lf-ng-md-file-input-x{
             float: none;
             text-align: right;
+            margin-bottom: 5px;
             &:focus{
                 outline: none;
                 border: 0;
@@ -24,20 +25,21 @@
         }
         .lf-ng-md-file-input-drag{
             @include border-radius(7px);
-            height:200px;
-            line-height: 200px;
+            /*height:200px;
+            line-height: 200px;*/
             border: 2px dashed #DDD;
         }
         .lf-ng-md-file-input-drag-hover{
-            border: 2px dashed #ff0000;
+            border: 2px dashed #ffffff;
+            background-color:rgba(0,0,0,0.1);
         }
-        .lf-ng-md-file-input-drag-text{
-            font-size: 40px;
-            font-weight: 700;
-            color: rgba(0,0,0,0.26);
-            text-align: center;
-            white-space: nowrap;
-            overflow: scroll;
+        .lf-ng-md-file-input-drag-text-container{
+            height:200px;
+            .lf-ng-md-file-input-drag-text{
+                font-size: 40px;
+                font-weight: 700;
+                color: rgba(0,0,0,0.26);
+            }
         }
         .lf-ng-md-file-input-frame{
             @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
