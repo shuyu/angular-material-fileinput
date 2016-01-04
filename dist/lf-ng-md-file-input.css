@@ -64,6 +64,27 @@
   width: auto;
   max-width: 100%;
 }
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame > video {
+  height: 160px;
+  widht: auto;
+  max-width: 100%;
+}
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame > audio {
+  height: 160px;
+  widht: auto;
+  max-width: 100%;
+}
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame > object {
+  height: 160px;
+  widht: auto;
+  max-width: 100%;
+}
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame > object .lf-ng-md-file-input-preview-default {
+  height: 160px;
+  width: 160px;
+  background-color: white;
+  text-align: left;
+}
 .lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame .lf-ng-md-file-input-frame-caption {
   padding-top: 4px;
   font-size: 11px;
