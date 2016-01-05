@@ -75,9 +75,16 @@
                     width:160px;
                     background-color:white;
                     text-align:left;
+                    .lf-ng-md-file-input-preview-icon{
+                        margin: 40px 40px 40px 40px;
+                    }
                 }
             }
             .lf-ng-md-file-input-frame-caption{
+                margin: 0px auto 0px auto;
+                width: 160px;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 padding-top: 4px;
                 font-size: 11px;
                 color: #777;
