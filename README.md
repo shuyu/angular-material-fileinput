@@ -2,7 +2,7 @@
 
 A Html file input enhance base on angular material.
 
-It's support multiple file type .
+This directive try to make input file or file upload intuitive.
 
 ![screensho 0](http://shuyu.github.io/angular-material-fileinput/resources/screenshot_0.png)
 
