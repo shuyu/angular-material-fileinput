@@ -31,9 +31,57 @@ Add `lfNgMdFileInput` as a module dependency for your module.
 var app = angular.module('app', ['ngMaterial','ngMdIcons','lfNgMdFileInput']);
 ```
 
+##Usage
+
+This directive will return a array via lf-files attribute binding, the object in array contain some object include lfFile and lfDataUrl, that you can grab file and preview dataurl easily.
+
+###Basic
+
 ```html
 
-<lf-ng-md-file-input lf-files="files" lf-placeholder="Pick Image" multiple drag preview></lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files="files"></lf-ng-md-file-input>
+
+```
+
+###Accept
+
+Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
+
+```html
+
+<lf-ng-md-file-input lf-files="files" accept=".png"></lf-ng-md-file-input>
+
+```
+
+###Multiple
+
+```html
+
+<lf-ng-md-file-input lf-files="files" multiple></lf-ng-md-file-input>
+
+```
+
+###Placeholder
+
+```html
+
+<lf-ng-md-file-input lf-files="files" lf-placeholder="my placeholder"></lf-ng-md-file-input>
+
+```
+
+###Preview
+
+```html
+
+<lf-ng-md-file-input lf-files="files" preview></lf-ng-md-file-input>
+
+```
+
+###Drag
+
+```html
+
+<lf-ng-md-file-input lf-files="files" drag></lf-ng-md-file-input>
 
 ```
 
