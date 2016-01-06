@@ -1,7 +1,10 @@
 # angular-material-fileinput
+
 A Html file input enhance base on angular material.
 
-It's only support image file type now.
+It's support multiple file type .
+
+![screensho 0](http://shuyu.github.io/angular-material-fileinput/resources/screenshot_0.png)
 
 ## Demo
 
@@ -37,3 +40,4 @@ var app = angular.module('app', ['ngMaterial','ngMdIcons','lfNgMdFileInput']);
 ## Release History
  
 * v0.1.0 - Initial release.
+* v1.0.0 - Standard features.
