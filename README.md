@@ -1,4 +1,4 @@
-# angular-material-fileinput
+# Angular Material File Input
 
 A Html file input enhance base on angular material.
 
