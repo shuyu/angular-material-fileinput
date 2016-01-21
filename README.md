@@ -85,7 +85,24 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ```
 
+###Change labels
+
+```html
+<lf-ng-md-file-input lf-files="files" lf-drag-and-drop-label="Drag and Drop this" drag></lf-ng-md-file-input>
+```
+
+```html
+
+<lf-ng-md-file-input lf-files="files" lf-browse-label="Browse..."></lf-ng-md-file-input>
+```
+
+```html
+
+<lf-ng-md-file-input lf-files="files" lf-remove-label="Trash"></lf-ng-md-file-input>
+```
+
 ## Release History
  
 * v0.1.0 - Initial release.
 * v1.0.0 - Standard features.
+* v1.1.0 - New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label
