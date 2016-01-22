@@ -1,7 +1,6 @@
 .lf-ng-md-file-input {
   margin-top: 5px;
   margin-bottom: 5px;
-  width: 100%;
 }
 .lf-ng-md-file-input .lf-ng-md-file-input-preview-container {
   -moz-border-radius: 5px;
@@ -113,7 +112,6 @@
   border-radius: 5px 0 0 5px;
   position: relative;
   display: table-cell;
-  width: 100%;
   z-index: 2;
   padding-left: 12px;
 }

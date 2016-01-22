@@ -105,13 +105,7 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ```
 
-###Api
-
-```html
-
-<lf-ng-md-file-input lf-files="files" lf-api="api"></lf-ng-md-file-input>
-
-```
+###API
 
 ```html
 
@@ -122,11 +116,11 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 | Name           | Parameter   |  Description |
 | :------------- | :---------- | :---------------- |
-| `removeAll`    | ` `         | `Remove all file` |
+| `removeAll`    |             | `Remove all file` |
 
 ## Release History
  
 * v0.1.0 - Initial release.
 * v1.0.0 - Standard features.
 * v1.1.0 - New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
-* v1.2.0 - Add lf-api attribute bind to interaction with directive.
+* v1.2.0 - New lf-api attribute bind to interaction with directive.
