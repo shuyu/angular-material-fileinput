@@ -66,6 +66,7 @@
             replace: true,
             scope:{
                 lfFiles:'=?',
+                lfApi:'=?',
                 lfPlaceholder:'@?',
 				lfDragAndDropLabel:'@?',
 				lfBrowseLabel: '@?',
@@ -111,6 +112,13 @@
                 scope.accept = scope.accept || '';
 
                 scope.lfFiles = [];
+
+                scope.lfApi = new function(){
+                    var self = this;
+                    self.removeAll = function(){
+                        scope.removeAllFiles();
+                    };
+                };
 
                 scope.isFilesNull = true;
 
@@ -268,7 +276,6 @@
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
                             if(names.indexOf(file.name) == -1){
-                                console.log('remove');
                                 scope.removeAllFiles();
                                 setTimeout(readFile(file), 100);
                                 break;
@@ -301,7 +308,7 @@
                         // "lfFileType":lfFileType,
                         // "lfTagType":lfTagType,
 
-                        console.log(scope.lfFiles);
+                        // console.log(scope.lfFiles);
 
                         var elFrame = angular.element('<div class="lf-ng-md-file-input-frame"></div>');
 
