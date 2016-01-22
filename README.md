@@ -4,7 +4,7 @@ A Html file input enhance base on angular material.
 
 This directive try to make input file or file upload intuitive.
 
-![screensho 0](http://shuyu.github.io/angular-material-fileinput/resources/screenshot_0.png)
+![screensho 0](http://shuyu.github.io/angular-material-fileinput/example/screenshot/screenshot_0.png)
 
 ## Demo
 
