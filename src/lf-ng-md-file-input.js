@@ -17,7 +17,7 @@
                                 '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull" >&times;</div>',
                                 '<div class="lf-ng-md-file-input-drag">',
                                     '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="isFilesNull && isDrag">',
-                                        '<div class="lf-ng-md-file-input-drag-text">Drag & drop files here ...</div>', 
+                                        '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                                     '</div>',
                                     '<div class="lf-ng-md-file-input-thumbnails">',
                                         // '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles">',
@@ -53,11 +53,11 @@
                                 '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
                                     '<md-button type="button" ng-disabled="isDisabled" ng-hide="isFilesNull" ng-click="removeAllFiles()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
                                         '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
-                                        ' Remove',
+                                        ' {{strCaptionRemove}}',
                                     '</md-button><!--',
                                     '--><md-button type="button" ng-disabled="isDisabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
                                         '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
-                                        ' Browse',
+                                        ' {{strCaptionBrowse}}',
                                         '<input type="file" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                     '</md-button>',
                                 '</div>',
@@ -67,6 +67,9 @@
             scope:{
                 lfFiles:'=?',
                 lfPlaceholder:'@?',
+				lfDragAndDropLabel:'@?',
+				lfBrowseLabel: '@?',
+				lfRemoveLabel: '@?',
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -75,11 +78,11 @@
                 var elFileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
-                
+
                 scope.isPreview = false;
                 scope.isDrag = false;
                 scope.isMutiple = false;
-                
+
                 if('preview' in attrs){
                     scope.isPreview = true;
                 }
@@ -106,18 +109,36 @@
                 }
 
                 scope.accept = scope.accept || '';
-                
+
                 scope.lfFiles = [];
-                
+
                 scope.isFilesNull = true;
 
                 scope.strCaption = '';
 
-                scope.strCaptionPlaceholder = 'Select file';                
+                scope.strCaptionPlaceholder = 'Select file';
+
+				scope.strCaptionDragAndDrop = 'Drag & drop files here...';
+
+				scope.strCaptionBrowse = 'Browse';
+
+				scope.strCaptionRemove = 'Remove';
 
                 if(scope.lfPlaceholder){
                     scope.strCaptionPlaceholder = scope.lfPlaceholder;
                 }
+
+				if(scope.lfDragAndDropLabel){
+					scope.strCaptionDragAndDrop = scope.lfDragAndDropLabel;
+				}
+
+				if(scope.lfBrowseLabel){
+					scope.strCaptionBrowse = scope.lfBrowseLabel;
+				}
+
+				if(scope.lfRemoveLabel){
+					scope.strCaptionRemove = scope.lfRemoveLabel;
+				}
 
                 elDragview.bind("dragover", function(e){
                     e.stopPropagation();
@@ -144,13 +165,13 @@
                     if(scope.isDisabled || !scope.isDrag){
                         return;
                     }
-                    
+
                     elDragview.removeClass("lf-ng-md-file-input-drag-hover");
-                    
+
                     var files = e.target.files || e.dataTransfer.files;
 
                     if(files.length <= 0){
-                        return; 
+                        return;
                     }
 
                     var names = scope.lfFiles.map(function(obj){return obj.lfFileName;});
@@ -158,7 +179,7 @@
                     var regexp = new RegExp(scope.accept, "i");
 
                     if(scope.isMutiple){
-                        
+
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
                             if(file.type.match(regexp)){
@@ -186,7 +207,7 @@
                 });
 
                 scope.removeAllFiles = function(event){
-                    
+
                     if(scope.isDisabled){
                         return;
                     }
@@ -196,7 +217,7 @@
                     elThumbnails.empty();
 
                     updateTextCaption();
-                    
+
                 };
 
                 scope.removeFileByName = function(name){
@@ -232,7 +253,7 @@
                     }
 
                     if(scope.isMutiple){
-                        
+
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
                             var intAvail = 1;
@@ -283,27 +304,27 @@
                         console.log(scope.lfFiles);
 
                         var elFrame = angular.element('<div class="lf-ng-md-file-input-frame"></div>');
-                        
+
                         var elFrameX = angular.element('<div class="lf-ng-md-file-input-x" ng-click="removeFileByName(\''+file.name+'\',$event)">&times;</div>');
-                        
+
                         var tplPreview = '';
 
                         if(lfTagType == 'image'){
-                        
+
                             tplPreview = '<img src="'+lfDataUrl+'" >';
-                        
+
                         }else if(lfTagType == 'video'){
-                        
+
                             tplPreview  =  ['<video controls>',
                                                 '<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
                                             '</video>'].join('');
-                        
+
                         }else if(lfTagType == 'audio'){
-                            
+
                             tplPreview  =  ['<audio controls>',
                                                 '<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
                                             '</audio>'].join('');
-                        
+
                         }else{
 
                             tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'"><param name="movie" value="'+lfFile.name+'" />',
@@ -321,7 +342,7 @@
                         elFrame.append(elFrameX);
                         elFrame.append(elPreview);
                         elFrame.append(elFooter);
-                        
+
                         $compile(elFrame)(scope);
 
                         elThumbnails.append(elFrame);
@@ -335,7 +356,7 @@
                     });
 
                 };
-                
+
                 var updateTextCaption = function(){
                     if(scope.lfFiles.length == 1){
                         scope.strCaption = '' + scope.lfFiles[0].lfFileName;
@@ -375,17 +396,17 @@
                 };
 
                 var readAsDataURL = function (file,index) {
-                
+
                     var deferred = $q.defer();
-                    
-                    var reader = new FileReader();       
-                    
+
+                    var reader = new FileReader();
+
                     reader.onloadstart = function(){
                         deferred.notify(0);
                     };
 
                     reader.onload = function(event){
-                        
+
                     };
 
                     reader.onloadend = function(event){

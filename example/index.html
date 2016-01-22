@@ -91,6 +91,25 @@
 
                 <lf-ng-md-file-input lf-files="files03" lf-placeholder="my placeholder" ></lf-ng-md-file-input>
 
+                <h2>Custom labels</h2>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files01" lf-browse-label="Search" lf-remove-label="Delete" ng-disabled="disabled01"></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files01" lf-browse-label="Search" lf-remove-label="Delete" ng-disabled="disabled01"></lf-ng-md-file-input>
+                <br>
+                <md-checkbox ng-model="disabled01" aria-label="disabled01">
+                    Disable
+                </md-checkbox>
+
+                <xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files01" lf-browse-label="Search" lf-remove-label="Delete" lf-drag-and-drop-label="Drag and Drop here!" drag preview></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="files01" lf-browse-label="Search" lf-remove-label="Delete" lf-drag-and-drop-label="Drag and Drop here!" drag preview></lf-ng-md-file-input>
+                <br>
+
                 <h2>Preview</h2>
 
                 <xmp class="prettyprint lang-html">
