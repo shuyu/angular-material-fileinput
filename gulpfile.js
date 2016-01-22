@@ -10,7 +10,7 @@ gulp.task('default', ['clean'], function() {
 });
 
 gulp.task('clean', function() {  
-    del('./dist');
+    del('./dist/*');
 });
 
 gulp.task('scripts', function() {  
