@@ -114,9 +114,9 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ```
 
-| Name           | Parameter   |  Description |
+| Name           | Parameter   | Description |
 | :------------- | :---------- | :---------------- |
-| `removeAll`    |             | `Remove all file` |
+| removeAll      |             | Remove all file  |
 
 ## Release History
  
