@@ -21,8 +21,22 @@ bower install lf-ng-md-file-input --save
 Add `dist/lf-ng-md-file-input.js` and `dist/lf-ng-md-file-input.css` to your index.html.
 
 ```html
-<link rel="stylesheet" href="../bower_components/lf-ng-md-file-input/dist/lf-ng-md-file-input.css">
-<script src="../bower_components/lf-ng-md-file-input/dist/lf-ng-md-file-input.js"></script>
+
+<!-- Angular Material Dependencies -->
+<link rel="stylesheet" href="./bower_components/angular-material/angular-material.min.css">
+<script src="./bower_components/angular/angular.min.js"></script>
+<script src="./bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="./bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="./bower_components/angular-material/angular-material.min.js"></script>
+
+<!-- Angular Material Fileinput Dependencies -->
+<link rel="stylesheet" href="./bower_components/angular-material-icons/angular-material-icons.css">
+<script src="./bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+
+<!-- Angular Material Fileinput -->
+<link rel="stylesheet" href="./bower_components/lf-ng-md-file-input/dist/lf-ng-md-file-input.css">
+<script src="./bower_components/lf-ng-md-file-input/dist/lf-ng-md-file-input.js"></script>
+
 ```
 
 Add `lfNgMdFileInput` as a module dependency for your module.
