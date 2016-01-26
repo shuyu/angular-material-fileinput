@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
 
-    var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial','ngMdIcons']);
+    var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
 
     lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
         return function(url) {
@@ -12,7 +12,7 @@
     lfNgMdFileinput.directive('lfNgMdFileInput',['$q','$compile', function($q,$compile){
         return {
             restrict: 'E',
-            template:  ['<div class="lf-ng-md-file-input">',
+            template:  ['<div layout="column" class="lf-ng-md-file-input">',
                             '<div class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
                                 '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull" >&times;</div>',
                                 '<div class="lf-ng-md-file-input-drag">',
@@ -39,29 +39,51 @@
                                     '<div class="clearfix" style="clear:both"></div>',
                                 '</div>',
                             '</div>',
-                            '<div class="lf-ng-md-file-input-container" >',
-                                '<div tabindex="-1" class="lf-ng-md-file-input-caption" ng-class="{\'disabled\':isDisabled}">',
-                                    '<!--<span class="file-caption-ellipsis">&hellip;</span>-->',
-                                    '<div class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
-                                        '<ng-md-icon icon="insert_drive_file" size="24" style="fill:black; "></ng-md-icon>',//attach_file
+                            '<div layout="row" class="lf-ng-md-file-input-container" >',
+                                '<div layout="row" class="lf-ng-md-file-input-caption" ng-class="{\'disabled\':isDisabled}" layout-align="start center" flex style="padding:0px 8px 0px 8px">',
+                                    '<md-icon class="lf-document" style="background-size:cover;"></md-icon>',
+                                    '<div flex style="margin-left:8px" class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
+                                        '{{strCaptionPlaceholder}}',
+                                    '</div>',
+                                    '<div flex style="margin-left:8px" class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
                                         '{{strCaption}}',
                                     '</div>',
-                                    '<div class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
-                                        ' {{strCaptionPlaceholder}}',
-                                    '</div>',
                                 '</div>',
-                                '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
-                                    '<md-button type="button" ng-disabled="isDisabled" ng-hide="isFilesNull" ng-click="removeAllFiles()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
-                                        '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
-                                        ' {{strCaptionRemove}}',
-                                    '</md-button><!--',
-                                    '--><md-button type="button" ng-disabled="isDisabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
-                                        '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
-                                        ' {{strCaptionBrowse}}',
-                                        '<input type="file" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
-                                    '</md-button>',
-                                '</div>',
+                                '<md-button ng-disabled="isDisabled" ng-click="removeAllFiles()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" style="margin:0px;padding:0px 8px 0px 8px;">',
+                                    '<md-icon class="lf-icon lf-remove" style="background-size:cover;" ></md-icon> ',
+                                    '{{strCaptionRemove}}',
+                                '</md-button>',
+                                '<md-button ng-disabled="isDisabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" style="margin:0px;padding:0px 8px 0px 8px;">',
+                                    '<md-icon class="lf-icon lf-browse" ></md-icon> ',
+                                    '{{strCaptionBrowse}}',
+                                    '<input type="file" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                '</md-button>',
                             '</div>',
+                            // '<div layout="row"  class="lf-ng-md-file-input-container">',//class="lf-ng-md-file-input-container"
+                            //     '<div flex layout="column" tabindex="-1" class="lf-ng-md-file-input-caption" ng-class="{\'disabled\':isDisabled}">',
+                            //         '<!--<span class="file-caption-ellipsis">&hellip;</span>-->',
+                            //         '<div class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
+                            //             '<ng-md-icon icon="insert_drive_file" size="24" style="fill:black; "></ng-md-icon>',//attach_file
+                            //             '{{strCaption}}',
+                            //         '</div>',
+                            //         '<div class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull" layout="row" layout-align="center center">',
+                            //             ' <md-icon class="lf-browse"></md-icon> ',
+                            //             // '<div layout  style="background-color:red">A</div>',
+                            //             ' {{strCaptionPlaceholder}}',
+                            //         '</div>',
+                            //     '</div>',
+                            //     '<div class="" style="position:relative;display:table-cell;width:1%;white-space:nowrap;">',
+                            //         '<md-button type="button" ng-disabled="isDisabled" ng-hide="isFilesNull" ng-click="removeAllFiles()" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove">',
+                            //             '<ng-md-icon icon="delete" size="24" style="fill:black;"></ng-md-icon>',
+                            //             ' {{strCaptionRemove}}',
+                            //         '</md-button><!--',
+                            //         '--><md-button type="button" ng-disabled="isDisabled" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower">',
+                            //             '<ng-md-icon icon="folder_open" size="24" style="fill:white;"></ng-md-icon>',
+                            //             ' {{strCaptionBrowse}}',
+                            //             '<input type="file" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                            //         '</md-button>',
+                            //     '</div>',
+                            // '</div>',
                         '</div>'].join(''),
             replace: true,
             scope:{
@@ -336,7 +358,8 @@
 
                             tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'"><param name="movie" value="'+lfFile.name+'" />',
                                                 '<div class="lf-ng-md-file-input-preview-default">',
-                                                    '<ng-md-icon class="lf-ng-md-file-input-preview-icon" icon="attach_file" size="80"></ng-md-icon>',
+                                                    '<md-icon class="lf-attach" ></md-icon>',
+                                                    // '<ng-md-icon class="lf-ng-md-file-input-preview-icon" icon="attach_file" size="80"></ng-md-icon>',
                                                 '</div>',
                                             '</object>'].join('');
 
