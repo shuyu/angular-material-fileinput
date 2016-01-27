@@ -161,7 +161,6 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 </script>
 
 <lf-ng-md-file-input lf-files="files" lf-option="option"></lf-ng-md-file-input>
-<md-button class="md-raised md-warn" ng-click="api.removeAll()">remove all</md-button>
 
 ```
 
