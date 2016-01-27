@@ -174,9 +174,15 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ## Release History
  
-* v0.1.0 - Initial release.
-* v1.0.0 - Standard features.
-* v1.1.0 - New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
-* v1.2.0 - New lf-api attribute bind to interaction with directive.
-* v1.3.0 - Remove angular-material-icons dependencies and New lf-option attribute to make icon changeable.
+* v0.1.0
+	* Initial release.
+* v1.0.0
+	* Standard features.
+* v1.1.0 
+	* New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
+* v1.2.0
+	* New lf-api attribute bind to interaction with directive.
+* v1.3.0    
+	* Make template much compatible with angular material.
+	* Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
 
