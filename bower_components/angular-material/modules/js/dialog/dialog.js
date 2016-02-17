@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.3
+ * v1.0.5
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -422,7 +422,6 @@ MdDialogDirective.$inject = ["$$rAF", "$mdTheming", "$mdDialog"];
  *     `three` into the controller, with the value 3. If `bindToController` is true, they will be
  *     copied to the controller instead.
  *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in.
- *     These values will not be available until after initialization.
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values, and the
  *     dialog will not open until all of the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
@@ -758,17 +757,23 @@ function MdDialogProvider($$interimElementProvider) {
         // Add keydown listeners
         element.on('keydown', keyHandlerFn);
         target.on('keydown', keyHandlerFn);
-        window.on('resize', onWindowResize);
 
         // Queue remove listeners function
         removeListeners.push(function() {
 
           element.off('keydown', keyHandlerFn);
           target.off('keydown', keyHandlerFn);
-          window.off('resize', onWindowResize);
 
         });
       }
+
+      // Register listener to update dialog on window resize
+      window.on('resize', onWindowResize);
+
+      removeListeners.push(function() {
+        window.off('resize', onWindowResize);
+      });
+
       if (options.clickOutsideToClose) {
         var target = element;
         var sourceElem;

@@ -28,7 +28,7 @@
     "src"
   ],
   "dependencies": {
-    "angular-material": "~1.0.3"
+    "angular-material": "^1.0.5"
   },
   "homepage": "https://github.com/shuyu/angular-material-fileinput",
   "main": [

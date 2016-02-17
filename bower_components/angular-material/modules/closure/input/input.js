@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.3
+ * v1.0.5
  */
 goog.provide('ng.material.components.input');
 goog.require('ng.material.core');
@@ -23,6 +23,7 @@ angular.module('material.components.input', [
   .directive('ngMessages', ngMessagesDirective)
   .directive('ngMessage', ngMessageDirective)
   .directive('ngMessageExp', ngMessageDirective)
+  .directive('mdSelectOnFocus', mdSelectOnFocusDirective)
 
   .animation('.md-input-invalid', mdInputInvalidMessagesAnimation)
   .animation('.md-input-messages-animation', ngMessagesAnimation)
@@ -43,7 +44,7 @@ angular.module('material.components.input', [
  *
  * @param md-is-error {expression=} When the given expression evaluates to true, the input container
  *   will go into error state. Defaults to erroring if the input has been touched and is invalid.
- * @param md-no-float {boolean=} When present, placeholders will not be converted to floating
+ * @param md-no-float {boolean=} When present, `placeholder` attributes on the input will not be converted to floating
  *   labels.
  *
  * @usage
@@ -60,6 +61,15 @@ angular.module('material.components.input', [
  * </md-input-container>
  *
  * </hljs>
+ *
+ * <h3>When disabling floating labels</h3>
+ * <hljs lang="html">
+ *
+ * <md-input-container md-no-float>
+ *   <input type="text" placeholder="Non-Floating Label">
+ * </md-input-container>
+ *
+ * </hljs>
  */
 function mdInputContainerDirective($mdTheming, $parse) {
   ContainerCtrl.$inject = ["$scope", "$element", "$attrs", "$animate"];
@@ -69,9 +79,24 @@ function mdInputContainerDirective($mdTheming, $parse) {
     controller: ContainerCtrl
   };
 
-  function postLink(scope, element, attr) {
+  function postLink(scope, element) {
     $mdTheming(element);
-    if (element.find('md-icon').length) element.addClass('md-has-icon');
+
+    var iconElements = element.find('md-icon');
+    var icons = iconElements.length ? iconElements : element[0].getElementsByClassName('md-icon');
+
+    // Incase there's one icon we want to identify where the icon is (right or left) and apply the related class
+    if (icons.length == 1) {
+      var next = icons[0].nextElementSibling;
+      var previous = icons[0].previousElementSibling;
+
+      element.addClass(next && next.tagName === 'INPUT' ? 'md-icon-left' :
+                       previous && previous.tagName === 'INPUT' ? 'md-icon-right' : '');
+    }
+    // In case there are two icons we apply both icon classes
+    else if (icons.length == 2) {
+      element.addClass('md-icon-left md-icon-right');
+    }
   }
 
   function ContainerCtrl($scope, $element, $attrs, $animate) {
@@ -254,7 +279,8 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     // Add an error spacer div after our input to provide space for the char counter and any ng-messages
     var errorsSpacer = angular.element('<div class="md-errors-spacer">');
-    element.after(errorsSpacer);
+    // element.after appending the div before the icon (if exist) which cause a problem with calculating which class to apply
+    element.parent().append(errorsSpacer);
 
     if (!containerCtrl.label) {
       $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
@@ -282,8 +308,9 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     var isParentFormSubmitted = function () {
       var parent = $mdUtil.getClosest(element, 'form');
+      var form = parent ? angular.element(parent).controller('form') : null;
 
-      return parent ? angular.element(parent).controller('form').$submitted : false;
+      return form ? form.$submitted : false;
     };
 
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
@@ -550,6 +577,29 @@ function placeholderDirective($log) {
 }
 placeholderDirective.$inject = ["$log"];
 
+function mdSelectOnFocusDirective() {
+
+  return {
+    restrict: 'A',
+    link: postLink
+  };
+
+  function postLink(scope, element, attr) {
+    if (element[0].nodeName !== 'INPUT' && element[0].nodeName !== "TEXTAREA") return;
+
+    element.on('focus', onFocus);
+
+    scope.$on('$destroy', function() {
+      element.off('focus', onFocus);
+    });
+
+    function onFocus() {
+      // Use HTMLInputElement#select to fix firefox select issues
+      element[0].select();
+    }
+  }
+}
+
 var visibilityDirectives = ['ngIf', 'ngShow', 'ngHide', 'ngSwitchWhen', 'ngSwitchDefault'];
 function ngMessagesDirective() {
   return {
@@ -612,6 +662,8 @@ function mdInputInvalidMessagesAnimation($q, $animateCss) {
 
       if (className == "md-input-invalid" && messages.hasClass('md-auto-hide')) {
         showInputMessages(element, $animateCss, $q).finally(done);
+      } else {
+        done();
       }
     }
 
