@@ -184,4 +184,6 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 * v1.3.0    
 	* Make template much compatible with angular material.
 	* Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
+* v1.3.1    
+    * Fix firefox upload button.
 
