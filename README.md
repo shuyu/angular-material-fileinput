@@ -151,7 +151,7 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 <script type="text/javascript">
 	...
-    $scope.optoin = {
+    $scope.option = {
         "browseIconCls":"myBrowse",
         "removeIconCls":"myRemove",
         "captionIconCls":"myCaption",
