@@ -14,13 +14,16 @@
         <script src="../bower_components/angular-aria/angular-aria.min.js"></script>
         <script src="../bower_components/angular-material/angular-material.min.js"></script>
 
-        <script src="../dist/lf-ng-md-file-input.js"></script>
+        <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
+
+        <!--<script src="../dist/lf-ng-md-file-input.js"></script>-->
+        <script src="../src/lf-ng-md-file-input.js"></script>
 
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
         <script type="text/javascript">
             
-            var app = angular.module('demo', ['ngMaterial','lfNgMdFileInput']);
+            var app = angular.module('demo', ['ngMaterial','ngMessages','lfNgMdFileInput']);
 
             app.controller('DemoController',function($scope){
                 $scope.optoin08 = {
@@ -28,6 +31,11 @@
                     "removeIconCls":"myRemove",
                     "captionIconCls":"myCaption",
                     "unknowIconCls":"myUnknow"
+                }
+                $scope.rr = 2;
+                $scope.ch = function(){
+                    $scope.rr = parseInt(Math.random()*10);
+                    console.log('ch');
                 }
             });
             
@@ -75,6 +83,19 @@
         <div ng-view layout="column" layout-padding flex ng-controller="DemoController">
 
             <md-content>
+                <h2>Validation</h2>
+                <form name="testForm">
+                    <lf-ng-md-file-input name="files" lf-api="api00" lf-files="files00" multiple></lf-ng-md-file-input>
+                    <div ng-messages="testForm.files.$error">
+                      <div ng-message="required">This is required.</div>
+                      <!-- <div ng-message="json">invalid json format</div> -->
+                      <!-- <div ng-message="md-maxlength">The name has to be less than 30 characters long.</div> -->
+                    </div>
+                  <!-- </md-input-container> -->
+                    <p>{{testForm.files.$error}}</p>
+                    <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api00.removeAll()">RemoveAll</md-button> 
+                    <md-button type="button" class="md-raised md-primary" ng-click="ch()">ch</md-button>  
+                </form>
 
                 <h2>Usage</h2>
                     <p>

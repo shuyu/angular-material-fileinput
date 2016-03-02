@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.6
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -793,7 +793,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
       setOptionValue(attr.value);
     } else {
       scope.$watch(function() {
-        return element.text();
+        return element.text().trim();
       }, setOptionValue);
     }
 

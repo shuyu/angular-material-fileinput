@@ -10,10 +10,46 @@
         };
     }]);
 
+    lfNgMdFileinput.directive('lfRequired', function() {
+        return {
+            restrict: "A",
+            require:"ngModel",
+            link: function(scope, element, attributes,ngModel) {
+                ngModel.$validators.required = function(value) {
+                    return value.length > 0;
+                };
+            }
+        }
+    });
+
+    // lfNgMdFileinput.directive('lfMaxcount', function() {
+    //     return {
+    //         restrict: "A",
+    //         require:"ngModel",
+    //         link: function(scope, element, attributes ,ngModel) {
+    //         	var intMaxcount = -1;
+				// attributes.$observe('lfMaxcount', function(value) {
+				// 	console.log(value);
+				// 	var intVal = parseInt(value,10);
+				// 	intMaxcount = isNaN(intVal) ? -1 : intVal;
+				// 	ngModel.$validate();
+				// });
+				// // ngModel.$validators.maxlength = function(modelValue, viewValue) {
+				// // 	return (maxlength < 0) || ctrl.$isEmpty(viewValue) || (viewValue.length <= maxlength);
+				// // };
+				
+    //             ngModel.$validators.maxcount = function(value) {
+    //                 // return value.length > 0;
+    //                 return value.length < intMaxcount;
+    //             };
+    //         }
+    //     }
+    // });
+
     lfNgMdFileinput.directive('lfNgMdFileInput',['$q','$compile','$timeout', function($q,$compile,$timeout){
         return {
             restrict: 'E',
-            template:  ['<div layout="column" class="lf-ng-md-file-input">',
+            template:  ['<div layout="column" class="lf-ng-md-file-input" ng-model="lfFiles" lf-required  >',
                             '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
                                 '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull" >&times;</div>',
                                 '<div class="lf-ng-md-file-input-drag">',

@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.6
  */
 goog.provide('ng.material.components.autocomplete');
 goog.require('ng.material.components.icon');
@@ -199,6 +199,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Removes any events or leftover elements created by this controller
    */
   function cleanup () {
+    if(!ctrl.hidden) {
+      $mdUtil.enableScrolling();
+    }
+
     angular.element($window).off('resize', positionDropdown);
     if ( elements ){
       var items = 'ul scroller scrollContainer input'.split(' ');
@@ -822,7 +826,9 @@ angular
  *     make suggestions
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
  *     for results
- * @param {boolean=} md-autofocus If true, will immediately focus the input element
+ * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a `$mdDialog`,
+ *     `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening. <br/><br/>
+ *     Also the autocomplete will immediately focus the input element.
  * @param {boolean=} md-autoselect If true, the first item will be selected by default
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
@@ -917,8 +923,9 @@ function MdAutocomplete () {
       inputId:        '@?mdInputId'
     },
     link: function(scope, element, attrs, controller) {
-      controller.hasNotFound = element.hasNotFoundTemplate;
-      delete element.hasNotFoundTemplate;
+      // Retrieve the state of using a md-not-found template by using our attribute, which will
+      // be added to the element in the template function.
+      controller.hasNotFound = !!element.attr('md-has-not-found');
     },
     template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
@@ -926,8 +933,10 @@ function MdAutocomplete () {
           leftover        = element.html(),
           tabindex        = attr.tabindex;
 
-      // Set our variable for the link function above which runs later
-      element.hasNotFoundTemplate = !!noItemsTemplate;
+      // Set our attribute for the link function above which runs later.
+      // We will set an attribute, because otherwise the stored variables will be trashed when
+      // removing the element is hidden while retrieving the template. For example when using ngIf.
+      if (noItemsTemplate) element.attr('md-has-not-found', true);
 
       if (!attr.hasOwnProperty('tabindex')) element.attr('tabindex', '-1');
 
