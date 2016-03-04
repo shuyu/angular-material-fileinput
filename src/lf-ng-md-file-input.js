@@ -2,6 +2,13 @@
 
     'use strict';
 
+    var genLfObjId = function(){
+    	return 	'lfobjxxxxxxxx'.replace(/[xy]/g, function(c) {
+	    			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+	    			return v.toString(16);
+				});
+    };
+
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
 
     lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
@@ -14,42 +21,137 @@
         return {
             restrict: "A",
             require:"ngModel",
-            link: function(scope, element, attributes,ngModel) {
-                ngModel.$validators.required = function(value) {
-                    return value.length > 0;
+            link: function(scope, element, attrs, ctrl) {
+            	if (!ctrl) {
+            		return;
+      			}
+      			ctrl.$validators.required = function(modelValue,viewValue) {
+      				if(!modelValue){
+      					return false;
+      				}
+        			return modelValue.length>0;
+      			};
+            }
+        }
+    });
+
+    lfNgMdFileinput.directive('lfMaxcount', function() {
+        return {
+            restrict: "A",
+            require:"ngModel",
+            link: function(scope, element, attrs ,ctrl) {
+            	if (!ctrl) {
+            		return;
+      			}
+            	var intMax = -1;
+				attrs.$observe('lfMaxcount', function(value) {
+					var intVal = parseInt(value,10);
+					intMax = isNaN(intVal) ? -1 : intVal;
+					ctrl.$validate();
+				});
+                ctrl.$validators.maxcount = function(modelValue,viewValue) {
+                	if(!modelValue){
+      					return false;
+      				}
+                    return modelValue.length <= intMax;
                 };
             }
         }
     });
 
-    // lfNgMdFileinput.directive('lfMaxcount', function() {
-    //     return {
-    //         restrict: "A",
-    //         require:"ngModel",
-    //         link: function(scope, element, attributes ,ngModel) {
-    //         	var intMaxcount = -1;
-				// attributes.$observe('lfMaxcount', function(value) {
-				// 	console.log(value);
-				// 	var intVal = parseInt(value,10);
-				// 	intMaxcount = isNaN(intVal) ? -1 : intVal;
-				// 	ngModel.$validate();
-				// });
-				// // ngModel.$validators.maxlength = function(modelValue, viewValue) {
-				// // 	return (maxlength < 0) || ctrl.$isEmpty(viewValue) || (viewValue.length <= maxlength);
-				// // };
-				
-    //             ngModel.$validators.maxcount = function(value) {
-    //                 // return value.length > 0;
-    //                 return value.length < intMaxcount;
-    //             };
-    //         }
-    //     }
-    // });
+    lfNgMdFileinput.directive('lfFilesize', function() {
+        return {
+            restrict: "A",
+            require:"ngModel",
+            link: function(scope, element, attrs ,ctrl) {
+            	if (!ctrl) {
+            		return;
+      			}
+            	var intMax = -1;
+				attrs.$observe('lfFilesize', function(value) {
+					var reg = /^[1-9][0-9]*(Byte|KB|MB)$/;
+					if(!reg.test(value)){
+						intMax = -1;
+					}else{
+						var sizes = ['Byte', 'KB', 'MB'];
+						var unit = value.match(reg)[1];
+						var number = value.substring(0,value.indexOf(unit));
+						sizes.every(function(obj,idx){
+							if(unit === obj){
+								intMax = parseInt(number)*Math.pow(1024,idx);
+								return false;
+							}else{
+								return true;
+							}
+						});
+					}
+					ctrl.$validate();
+				});
+                ctrl.$validators.filesize = function(modelValue,viewValue) {
+                	if(!modelValue){
+      					return false;
+      				}
+      				var boolValid = true;
+      				modelValue.every(function(obj,idx){
+      					if(obj.lfFile.size > intMax){
+      						boolValid = false;
+      						return false;
+      					}else{
+      						return true;
+      					}
+      				});
+      				return boolValid;
+                };
+            }
+        }
+    });
+
+	lfNgMdFileinput.directive('lfTotalsize', function() {
+        return {
+            restrict: "A",
+            require:"ngModel",
+            link: function(scope, element, attrs ,ctrl) {
+            	if (!ctrl) {
+            		return;
+      			}
+            	var intMax = -1;
+				attrs.$observe('lfTotalsize', function(value) {
+					var reg = /^[1-9][0-9]*(Byte|KB|MB)$/;
+					if(!reg.test(value)){
+						intMax = -1;
+					}else{
+						var sizes = ['Byte', 'KB', 'MB'];
+						var unit = value.match(reg)[1];
+						var number = value.substring(0,value.indexOf(unit));
+						sizes.every(function(obj,idx){
+							if(unit === obj){
+								intMax = parseInt(number)*Math.pow(1024,idx);
+								return false;
+							}else{
+								return true;
+							}
+						});
+					}
+					ctrl.$validate();
+				});
+                ctrl.$validators.totalsize = function(modelValue,viewValue) {
+                	if(!modelValue){
+      					return false;
+      				}
+      				var intTotal = 0;
+      				angular.forEach(modelValue,function(obj,idx){
+      					intTotal = intTotal + obj.lfFile.size;
+      				});
+      				return intTotal < intMax;
+                };
+            }
+        }
+    });
 
     lfNgMdFileinput.directive('lfNgMdFileInput',['$q','$compile','$timeout', function($q,$compile,$timeout){
         return {
             restrict: 'E',
-            template:  ['<div layout="column" class="lf-ng-md-file-input" ng-model="lfFiles" lf-required  >',
+            template:  ['<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
                             '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
                                 '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull" >&times;</div>',
                                 '<div class="lf-ng-md-file-input-drag">',
@@ -83,6 +185,7 @@
                             '</div>',
                         '</div>'].join(''),
             replace: true,
+            require:"ngModel",
             scope:{
                 lfFiles:'=?',
                 lfApi:'=?',
@@ -94,7 +197,9 @@
                 accept:'@?',
                 ngDisabled:'=?'
             },
-            link: function(scope,element,attrs){
+            link: function(scope,element,attrs,ctrl){
+
+            	
 
                 var elFileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
@@ -122,9 +227,7 @@
                 scope.isDisabled = false;
 
                 if (angular.isDefined(attrs.ngDisabled) ) {
-                    scope.$watch(function(){
-                        return scope.ngDisabled;
-                    }, function(isDisabled) {
+                    scope.$watch('ngDisabled', function(isDisabled) {
                         scope.isDisabled = isDisabled;
                     });
                 }
@@ -154,6 +257,11 @@
                 scope.accept = scope.accept || '';
 
                 scope.lfFiles = [];
+                
+                scope[attrs.ngModel] = scope.lfFiles;
+                scope.$watch('lfFiles.length',function(newVal,oldVal){
+            		ctrl.$validate();
+            	});
 
                 scope.lfApi = new function(){
                     var self = this;
@@ -279,7 +387,7 @@
 						return;
 					}
 
-					scope.lfFiles = [];
+					scope.lfFiles.length=0;
 
 					elThumbnails.empty();
 
@@ -481,6 +589,7 @@
 					};
 
 					reader.onprogress = function(event){
+						// console.log(event.loaded/event.total);
 						deferred.notify(event.loaded/event.total);
 					};
 
