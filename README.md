@@ -117,6 +117,25 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ```
 
+###Validation
+
+lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB, 5MB)
+
+```html
+
+<form name="testForm" layout="column">
+    <lf-ng-md-file-input name="files" lf-files="files" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" multiple drag preview></lf-ng-md-file-input>
+    <div ng-messages="testForm.files.$error" style="color:red;">
+        <div ng-message="required">This is required.</div>
+        <div ng-message="maxcount">Too many files.</div>
+        <div ng-message="filesize">File size too large.</div>
+        <div ng-message="totalsize">Total size too large.</div>
+    </div> 
+</form>
+
+```
+
+
 ###API
 
 ```html
@@ -186,4 +205,6 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 	* Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
 * v1.3.1    
     * Fix firefox upload button.
+* v1.4.0    
+    * Add validation feature.
 
