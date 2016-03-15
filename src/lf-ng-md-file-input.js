@@ -148,6 +148,39 @@
         }
     });
 
+    lfNgMdFileinput.directive('lfMimetype', function() {
+        return {
+            restrict: "A",
+            require:"ngModel",
+            link: function(scope, element, attrs ,ctrl) {
+                if (!ctrl) {
+                    return;
+                }
+                var reg;
+                attrs.$observe('lfMimetype', function(value) {
+                    reg = new RegExp(value, "i");
+                    ctrl.$validate();
+                });
+                ctrl.$validators.mimetype = function(modelValue,viewValue) {
+                    if(!modelValue){
+                        return false;
+                    }
+                    var boolValid = true;
+                    modelValue.every(function(obj,idx){
+                        console.log(obj);
+                        if(obj.lfFile.type.match(reg)){
+                            return true;
+                        }else{
+                            boolValid = false;
+                            return false;
+                        }
+                    });
+                    return boolValid;
+                };
+            }
+        }
+    });
+
     lfNgMdFileinput.directive('lfNgMdFileInput',['$q','$compile','$timeout', function($q,$compile,$timeout){
         return {
             restrict: 'E',
@@ -180,7 +213,7 @@
                                 '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
                                     '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
                                     '{{strCaptionBrowse}}',
-                                    '<input type="file" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                    '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                 '</md-button>',
                             '</div>',
                         '</div>'].join(''),
@@ -198,8 +231,6 @@
                 ngDisabled:'=?'
             },
             link: function(scope,element,attrs,ctrl){
-
-            	
 
                 var elFileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
@@ -232,6 +263,12 @@
                     });
                 }
 
+                scope.strAriaLabel = "";
+
+                if (angular.isDefined(attrs.ariaLabel)) {
+                    scope.strAriaLabel = attrs.ariaLabel;
+                }
+
                 scope.strBrowseIconCls = "lf-browse";
                 scope.strRemoveIconCls = "lf-remove";
                 scope.strCaptionIconCls = "lf-caption";
@@ -259,6 +296,7 @@
                 scope.lfFiles = [];
                 
                 scope[attrs.ngModel] = scope.lfFiles;
+
                 scope.$watch('lfFiles.length',function(newVal,oldVal){
             		ctrl.$validate();
             	});

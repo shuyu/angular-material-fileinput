@@ -16,8 +16,8 @@
 
         <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
 
-        <script src="../dist/lf-ng-md-file-input.js"></script>
-        <!--<script src="../src/lf-ng-md-file-input.js"></script>-->
+        <!--<script src="../dist/lf-ng-md-file-input.js"></script>-->
+        <script src="../src/lf-ng-md-file-input.js"></script>
 
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -95,7 +95,7 @@
 </md-checkbox>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01"></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01" accept="" aria-label="TT" drag></lf-ng-md-file-input>
                 
                 <br>
                 
@@ -173,24 +173,26 @@
 
                 <xmp class="prettyprint lang-html">
 <form name="testForm" layout="column">
-    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" multiple drag preview></lf-ng-md-file-input>
+    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
     <div ng-messages="testForm.files00.$error" style="color:red;">
         <div ng-message="required">This is required.</div>
         <div ng-message="maxcount">Too much files.</div>
         <div ng-message="filesize">File size too large.</div>
         <div ng-message="totalsize">Total size too large.</div>
+        <div ng-message="mimetype">Mimetype error.</div>
     </div>
     <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button> 
 </form>
                 </xmp>  
 
                 <form name="testForm" layout="column">
-                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" multiple drag preview></lf-ng-md-file-input>
+                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
                     <div ng-messages="testForm.files00.$error" style="color:red;">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="maxcount">Too many files.</div>
                         <div ng-message="filesize">File size too large.</div>
                         <div ng-message="totalsize">Total size too large.</div>
+                        <div ng-message="mimetype">Mimetype error.</div>
                     </div>
                     <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button> 
                 </form>

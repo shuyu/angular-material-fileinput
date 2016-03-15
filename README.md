@@ -55,13 +55,20 @@ This directive will return a array via lf-files attribute binding, the object in
 
 ```
 
+###Aria-label
+```html
+
+<lf-ng-md-file-input lf-files="files" aria-label="fileupload"></lf-ng-md-file-input>
+
+```
+
 ###Accept
 
-Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
+Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , video/mp4)
 
 ```html
 
-<lf-ng-md-file-input lf-files="files" accept=".png"></lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files="files" accept="image/*"></lf-ng-md-file-input>
 
 ```
 
@@ -119,17 +126,26 @@ Accept attribute can set file extension (e.g: .png) or MIME type (e.g: image/*)
 
 ###Validation
 
+| Attribute      | Description |
+| :------------- | :---------------- |
+| lf-required    | file input required |
+| lf-maxcount    | files count limit |
+| lf-filesize    | per file size limit  |
+| lf-totalsize   | total files size limit |
+| lf-mimetype    | mime type check  |
+
 lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB, 5MB)
 
 ```html
 
 <form name="testForm" layout="column">
-    <lf-ng-md-file-input name="files" lf-files="files" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" multiple drag preview></lf-ng-md-file-input>
+    <lf-ng-md-file-input name="files" lf-files="files" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
     <div ng-messages="testForm.files.$error" style="color:red;">
         <div ng-message="required">This is required.</div>
         <div ng-message="maxcount">Too many files.</div>
         <div ng-message="filesize">File size too large.</div>
         <div ng-message="totalsize">Total size too large.</div>
+        <div ng-message="mimetype">Mimetype error.</div>
     </div> 
 </form>
 
@@ -138,6 +154,10 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 ###API
 
+| Name           | Parameter   | Description |
+| :------------- | :---------- | :---------------- |
+| removeAll      |             | Remove all file  |
+
 ```html
 
 <lf-ng-md-file-input lf-files="files" lf-api="api"></lf-ng-md-file-input>
@@ -145,11 +165,14 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 ```
 
-| Name           | Parameter   | Description |
-| :------------- | :---------- | :---------------- |
-| removeAll      |             | Remove all file  |
-
 ###OPTION
+
+| Name           | Description |
+| :------------- | :---------------- |
+| browseIconCls  | Set class to browse icon  |
+| removeIconCls  | Set class to remove icon  |
+| captionIconCls | Set class to caption icon  |
+| unknowIconCls  | Set class to unknow icon  |
 
 ```html
 
@@ -183,28 +206,24 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 ```
 
-| Name           | Description |
-| :------------- | :---------------- |
-| browseIconCls  | Set class to browse icon  |
-| removeIconCls  | Set class to remove icon  |
-| captionIconCls | Set class to caption icon  |
-| unknowIconCls  | Set class to unknow icon  |
-
 ## Release History
  
-* v0.1.0
-	* Initial release.
-* v1.0.0
-	* Standard features.
-* v1.1.0 
-	* New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
-* v1.2.0
-	* New lf-api attribute bind to interaction with directive.
-* v1.3.0    
-	* Make template much compatible with angular material.
-	* Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
-* v1.3.1    
-    * Fix firefox upload button.
+* v1.4.1    
+    * Add MIME type validation.
+    * Add aria-label.
 * v1.4.0    
     * Add validation feature.
+* v1.3.1    
+    * Fix firefox upload button.
+* v1.3.0    
+    * Make template much compatible with angular material.
+    * Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
+* v1.2.0
+    * New lf-api attribute bind to interaction with directive.
+* v1.1.0 
+    * New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
+* v1.0.0
+    * Standard features.
+* v0.1.0
+    * Initial release.
 
