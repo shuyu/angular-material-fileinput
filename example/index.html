@@ -16,8 +16,8 @@
 
         <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
 
-        <!--<script src="../dist/lf-ng-md-file-input.js"></script>-->
-        <script src="../src/lf-ng-md-file-input.js"></script>
+        <script src="../dist/lf-ng-md-file-input.js"></script>
+        <!--<script src="../src/lf-ng-md-file-input.js"></script>-->
 
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -25,8 +25,9 @@
             
             var app = angular.module('demo', ['ngMaterial','ngMessages','lfNgMdFileInput']);
 
-            app.config(['$compileProvider', function ($compileProvider) {
+            app.config(['$compileProvider','$mdThemingProvider', function ($compileProvider,$mdThemingProvider) {
                 $compileProvider.debugInfoEnabled(false);
+                // $mdThemingProvider.theme('default').primaryPalette('teal');
             }]);
 
             app.controller('DemoController',function($scope){
@@ -123,13 +124,34 @@
 
                 <md-button class="md-raised md-warn" ng-click="api02.removeAll()">remove all file outside</md-button>
 
-                <h2>Custom placeholder</h2>
+                <h2>Custom placeholder and caption</h2>
 
-                <xmp class="prettyprint lang-html">
-<lf-ng-md-file-input lf-files="files03" lf-placeholder="my placeholder" ></lf-ng-md-file-input>
+                <xmp class="prettyprint lang-html" ng-non-bindable>
+<lf-ng-md-file-input lf-files="files03" lf-placeholder="{{myPlacehoder}}" lf-caption="{{myCaption}}" ></lf-ng-md-file-input>
+<div layout="row">
+    <md-input-container flex>
+        <label>My placeholder</label>
+        <input ng-model="myPlacehoder">
+    </md-input-container>
+    <md-input-container flex>
+        <label>My caption</label>
+        <input ng-model="myCaption">
+    </md-input-container>
+</div>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="files03" lf-placeholder="my placeholder" ></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="files03" lf-placeholder="{{myPlacehoder}}" lf-caption="{{myCaption}}" ></lf-ng-md-file-input>
+
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>My placeholder</label>
+                        <input ng-model="myPlacehoder">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>My caption</label>
+                        <input ng-model="myCaption">
+                    </md-input-container>
+                </div>
 
                 <h2>Custom labels</h2>
 

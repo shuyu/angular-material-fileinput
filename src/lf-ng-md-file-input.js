@@ -223,6 +223,7 @@
                 lfFiles:'=?',
                 lfApi:'=?',
                 lfOption:'=?',
+                lfCaption:'@?',
                 lfPlaceholder:'@?',
 				lfDragAndDropLabel:'@?',
 				lfBrowseLabel: '@?',
@@ -235,6 +236,8 @@
                 var elFileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
+
+                var isCustomCaption = false;
 
                 scope.isPreview = false;
                 scope.isDrag = false;
@@ -261,12 +264,6 @@
                     scope.$watch('ngDisabled', function(isDisabled) {
                         scope.isDisabled = isDisabled;
                     });
-                }
-
-                scope.strAriaLabel = "";
-
-                if (angular.isDefined(attrs.ariaLabel)) {
-                    scope.strAriaLabel = attrs.ariaLabel;
                 }
 
                 scope.strBrowseIconCls = "lf-browse";
@@ -320,8 +317,23 @@
 
 				scope.strCaptionRemove = 'Remove';
 
-                if(scope.lfPlaceholder){
-                    scope.strCaptionPlaceholder = scope.lfPlaceholder;
+                scope.strAriaLabel = "";
+
+                if (angular.isDefined(attrs.ariaLabel)) {
+                    scope.strAriaLabel = attrs.ariaLabel;
+                }
+
+                if(angular.isDefined(attrs.lfPlaceholder)){
+                    scope.$watch('lfPlaceholder', function(newVal) {
+                        scope.strCaptionPlaceholder = newVal;
+                    });
+                }
+
+                if (angular.isDefined(attrs.lfCaption) ) {
+                    isCustomCaption = true;
+                    scope.$watch('lfCaption', function(newVal) {
+                        scope.strCaption = newVal;
+                    });
                 }
 
 				if(scope.lfDragAndDropLabel){
@@ -567,13 +579,19 @@
 
 				var updateTextCaption = function(){
 					if(scope.lfFiles.length == 1){
-						scope.strCaption = '' + scope.lfFiles[0].lfFileName;
+                        if(!isCustomCaption){
+                            scope.strCaption = '' + scope.lfFiles[0].lfFileName;
+                        }
 						scope.isFilesNull  = false;
 					}else if(scope.lfFiles.length > 1){
-						scope.strCaption = '' + scope.lfFiles.length + ' files selected';
+                        if(!isCustomCaption){
+    						scope.strCaption = '' + scope.lfFiles.length + ' files selected';
+                        }
 						scope.isFilesNull  = false;
 					}else{
-						scope.strCaption = '';
+                        if(!isCustomCaption){
+						  scope.strCaption = '';
+                        }
 						scope.isFilesNull  = true;
 					}
 				};
