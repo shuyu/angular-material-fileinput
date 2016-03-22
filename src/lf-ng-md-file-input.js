@@ -213,7 +213,7 @@
                                 '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
                                     '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
                                     '{{strCaptionBrowse}}',
-                                    '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                    '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',//,onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                 '</md-button>',
                             '</div>',
                         '</div>'].join(''),
@@ -457,7 +457,7 @@
 
 				scope.onFileChanged = function(e){
 
-					var files = e.files;
+					var files = e.files || e.target.files;
 
 					var names = scope.lfFiles.map(function(obj){return obj.lfFileName;});
 
@@ -492,6 +492,8 @@
 					elFileinput.val('');
 
 				};
+
+                elFileinput.bind("change",scope.onFileChanged);
 
 				var readFile = function(file){
 

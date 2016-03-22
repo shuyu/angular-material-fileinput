@@ -16,8 +16,8 @@
 
         <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
 
-        <script src="../dist/lf-ng-md-file-input.js"></script>
-        <!--<script src="../src/lf-ng-md-file-input.js"></script>-->
+        <!--<script src="../dist/lf-ng-md-file-input.js"></script>-->
+        <script src="../src/lf-ng-md-file-input.js"></script>
 
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -25,7 +25,14 @@
             
             var app = angular.module('demo', ['ngMaterial','ngMessages','lfNgMdFileInput']);
 
+            app.config(['$compileProvider', function ($compileProvider) {
+                $compileProvider.debugInfoEnabled(false);
+            }]);
+
             app.controller('DemoController',function($scope){
+                $scope.$watch('files02.length',function(newVal,oldVal){
+                    console.log($scope.files02);
+                });
                 $scope.optoin08 = {
                     "browseIconCls":"myBrowse",
                     "removeIconCls":"myRemove",
