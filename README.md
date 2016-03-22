@@ -88,6 +88,14 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
+###Caption
+
+```html
+
+<lf-ng-md-file-input lf-files="files" lf-caption="my caption"></lf-ng-md-file-input>
+
+```
+
 ###Preview
 
 ```html
@@ -207,7 +215,9 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
- 
+* v1.4.2    
+    * Add lf-capion attribute to customize file caption.
+    * Fix bug when $compileProvider.debugInfoEnabled(false). 
 * v1.4.1    
     * Add MIME type validation.
     * Add aria-label.
