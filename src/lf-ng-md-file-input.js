@@ -167,7 +167,6 @@
                     }
                     var boolValid = true;
                     modelValue.every(function(obj,idx){
-                        console.log(obj);
                         if(obj.lfFile.type.match(reg)){
                             return true;
                         }else{
@@ -647,7 +646,6 @@
 					};
 
 					reader.onprogress = function(event){
-						// console.log(event.loaded/event.total);
 						deferred.notify(event.loaded/event.total);
 					};
 
