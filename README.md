@@ -45,7 +45,98 @@ var app = angular.module('app', ['ngMaterial','lfNgMdFileInput']);
 
 ##Usage
 
-This directive will return a array via lf-files attribute binding, the object in array contain some object include lfFile and lfDataUrl, that you can grab file and preview dataurl easily.
+This angular directive is focus on make material look and upload file base on ajax.
+
+So the most important thing is you need fetch files yourself from "lf-files" data bind, not input element because it will clear every time after resolve file.   
+
+The "lf-files" data is an array variable, object in array contain properties with lfFileName(file name) 、 lfFile(file object) and lfDataUrl(for preview) from resolve input file.
+
+You can observe "lf-files" by using $watch.
+
+####html
+
+```html
+
+    <lf-ng-md-file-input lf-files='files' multiple> </lf-ng-md-file-input>
+
+```
+
+####javascript
+
+```javascript
+
+    app.controller('MyCtrl',function($scope){
+        $scope.$watch('files.length',function(newVal,oldVal){
+            console.log($scope.files);
+        });
+    });
+
+```
+
+So after you finish select files you need adjust data like below to fit your server side.
+
+####client
+
+```javascript
+
+    app.controller('MyCtrl',function($scope){
+    
+        ...
+
+        $scope.onSubmit = function(){
+            var formData = new FormData();
+            angular.forEach($scope.files,function(obj){
+                formData.append('files[]', obj.lfFile);
+            });
+            $http.post('./upload', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function(result){
+                // do sometingh                   
+            },function(err){
+                // do sometingh
+            });
+        };
+
+        ...
+
+    });
+
+```
+
+In this example I use node.js( express + formidable ) on server side, "Formidable" is a node module for parsing form data, there has other similar like "Multer". 
+
+####server
+
+```javascript
+    
+    var express = require('express');
+    var formidable = require('formidable');
+    var app = express();
+    app.use(express.static(__dirname + '/public'));
+    
+    ...
+
+    app.post('/upload',function(req,res){
+        var form = new formidable.IncomingForm();
+        form.uploadDir = __dirname +'/public/uploads';
+        //file upload path
+        form.parse(req, function(err, fields, files) {
+            //you can get fields here
+        });
+        form.on ('fileBegin', function(name, file){
+            file.path = form.uploadDir + "/" + file.name;
+            //modify file path
+        });
+        form.on ('end', function(){
+            res.sendStatus(200);
+            //when finish all process    
+        });
+    });
+    
+    ...
+
+```
 
 ###Basic
 
