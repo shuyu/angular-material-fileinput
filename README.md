@@ -306,6 +306,8 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.4.3    
+    * Remove console.log calls.
 * v1.4.2    
     * Add lf-capion attribute to customize file caption.
     * Fix bug when $compileProvider.debugInfoEnabled(false). 
