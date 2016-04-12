@@ -102,6 +102,8 @@
         @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26)); 
         .lf-ng-md-file-input-caption{
             @include border-radius(5px 0 0 5px);
+            position: relative;
+            overflow: hidden;
             z-index: 2;
             padding:0px 8px 0px 8px;
             &.disabled{
@@ -116,6 +118,11 @@
                 color: rgba(0,0,0,0.26); 
                 font-weight: 700;
             }
+        }
+        md-progress-linear{
+            position:absolute;
+            bottom:0%;
+            left:0%;
         }
         .lf-icon{
             background-size:cover;

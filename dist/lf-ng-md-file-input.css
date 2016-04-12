@@ -112,6 +112,8 @@
   -moz-border-radius: 5px 0 0 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px 0 0 5px;
+  position: relative;
+  overflow: hidden;
   z-index: 2;
   padding: 0px 8px 0px 8px;
 }
@@ -126,6 +128,11 @@
   margin-left: 8px;
   color: rgba(0, 0, 0, 0.26);
   font-weight: 700;
+}
+.lf-ng-md-file-input .lf-ng-md-file-input-container md-progress-linear {
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
 }
 .lf-ng-md-file-input .lf-ng-md-file-input-container .lf-icon {
   background-size: cover;

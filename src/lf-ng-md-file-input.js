@@ -204,8 +204,9 @@
                                     '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
                                         '{{strCaption}}',
                                     '</div>',
+                                    '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading" class="fadein"></md-progress-linear>',
                                 '</div>',
-                                '<md-button ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
+                                '<md-button ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
                                     '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
                                     '{{strCaptionRemove}}',
                                 '</md-button>',
@@ -215,6 +216,7 @@
                                     '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',//,onchange="angular.element(this).scope().onFileChanged(this)"/>',
                                 '</md-button>',
                             '</div>',
+
                         '</div>'].join(''),
             replace: true,
             require:"ngModel",
@@ -237,6 +239,10 @@
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
 
                 var isCustomCaption = false;
+                var intFilesCount = 0;
+
+                scope.intLoading = 0;
+                scope.floatProgress = 0;
 
                 scope.isPreview = false;
                 scope.isDrag = false;
@@ -387,8 +393,10 @@
 
 					var regexp = new RegExp(scope.accept, "i");
 
-					if(scope.isMutiple){
+                    scope.floatProgress = 0;
 
+					if(scope.isMutiple){
+                        intFilesCount = files.length;
 						for(i=0;i<files.length;i++){
 							file = files[i];
 							if(file.type.match(regexp)){
@@ -399,7 +407,7 @@
 						}
 
 					}else{
-
+                        intFilesCount = 1;
 						for(i=0;i<files.length;i++){
 							file = files[i];
 							if(file.type.match(regexp)){
@@ -476,8 +484,10 @@
 						return;
 					}
 
-					if(scope.isMutiple){
+                    scope.floatProgress = 0;
 
+					if(scope.isMutiple){
+                        intFilesCount = files.length;
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
                             var intAvail = 1;
@@ -488,7 +498,7 @@
                         }
 
                     }else{
-
+                        intFilesCount = 1;
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
                             if(names.indexOf(file.name) == -1){
@@ -507,6 +517,8 @@
                 elFileinput.bind("change",scope.onFileChanged);
 
 				var readFile = function(file){
+
+                    scope.intLoading++;
 
 					readAsDataURL(file).then(function(result){
 
@@ -639,10 +651,14 @@
 							'index':index,
 							'result':reader.result
 						});
+                        scope.intLoading--;
+                        scope.floatProgress = (intFilesCount-scope.intLoading)/intFilesCount*100;
 					};
 
 					reader.onerror = function(event){
 						deferred.reject(reader.result);
+                        scope.intLoading--;
+                        scope.floatProgress = (intFilesCount-scope.intLoading)/intFilesCount*100;
 					};
 
 					reader.onprogress = function(event){
