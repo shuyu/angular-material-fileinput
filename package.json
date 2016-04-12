@@ -2,10 +2,7 @@
   "name": "lf-ng-md-file-input",
   "version": "1.4.3",
   "description": "angular material file input with more feature.",
-  "main": "./dist",
-  "directories": {
-    "example": "example"
-  },
+  "main": "./dist/lf-ng-md-file-input.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
