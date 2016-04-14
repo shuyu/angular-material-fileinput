@@ -171,6 +171,14 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
+###Progress
+
+```html
+
+<lf-ng-md-file-input lf-files="files" progress></lf-ng-md-file-input>
+
+```
+
 ###Placeholder
 
 ```html
@@ -306,6 +314,8 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.4.4    
+    * Add progress attribute.
 * v1.4.3    
     * Remove console.log calls.
 * v1.4.2    
