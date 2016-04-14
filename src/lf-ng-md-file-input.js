@@ -204,7 +204,7 @@
                                     '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
                                         '{{strCaption}}',
                                     '</div>',
-                                    '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading" class="fadein"></md-progress-linear>',
+                                    '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
                                 '</div>',
                                 '<md-button ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
                                     '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
@@ -247,20 +247,25 @@
                 scope.isPreview = false;
                 scope.isDrag = false;
                 scope.isMutiple = false;
+                scope.isProgress = false;
 
-                if('preview' in attrs){
+                if(angular.isDefined(attrs.preview)){
                     scope.isPreview = true;
                 }
 
-                if('drag' in attrs){
+                if(angular.isDefined(attrs.drag)){
                     scope.isDrag = true;
-                }
+                };
 
-                if('multiple' in attrs){
+                if(angular.isDefined(attrs.multiple)){
                     elFileinput.attr('multiple','multiple');
                     scope.isMutiple = true;
                 }else{
                     elFileinput.removeAttr('multiple');
+                }
+
+                if(angular.isDefined(attrs.progress)){
+                    scope.isProgress = true;
                 }
 
                 scope.isDisabled = false;
