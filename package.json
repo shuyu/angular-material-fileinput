@@ -1,6 +1,6 @@
 {
   "name": "lf-ng-md-file-input",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "angular material file input with more feature.",
   "main": "./dist/lf-ng-md-file-input.js",
   "scripts": {
