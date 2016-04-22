@@ -386,7 +386,9 @@
 
 					elDragview.removeClass("lf-ng-md-file-input-drag-hover");
 
-                    e.dataTransfer = e.originalEvent.dataTransfer;
+                    if (angular.isObject(e.originalEvent)){
+                        e = e.originalEvent;
+                    } 
 
 					var files = e.target.files || e.dataTransfer.files;
 					var i = 0;
