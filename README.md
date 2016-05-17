@@ -314,6 +314,8 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.4.6    
+    * Fix IE click event.
 * v1.4.5    
     * Fix drop event.
 * v1.4.4    

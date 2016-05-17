@@ -433,17 +433,15 @@
 				});
 
 				scope.openDialog = function(event, el) {
-					if (navigator.userAgent.indexOf('Firefox') != -1) {
-						if(event){
-							$timeout(function() {
-								event.preventDefault();
-								event.stopPropagation();
-								var elFileinput = event.target.children[2];
-								if(elFileinput !== undefined) {
-									elFileinput.click();
-								}
-							}, 0);
-						}
+					if(event){
+						$timeout(function() {
+							event.preventDefault();
+							event.stopPropagation();
+							var elFileinput = event.target.children[2];
+							if(elFileinput !== undefined) {
+								elFileinput.click();
+							}
+						}, 0);
 					}
 				};
 
