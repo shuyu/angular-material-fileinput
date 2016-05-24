@@ -104,10 +104,10 @@ So after you finish select files you need adjust data like below to fit your ser
 
 ```
 
-In this example I use node.js( express + formidable ) on server side, "Formidable" is a node module for parsing form data, there has other similar like "Multer". 
+In this example I use node.js( express + formidable ) & ( express + multer ) on server side, "Formidable & Multer" is a node module for parsing form data. 
 
 ####server
-
+#####Formidable
 ```javascript
     
     var express = require('express');
@@ -132,6 +132,37 @@ In this example I use node.js( express + formidable ) on server side, "Formidabl
             res.sendStatus(200);
             //when finish all process    
         });
+    });
+    
+    ...
+
+```
+
+#####Muliter
+```javascript
+    
+    var express = require('express');
+    var multer = require('multer');
+    var app = express();
+    app.use(express.static(__dirname + '/public'));
+    
+    ...
+
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, __dirname +'/public/uploads');
+            //modify upload dest
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname);
+            //modify file name 
+        }
+    });
+    var upload = multer({ "storage": storage });
+    var type = upload.array('files[]');
+    
+    app.post('/upload',type,function(req,res){
+        res.sendStatus(200);
     });
     
     ...
