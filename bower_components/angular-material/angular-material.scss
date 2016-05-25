@@ -108,6 +108,14 @@ $swift-linear-duration: 0.08s !default;
 $swift-linear-timing-function: linear !default;
 $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default;
 
+$material-enter-duration: 0.3s;
+$material-enter-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+$material-enter: all $material-enter-duration $material-enter-timing-function;
+
+$material-leave-duration: 0.3s;
+$material-leave-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+$material-leave: all $material-leave-duration $material-leave-timing-function;
+
 // Fab Buttons (shared between buttons.scss and fab*.scss)
 // -------------------------------------------
 $button-fab-width: rem(5.600) !default;
@@ -260,6 +268,124 @@ $button-fab-padding: rem(1.60) !default;
   @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
   @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
   @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+}
+
+// This mixin allows a user to use the md-checkbox css outside of the
+// md-checkbox directive.
+// See src/components/select/select.scss for an example.
+@mixin checkbox-container(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  .md-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    box-sizing: border-box;
+    display: inline-block;
+
+    width: $width;
+    height: $height;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+
+    &:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
+    }
+  }
+
+  // unchecked
+  .md-icon {
+    box-sizing: border-box;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
+    border-style: solid;
+    border-radius: $border-radius;
+  }
+
+  &#{$checkedSelector} .md-icon {
+    border: none;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3;
+      top: $width / 9;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: default;
+  }
+
+  &.md-indeterminate .md-icon {
+    &:after {
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: table;
+      width: $width * 0.6;
+      height: $border-width;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
 }
 
 html, body {
@@ -771,7 +897,7 @@ md-autocomplete {
 }
 
 // !!Important - Theme-based Background-color can be configured in backdrop-theme.scss
-//             - Animate background-color opacityy only for `.md-opaque` styles
+//             - Animate background-color opacity only for `.md-opaque` styles
 
 md-backdrop {
   transition: opacity 450ms;
@@ -828,6 +954,193 @@ md-backdrop {
 
 }
 
+
+$bottom-sheet-horizontal-padding: 2 * $baseline-grid !default;
+$bottom-sheet-vertical-padding: 1 * $baseline-grid !default;
+$bottom-sheet-icon-after-margin: 4 * $baseline-grid !default;
+$bottom-sheet-list-item-height: 6 * $baseline-grid !default;
+$bottom-sheet-hidden-bottom-padding: 80px !default;
+$bottom-sheet-header-height: 7 * $baseline-grid !default;
+$bottom-sheet-grid-font-weight: 400 !default;
+
+md-bottom-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
+  z-index: $z-index-bottom-sheet;
+
+  border-top-width: 1px;
+  border-top-style: solid;
+
+  transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
+  transition: $swift-ease-out;
+  transition-property: transform;
+
+  &.md-has-header {
+    padding-top: 0;
+  }
+
+  &.ng-enter {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  &.ng-enter-active {
+    opacity: 1;
+    display: block;
+    transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important;
+  }
+
+
+  &.ng-leave-active {
+    transform: translate3d(0, 100%, 0) !important;
+    transition: $swift-ease-in;
+  }
+
+  .md-subheader {
+    background-color: transparent;
+    font-family: $font-family;
+    line-height: $bottom-sheet-header-height;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  md-inline-icon {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    fill: #444;
+  }
+
+  md-list-item {
+    display: flex;
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &.md-list {
+    md-list-item {
+      padding: 0;
+      align-items: center;
+      height: $bottom-sheet-list-item-height;
+
+      div.md-icon-container {
+        display: inline-block;
+        height: 3 * $baseline-grid;
+        margin-right: $bottom-sheet-icon-after-margin;
+      }
+    }
+  }
+
+
+
+  &.md-grid {
+    padding-left: 3 * $baseline-grid;
+    padding-right: 3 * $baseline-grid;
+    padding-top: 0;
+
+    md-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      transition: all 0.5s;
+      align-items: center;
+    }
+
+    md-list-item {
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.5s;
+
+      height: 12 * $baseline-grid;
+
+      margin-top: $baseline-grid;
+      margin-bottom: $baseline-grid;
+
+      /* Mixin for how many grid items to show per row */
+      @mixin grid-items-per-row($num, $alignEdges: false) {
+        $width: 100% / $num;
+        flex: 1 1 $width;
+        max-width: $width;
+
+        @if $alignEdges {
+          &:nth-of-type(#{$num}n + 1) {
+            align-items: flex-start;
+          }
+          &:nth-of-type(#{$num}n) {
+            align-items: flex-end;
+          }
+        }
+      }
+      
+      @media screen and (max-width: $layout-breakpoint-sm) {
+        @include grid-items-per-row(3, true);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+        @include grid-items-per-row(4);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+        @include grid-items-per-row(6);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-lg) {
+        @include grid-items-per-row(7);
+      }
+
+
+
+      .md-list-item-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 6 * $baseline-grid;
+        padding-bottom: 2 * $baseline-grid;
+      }
+
+      .md-grid-item-content {
+        border: 1px solid transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 10 * $baseline-grid;
+      }
+
+      .md-icon-container {
+        display: inline-block;
+        box-sizing: border-box;
+        height: 6 * $baseline-grid;
+        width: 6 * $baseline-grid;
+        margin: 0 0;
+      }
+
+      .md-grid-text {
+        font-weight: $bottom-sheet-grid-font-weight;
+        line-height: 2 * $baseline-grid;
+        font-size: 2 * $baseline-grid - 3;
+        margin: 0;
+        white-space: nowrap;
+        width: 8 * $baseline-grid;
+        text-align: center;
+        text-transform: none;
+        padding-top: 1 * $baseline-grid;
+      }
+    }
+  }
+}
+
+// IE only
+@media screen and (-ms-high-contrast: active) {
+  md-bottom-sheet {
+    border: 1px solid #fff;
+  }
+}
 
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
@@ -1302,12 +1615,12 @@ md-checkbox {
   position: relative;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
-  @include rtl(margin-left, inherit, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, inherit);
+  @include rtl(margin-left, 0, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, 0);
 
   &:last-of-type {
-    @include rtl(margin-left, inherit, 0);
-    @include rtl(margin-right, 0, inherit);
+    margin-left: 0;
+    margin-right: 0;
   }
 
   &.md-focused:not([disabled]) {
@@ -1325,100 +1638,11 @@ md-checkbox {
     }
   }
 
-  .md-container {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-
-    box-sizing: border-box;
-    display: inline-block;
-
-    width: $checkbox-width;
-    height: $checkbox-height;
-    @include rtl(left, 0, auto);
-    @include rtl(right, auto, 0);
-
-    &:before {
-      box-sizing: border-box;
-      background-color: transparent;
-      border-radius: 50%;
-      content: '';
-      position: absolute;
-      display: block;
-      height: auto;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      transition: all 0.5s;
-      width: auto;
-    }
-
-    &:after {
-      box-sizing: border-box;
-      content: '';
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px;
-    }
-
-    .md-ripple-container {
-      position: absolute;
-      display: block;
-      width: auto;
-      height: auto;
-      left: -15px;
-      top: -15px;
-      right: -15px;
-      bottom: -15px;
-    }
-  }
-
   &.md-align-top-left > div.md-container {
     top: $checkbox-top;
   }
 
-  // unchecked
-  .md-icon {
-    box-sizing: border-box;
-    transition: 240ms;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: $checkbox-width;
-    height: $checkbox-height;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-radius: $checkbox-border-radius;
-  }
-
-  &.md-checked .md-icon {
-    border: none;
-  }
-
-  // disabled
-  &[disabled] {
-    cursor: default;
-  }
-
-
-  &.md-checked .md-icon:after {
-    box-sizing: border-box;
-    transform: rotate(45deg);
-    position: absolute;
-    left: $checkbox-width / 3;
-    top: $checkbox-width / 9;
-    display: table;
-    width: $checkbox-width / 3;
-    height: $checkbox-width * 2 / 3;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: '';
-  }
+  @include checkbox-container;
 
   .md-label {
     box-sizing: border-box;
@@ -1431,193 +1655,6 @@ md-checkbox {
     @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
     @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
 
-  }
-}
-
-$bottom-sheet-horizontal-padding: 2 * $baseline-grid !default;
-$bottom-sheet-vertical-padding: 1 * $baseline-grid !default;
-$bottom-sheet-icon-after-margin: 4 * $baseline-grid !default;
-$bottom-sheet-list-item-height: 6 * $baseline-grid !default;
-$bottom-sheet-hidden-bottom-padding: 80px !default;
-$bottom-sheet-header-height: 7 * $baseline-grid !default;
-$bottom-sheet-grid-font-weight: 400 !default;
-
-md-bottom-sheet {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
-  z-index: $z-index-bottom-sheet;
-
-  border-top-width: 1px;
-  border-top-style: solid;
-
-  transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
-  transition: $swift-ease-out;
-  transition-property: transform;
-
-  &.md-has-header {
-    padding-top: 0;
-  }
-
-  &.ng-enter {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-  }
-
-  &.ng-enter-active {
-    opacity: 1;
-    display: block;
-    transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important;
-  }
-
-
-  &.ng-leave-active {
-    transform: translate3d(0, 100%, 0) !important;
-    transition: $swift-ease-in;
-  }
-
-  .md-subheader {
-    background-color: transparent;
-    font-family: $font-family;
-    line-height: $bottom-sheet-header-height;
-    padding: 0;
-    white-space: nowrap;
-  }
-
-  md-inline-icon {
-    display: inline-block;
-    height: 24px;
-    width: 24px;
-    fill: #444;
-  }
-
-  md-list-item {
-    display: flex;
-    outline: none;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  &.md-list {
-    md-list-item {
-      padding: 0;
-      align-items: center;
-      height: $bottom-sheet-list-item-height;
-
-      div.md-icon-container {
-        display: inline-block;
-        height: 3 * $baseline-grid;
-        margin-right: $bottom-sheet-icon-after-margin;
-      }
-    }
-  }
-
-
-
-  &.md-grid {
-    padding-left: 3 * $baseline-grid;
-    padding-right: 3 * $baseline-grid;
-    padding-top: 0;
-
-    md-list {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      transition: all 0.5s;
-      align-items: center;
-    }
-
-    md-list-item {
-      flex-direction: column;
-      align-items: center;
-      transition: all 0.5s;
-
-      height: 12 * $baseline-grid;
-
-      margin-top: $baseline-grid;
-      margin-bottom: $baseline-grid;
-
-      /* Mixin for how many grid items to show per row */
-      @mixin grid-items-per-row($num, $alignEdges: false) {
-        $width: 100% / $num;
-        flex: 1 1 $width;
-        max-width: $width;
-
-        @if $alignEdges {
-          &:nth-of-type(#{$num}n + 1) {
-            align-items: flex-start;
-          }
-          &:nth-of-type(#{$num}n) {
-            align-items: flex-end;
-          }
-        }
-      }
-      
-      @media screen and (max-width: $layout-breakpoint-sm) {
-        @include grid-items-per-row(3, true);
-      }
-
-      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
-        @include grid-items-per-row(4);
-      }
-
-      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
-        @include grid-items-per-row(6);
-      }
-
-      @media screen and (min-width: $layout-breakpoint-lg) {
-        @include grid-items-per-row(7);
-      }
-
-
-
-      .md-list-item-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 6 * $baseline-grid;
-        padding-bottom: 2 * $baseline-grid;
-      }
-
-      .md-grid-item-content {
-        border: 1px solid transparent;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 10 * $baseline-grid;
-      }
-
-      .md-icon-container {
-        display: inline-block;
-        box-sizing: border-box;
-        height: 6 * $baseline-grid;
-        width: 6 * $baseline-grid;
-        margin: 0 0;
-      }
-
-      .md-grid-text {
-        font-weight: $bottom-sheet-grid-font-weight;
-        line-height: 2 * $baseline-grid;
-        font-size: 2 * $baseline-grid - 3;
-        margin: 0;
-        white-space: nowrap;
-        width: 8 * $baseline-grid;
-        text-align: center;
-        text-transform: none;
-        padding-top: 1 * $baseline-grid;
-      }
-    }
-  }
-}
-
-// IE only
-@media screen and (-ms-high-contrast: active) {
-  md-bottom-sheet {
-    border: 1px solid #fff;
   }
 }
 
@@ -1818,154 +1855,34 @@ $contact-chip-name-width: rem(12) !default;
 }
 
 
-$dialog-padding: $baseline-grid * 3;
+md-content {
 
-.md-dialog-is-showing {
-  max-height: 100%;
-}
-.md-dialog-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: $z-index-dialog;
-  overflow: hidden;
-}
-
-md-dialog {
-
-  &.md-transition-in {
-    opacity: 1;
-    transition: $swift-ease-out;
-    transform: translate(0,0) scale(1.0);
-  }
-  &.md-transition-out {
-    opacity: 0;
-    transition: $swift-ease-out;
-    transform: translate(0,100%) scale(0.2);
-  }
-
-  opacity: 0;
-  min-width: 240px;
-  max-width: 80%;
-  max-height: 80%;
-  position: relative;
-  overflow: auto; // stop content from leaking out of dialog parent and fix IE
-
-  box-shadow: $whiteframe-shadow-13dp;
-
-  display: flex;
-  flex-direction: column;
-
-  &> form {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-  }
-
-  .md-dialog-content {
-    padding: $dialog-padding;
-  }
-
-  md-dialog-content {
-    order: 1;
-    flex-direction: column;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-
-    &:not([layout=row]) > *:first-child:not(.md-subheader) {
-      margin-top: 0;
-    }
-
-    &:focus {
-      outline: none;
-    }
-
-    .md-subheader {
-      margin: 0;
-
-      &.sticky-clone {
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
-      }
-    }
-    &.sticky-container {
-      padding: 0;
-
-      &> div {
-        padding: $dialog-padding;
-        padding-top: 0;
-      }
-    }
-
-    .md-dialog-content-body {
-      width:100%;
-    }
-  }
-
-  .md-actions, md-dialog-actions {
-    display: flex;
-    order: 2;
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 0;
-    padding-right: $baseline-grid;
-    padding-left: $baseline-grid * 2;
-    min-height: $baseline-grid * 6.5;
-    overflow: hidden;
-
-    .md-button {
-      margin-bottom: $baseline-grid;
-      margin-left: $baseline-grid;
-      margin-right: 0;
-      margin-top: $baseline-grid;
-    }
-  }
-  &.md-content-overflow {
-    .md-actions, md-dialog-actions {
-      border-top-width: 1px;
-      border-top-style: solid;
-    }
-  }
-
-}
-
-@media screen and (-ms-high-contrast: active) {
-  md-dialog {
-    border: 1px solid #fff;
-  }
-}
-
-@media (max-width: $layout-breakpoint-sm - 1) {
-  md-dialog.md-dialog-fullscreen {
-    min-height: 100%;
-    min-width: 100%;
-    border-radius: 0;
-  }
-}
-
-md-divider {
   display: block;
-  border-top-width: 1px;
-  border-top-style: solid;
-  margin: 0;
+  position: relative;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
-  &[md-inset] {
-    margin-left: $baseline-grid * 10;
+  &[md-scroll-y] {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  &[md-scroll-x] {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  &[md-scroll-xy] {
+  }
+
+  // For iOS allow disabling of momentum scrolling
+  // @see issue #2640.
+
+  &.autoScroll {
+    -webkit-overflow-scrolling: auto;
   }
 }
 
-.layout-row {
-  & > md-divider {
-    border-top-width: 0;
-    border-right-width: 1px;
-    border-right-style: solid;
-  }
-}
+
+
 /** Styles for mdCalendar. */
 $md-calendar-cell-size: 44px !default;
 $md-calendar-header-height: 40px;
@@ -2124,10 +2041,10 @@ md-calendar {
 }
 
 /** Styles for mdDatepicker. */
-$md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
-$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
-$md-datepicker-open-animation-duration: 0.2s;
-$md-datepicker-triangle-button-width: 36px;
+$md-datepicker-button-gap: 12px !default;  // Space between the text input and the calendar-icon button.
+$md-datepicker-border-bottom-gap: 5px !default;  // Space between input and the grey underline.
+$md-datepicker-open-animation-duration: 0.2s !default;
+$md-datepicker-triangle-button-width: 36px !default;
 
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
@@ -2322,34 +2239,154 @@ md-datepicker[disabled] {
   }
 }
 
-md-content {
+$dialog-padding: $baseline-grid * 3;
 
-  display: block;
+.md-dialog-is-showing {
+  max-height: 100%;
+}
+.md-dialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $z-index-dialog;
+  overflow: hidden;
+}
+
+md-dialog {
+
+  &.md-transition-in {
+    opacity: 1;
+    transition: $swift-ease-out;
+    transform: translate(0,0) scale(1.0);
+  }
+  &.md-transition-out {
+    opacity: 0;
+    transition: $swift-ease-out;
+    transform: translate(0,100%) scale(0.2);
+  }
+
+  opacity: 0;
+  min-width: 240px;
+  max-width: 80%;
+  max-height: 80%;
   position: relative;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: auto; // stop content from leaking out of dialog parent and fix IE
 
-  &[md-scroll-y] {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  &[md-scroll-x] {
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-  &[md-scroll-xy] {
+  box-shadow: $whiteframe-shadow-13dp;
+
+  display: flex;
+  flex-direction: column;
+
+  &> form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
   }
 
-  // For iOS allow disabling of momentum scrolling
-  // @see issue #2640.
+  .md-dialog-content {
+    padding: $dialog-padding;
+  }
 
-  &.autoScroll {
-    -webkit-overflow-scrolling: auto;
+  md-dialog-content {
+    order: 1;
+    flex-direction: column;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &:not([layout=row]) > *:first-child:not(.md-subheader) {
+      margin-top: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    .md-subheader {
+      margin: 0;
+
+      &.sticky-clone {
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+      }
+    }
+    &.sticky-container {
+      padding: 0;
+
+      &> div {
+        padding: $dialog-padding;
+        padding-top: 0;
+      }
+    }
+
+    .md-dialog-content-body {
+      width:100%;
+    }
+  }
+
+  .md-actions, md-dialog-actions {
+    display: flex;
+    order: 2;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0;
+    padding-right: $baseline-grid;
+    padding-left: $baseline-grid * 2;
+    min-height: $baseline-grid * 6.5;
+    overflow: hidden;
+
+    .md-button {
+      margin-bottom: $baseline-grid;
+      margin-left: $baseline-grid;
+      margin-right: 0;
+      margin-top: $baseline-grid;
+    }
+  }
+  &.md-content-overflow {
+    .md-actions, md-dialog-actions {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+  }
+
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-dialog {
+    border: 1px solid #fff;
   }
 }
 
+@media (max-width: $layout-breakpoint-sm - 1) {
+  md-dialog.md-dialog-fullscreen {
+    min-height: 100%;
+    min-width: 100%;
+    border-radius: 0;
+  }
+}
 
+md-divider {
+  display: block;
+  border-top-width: 1px;
+  border-top-style: solid;
+  margin: 0;
 
+  &[md-inset] {
+    margin-left: $baseline-grid * 10;
+  }
+}
+
+.layout-row {
+  & > md-divider {
+    border-top-width: 0;
+    border-right-width: 1px;
+    border-right-style: solid;
+  }
+}
 md-fab-speed-dial {
   position: relative;
   display: flex;
@@ -3109,100 +3146,6 @@ md-input-container.md-icon-right {
   }
 }
 
-md-toolbar.md-menu-toolbar {
-  h2.md-toolbar-tools {
-    line-height: 1rem;
-    height: auto;
-    padding: 3.5 * $baseline-grid;
-    padding-bottom: 1.5 * $baseline-grid;
-  }
-}
-
-md-menu-bar {
-  padding: 0 2.5 * $baseline-grid;
-  display: block;
-  position: relative;
-  z-index: 2;
-  .md-menu {
-    display: inline-block;
-    padding: 0;
-    position: relative;
-  }
-  button {
-    font-size: rem(1.4);
-    padding: 0 1.25 * $baseline-grid;
-    margin: 0;
-    border: 0;
-    background-color: transparent;
-    height: 5 * $baseline-grid;
-  }
-
-  md-backdrop.md-menu-backdrop {
-    z-index: -2;
-  }
-}
-
-md-menu-content.md-menu-bar-menu.md-dense {
-  max-height: none;
-  padding: 2 * $baseline-grid 0;
-  md-menu-item.md-indent {
-    position: relative;
-    > md-icon {
-      position: absolute;
-      padding: 0;
-      width: 24px;
-      top: 0.75 * $baseline-grid;
-      left: 3 * $baseline-grid;
-    }
-    > .md-button, .md-menu > .md-button {
-      padding: 0 4 * $baseline-grid 0 8 * $baseline-grid;
-    }
-  }
-  .md-button {
-    min-height: 0;
-    height: 4 * $baseline-grid;
-    display: flex;
-    span {
-      flex-grow: 1;
-    }
-    span.md-alt-text {
-      flex-grow: 0;
-      align-self: flex-end;
-      margin: 0 $baseline-grid;
-    }
-  }
-  md-menu-divider {
-    margin: $baseline-grid 0;
-  }
-
-  md-menu-item > .md-button, .md-menu > .md-button {
-    text-align: left;
-    text-align: start;
-  }
-
-  .md-menu {
-    padding: 0;
-    > .md-button {
-      position: relative;
-      margin: 0;
-      width: 100%;
-      text-transform: none;
-      font-weight: normal;
-      border-radius: 0px;
-      padding-left: 2 * $baseline-grid;
-      &:after {
-        display: block;
-        content: '\25BC';
-        position: absolute;
-        top: 0px;
-        speak: none;
-        transform: rotate(270deg) scaleY(0.45) scaleX(0.9);
-        right: 3.5 * $baseline-grid;
-      }
-    }
-  }
-}
-
 $list-h3-margin: 0 0 0px 0 !default;
 $list-h4-margin: 3px 0 1px 0 !default;
 $list-h4-font-weight: 400 !default;
@@ -3629,6 +3572,169 @@ md-toolbar {
   }
 }
 
+
+md-toolbar.md-menu-toolbar {
+  h2.md-toolbar-tools {
+    line-height: 1rem;
+    height: auto;
+    padding: 3.5 * $baseline-grid;
+    padding-bottom: 1.5 * $baseline-grid;
+  }
+}
+
+md-menu-bar {
+  padding: 0 2.5 * $baseline-grid;
+  display: block;
+  position: relative;
+  z-index: 2;
+  .md-menu {
+    display: inline-block;
+    padding: 0;
+    position: relative;
+  }
+  button {
+    font-size: rem(1.4);
+    padding: 0 1.25 * $baseline-grid;
+    margin: 0;
+    border: 0;
+    background-color: transparent;
+    height: 5 * $baseline-grid;
+  }
+
+  md-backdrop.md-menu-backdrop {
+    z-index: -2;
+  }
+}
+
+md-menu-content.md-menu-bar-menu.md-dense {
+  max-height: none;
+  padding: 2 * $baseline-grid 0;
+  md-menu-item.md-indent {
+    position: relative;
+    > md-icon {
+      position: absolute;
+      padding: 0;
+      width: 24px;
+      top: 0.75 * $baseline-grid;
+      left: 3 * $baseline-grid;
+    }
+    > .md-button, .md-menu > .md-button {
+      padding: 0 4 * $baseline-grid 0 8 * $baseline-grid;
+    }
+  }
+  .md-button {
+    min-height: 0;
+    height: 4 * $baseline-grid;
+    display: flex;
+    span {
+      flex-grow: 1;
+    }
+    span.md-alt-text {
+      flex-grow: 0;
+      align-self: flex-end;
+      margin: 0 $baseline-grid;
+    }
+  }
+  md-menu-divider {
+    margin: $baseline-grid 0;
+  }
+
+  md-menu-item > .md-button, .md-menu > .md-button {
+    text-align: left;
+    text-align: start;
+  }
+
+  .md-menu {
+    padding: 0;
+    > .md-button {
+      position: relative;
+      margin: 0;
+      width: 100%;
+      text-transform: none;
+      font-weight: normal;
+      border-radius: 0px;
+      padding-left: 2 * $baseline-grid;
+      &:after {
+        display: block;
+        content: '\25BC';
+        position: absolute;
+        top: 0px;
+        speak: none;
+        transform: rotate(270deg) scaleY(0.45) scaleX(0.9);
+        right: 3.5 * $baseline-grid;
+      }
+    }
+  }
+}
+
+.md-panel-outer-wrapper {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+._md-panel-hidden {
+  display: none;
+}
+
+._md-panel-fullscreen {
+  border-radius: 0;
+  left: 0;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+// Only used when no animations are present.
+._md-panel-shown .md-panel {
+  opacity: 1;
+  transition: none;
+}
+
+.md-panel {
+  opacity: 0;
+  position: fixed;
+
+  &._md-panel-shown {
+    // Only used when custom animations are present.
+    // Overridden by the default animations.
+    opacity: 1;
+    transition: none;
+  }
+
+  &._md-panel-animate-enter {
+    opacity: 1;
+    transition: $material-enter;
+  }
+
+  &._md-panel-animate-leave {
+    opacity: 1;
+    transition: $material-leave;
+  }
+
+  &._md-panel-animate-scale-out,
+  &._md-panel-animate-fade-out {
+    opacity: 0;
+  }
+
+  &._md-panel-backdrop {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
+  &._md-opaque-enter {
+    opacity: .48;
+    transition: opacity $material-enter-duration $material-enter-timing-function;
+  }
+
+  &._md-opaque-leave {
+    transition: opacity $material-leave-duration $material-leave-timing-function;
+  }
+}
 
 $progress-circular-ease-in-out : cubic-bezier(0.35, 0, 0.25, 1) !default;
 $progress-circular-duration : 5.25s !default;
@@ -4129,12 +4235,12 @@ md-radio-group {
     md-radio-button {
       margin-top: 0;
       margin-bottom: 0;
-      @include rtl(margin-left, inherit, $radio-margin);
-      @include rtl(margin-right, $radio-margin, inherit);
+      @include rtl(margin-left, 0, $radio-margin);
+      @include rtl(margin-right, $radio-margin, 0);
 
       &:last-of-type {
-        @include rtl(margin-left, inherit, 0);
-        @include rtl(margin-right, 0, inherit);
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   }
@@ -4171,6 +4277,9 @@ md-radio-group {
   }
 }
 
+$select-checkbox-border-radius: 2px !default;
+$select-checkbox-border-width: 2px !default;
+$select-checkbox-width: rem(1.4) !default;
 $select-option-height: 48px;
 $select-option-padding: 16px;
 $select-container-padding: 16px;
@@ -4282,7 +4391,7 @@ md-select {
   }
 
   *:first-child {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4402,6 +4511,20 @@ md-optgroup {
   }
 }
 
+md-select-menu[multiple] {
+  md-option.md-checkbox-enabled {
+    @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
+    @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
+
+    @include checkbox-container('[selected]');
+
+    .md-container {
+      @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
+      @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
+    }
+  }
+}
+
 $sidenav-mobile-width: 320px !default;
 $sidenav-desktop-width: 400px !default;
 $sidenav-min-space: 56px !default;
@@ -4416,6 +4539,7 @@ md-sidenav {
   max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   ul {
     list-style: none;
@@ -5781,7 +5905,6 @@ md-tooltip {
   &.md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
-    will-change: opacity, height, width;
   }
 }
 
@@ -6584,6 +6707,9 @@ $layout-breakpoint-lg:     1920px !default;
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-width: 0;  }
     }
 
     .layout-column > .#{$flexName}-#{$i * 5},
@@ -6592,6 +6718,10 @@ $layout-breakpoint-lg:     1920px !default;
       max-width: 100%;
       max-height: #{$value};
       box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-height: 0;  }
+
     }
   }
 
@@ -6605,6 +6735,9 @@ $layout-breakpoint-lg:     1920px !default;
   .layout-column, .layout#{$name}-column {
     > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
     > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+
+    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    > .flex                                       { min-height: 0;   }
   }
 }
 
