@@ -1,4 +1,4 @@
-(function(angular) {
+(function(window,angular,undefined) {
 
     'use strict';
 
@@ -229,6 +229,7 @@
 				lfDragAndDropLabel:'@?',
 				lfBrowseLabel: '@?',
 				lfRemoveLabel: '@?',
+                lfFileClick: '=?',
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -523,6 +524,19 @@
 
                 elFileinput.bind("change",scope.onFileChanged);
 
+                scope.onFileClick = function(key){
+                    if(angular.isFunction(scope.lfFileClick)){
+                        scope.lfFiles.every(function(obj,idx){
+                            if(obj.key == key){
+                                scope.lfFileClick(obj,idx);
+                                return false;
+                            }else{
+                                return true;
+                            }
+                        });
+                    }
+                };
+
 				var readFile = function(file){
 
                     scope.intLoading++;
@@ -535,13 +549,16 @@
 						var lfTagType = parseFileType(file);
 						var lfDataUrl = window.URL.createObjectURL(file);
 
-						scope.lfFiles.push({
-							"lfFile":lfFile,
-							"lfFileName":lfFileName,
-							"lfDataUrl":lfDataUrl
-						});
+                        var lfFileObj = {
+                            "key":genLfObjId(),
+                            "lfFile":lfFile,
+                            "lfFileName":lfFileName,
+                            "lfDataUrl":lfDataUrl
+                        };
 
-						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame"></div>');
+						scope.lfFiles.push(lfFileObj);
+
+						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame" ng-click="onFileClick(\''+lfFileObj.key+'\')"></div>');
 
 						var elFrameX = angular.element('<div class="lf-ng-md-file-input-x" ng-click="removeFileByName(\''+file.name+'\',$event)">&times;</div>');
 
@@ -683,4 +700,4 @@
 	
     }]);
 
-})(window.angular);
+})(window,window.angular);

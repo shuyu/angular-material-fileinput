@@ -58,6 +58,9 @@
   text-align: center;
   vertical-align: middle;
 }
+.lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame:focus {
+  outline: none;
+}
 .lf-ng-md-file-input .lf-ng-md-file-input-preview-container .lf-ng-md-file-input-frame > img {
   height: 160px;
   width: auto;

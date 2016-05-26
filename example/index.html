@@ -39,7 +39,10 @@
                     "removeIconCls":"myRemove",
                     "captionIconCls":"myCaption",
                     "unknowIconCls":"myUnknow"
-                }
+                };
+                $scope.onFileClick = function(obj,idx){
+                    alert(obj.lfFileName);
+                };
             });
             
         </script>
@@ -76,6 +79,9 @@
         </style>
 
     <body layout="column">
+
+        
+
         
         <md-toolbar layout="row" layout-align="center center">
             
@@ -233,6 +239,22 @@
                     </div>
                     <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button> 
                 </form>
+
+                <h2>FileClick</h2>
+
+                <xmp class="prettyprint lang-html">
+<script>
+    ...
+    $scope.onFileClick = function(obj,idx){
+        alert(obj.lfFileName);
+    };
+    ...
+</script>
+
+<lf-ng-md-file-input lf-files="filesOnFileClick" lf-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
 
             </md-content>
 
