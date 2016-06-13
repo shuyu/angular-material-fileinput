@@ -229,7 +229,7 @@
 				lfDragAndDropLabel:'@?',
 				lfBrowseLabel: '@?',
 				lfRemoveLabel: '@?',
-                lfFileClick: '=?',
+                lfOnFileClick: '=?',
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -302,7 +302,7 @@
                 scope.accept = scope.accept || '';
 
                 scope.lfFiles = [];
-                
+
                 scope[attrs.ngModel] = scope.lfFiles;
 
                 scope.$watch('lfFiles.length',function(newVal,oldVal){
@@ -381,6 +381,7 @@
 
 					e.stopPropagation();
 					e.preventDefault();
+
 					if(scope.isDisabled || !scope.isDrag){
 						return;
 					}
@@ -389,11 +390,10 @@
 
                     if (angular.isObject(e.originalEvent)){
                         e = e.originalEvent;
-                    } 
+                    }
 
 					var files = e.target.files || e.dataTransfer.files;
 					var i = 0;
-					var file;
 
 					if(files.length <= 0){
 						return;
@@ -405,31 +405,28 @@
 
                     scope.floatProgress = 0;
 
-					if(scope.isMutiple){
+                    if(scope.isMutiple){
                         intFilesCount = files.length;
-						for(i=0;i<files.length;i++){
-							file = files[i];
-							if(file.type.match(regexp)){
-								if(names.indexOf(file.name) == -1){
-									setTimeout(readFile(file), i*100);
-								}
-							}
-						}
-
-					}else{
+                        for(var i=0;i<files.length;i++){
+                            var file = files[i];
+                            if(file.type.match(regexp)){
+                                if(names.indexOf(file.name) != -1){
+                                    scope.removeFileByName(file.name);
+                                }
+                                setTimeout(readFile(file), i*100);
+                            }
+                        }
+                    }else{
                         intFilesCount = 1;
-						for(i=0;i<files.length;i++){
-							file = files[i];
-							if(file.type.match(regexp)){
-								if(names.indexOf(file.name) == -1){
-									scope.removeAllFiles();
-									setTimeout(readFile(file), i*100);
-									break;
-								}
-							}
-						}
-
-					}
+                        for(var i=0;i<files.length;i++){
+                            var file = files[i];
+                            if(file.type.match(regexp)){
+                                scope.removeAllFiles();
+                                setTimeout(readFile(file), 100);
+                                break;
+                            }
+                        }
+                    }
 
 				});
 
@@ -452,7 +449,7 @@
 						return;
 					}
 
-					scope.lfFiles.length=0;
+					scope.lfFiles.length = 0;
 
 					elThumbnails.empty();
 
@@ -468,15 +465,12 @@
 
 					scope.lfFiles.every(function(obj,idx){
 						if(obj.lfFileName == name){
+                            obj.element.remove();
 							scope.lfFiles.splice(idx,1);
 							return false;
 						}
 						return true;
 					});
-
-					if(event){
-						angular.element(event.target).parent().remove();
-					}
 
 					updateTextCaption();
 
@@ -498,24 +492,19 @@
                         intFilesCount = files.length;
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
-                            var intAvail = 1;
-                            if(names.indexOf(file.name) == -1){
-                                setTimeout(readFile(file), intAvail*100);
-                                intAvail++;
+                            if(names.indexOf(file.name) != -1){
+                                scope.removeFileByName(file.name);
                             }
+                            setTimeout(readFile(file), i*100);
                         }
-
                     }else{
                         intFilesCount = 1;
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
-                            if(names.indexOf(file.name) == -1){
-                                scope.removeAllFiles();
-                                setTimeout(readFile(file), 100);
-                                break;
-                            }
+                            scope.removeAllFiles();
+                            setTimeout(readFile(file), 100);
+                            break;
                         }
-
                     }
 
 					elFileinput.val('');
@@ -525,10 +514,10 @@
                 elFileinput.bind("change",scope.onFileChanged);
 
                 scope.onFileClick = function(key){
-                    if(angular.isFunction(scope.lfFileClick)){
+                    if(angular.isFunction(scope.lfOnFileClick)){
                         scope.lfFiles.every(function(obj,idx){
                             if(obj.key == key){
-                                scope.lfFileClick(obj,idx);
+                                scope.lfOnFileClick(obj,idx);
                                 return false;
                             }else{
                                 return true;
@@ -601,6 +590,8 @@
 						$compile(elFrame)(scope);
 
 						elThumbnails.append(elFrame);
+
+                        lfFileObj.element = elFrame;
 
 						updateTextCaption();
 
@@ -697,7 +688,7 @@
 			}
 
 		};
-	
+
     }]);
 
 })(window,window.angular);
