@@ -1,6 +1,6 @@
 {
   "name": "lf-ng-md-file-input",
-  "version": "1.4.4",
+  "version": "1.4.7",
   "authors": [
     "shuyu <lfshuyu@gmail.com>"
   ],
@@ -28,7 +28,7 @@
     "src"
   ],
   "dependencies": {
-    "angular-material": "^1.0.5"
+    "angular-material": "^1.0.9"
   },
   "homepage": "https://github.com/shuyu/angular-material-fileinput",
   "main": [

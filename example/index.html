@@ -5,11 +5,11 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 
         <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
-        
+
         <link rel="stylesheet" href="../dist/lf-ng-md-file-input.css">
 
         <script src="../bower_components/angular/angular.min.js"></script>
-        
+
         <script src="../bower_components/angular-animate/angular-animate.min.js"></script>
         <script src="../bower_components/angular-aria/angular-aria.min.js"></script>
         <script src="../bower_components/angular-material/angular-material.min.js"></script>
@@ -17,12 +17,12 @@
         <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
 
         <script src="../dist/lf-ng-md-file-input.js"></script>
-        <!--<script src="../src/lf-ng-md-file-input.js"></script>-->
+        <!-- <script src="../src/lf-ng-md-file-input.js"></script> -->
 
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
         <script type="text/javascript">
-            
+
             var app = angular.module('demo', ['ngMaterial','ngMessages','lfNgMdFileInput']);
 
             app.config(['$compileProvider','$mdThemingProvider', function ($compileProvider,$mdThemingProvider) {
@@ -39,9 +39,12 @@
                     "removeIconCls":"myRemove",
                     "captionIconCls":"myCaption",
                     "unknowIconCls":"myUnknow"
-                }
+                };
+                $scope.onFileClick = function(obj,idx){
+                    alert(obj.lfFileName);
+                };
             });
-            
+
         </script>
 
         <style>
@@ -76,13 +79,16 @@
         </style>
 
     <body layout="column">
-        
+
+
+
+
         <md-toolbar layout="row" layout-align="center center">
-            
+
             <h1>lf-ng-md-file-input</h1>
 
         </md-toolbar>
-        
+
         <div ng-view layout="column" layout-padding flex ng-controller="DemoController">
 
             <md-content>
@@ -104,11 +110,11 @@
                 </xmp>
 
                 <lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01"></lf-ng-md-file-input>
-                
+
                 <br>
-                
+
                 <md-button class="md-raised md-warn" ng-click="api01.removeAll()">remove all file outside</md-button>
-                
+
                 <md-checkbox ng-model="disabled01" aria-label="disabled01">
                     Disable
                 </md-checkbox>
@@ -168,7 +174,7 @@
                 </xmp>
 
                 <lf-ng-md-file-input lf-files="files04" lf-browse-label="Search" lf-remove-label="Delete" ></lf-ng-md-file-input>
-                
+
                 <br>
 
                 <xmp class="prettyprint lang-html">
@@ -218,9 +224,9 @@
         <div ng-message="totalsize">Total size too large.</div>
         <div ng-message="mimetype">Mimetype error.</div>
     </div>
-    <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button> 
+    <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button>
 </form>
-                </xmp>  
+                </xmp>
 
                 <form name="testForm" layout="column">
                     <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
@@ -231,8 +237,24 @@
                         <div ng-message="totalsize">Total size too large.</div>
                         <div ng-message="mimetype">Mimetype error.</div>
                     </div>
-                    <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button> 
+                    <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button>
                 </form>
+
+                <h2>FileClick</h2>
+
+                <xmp class="prettyprint lang-html">
+<script>
+    ...
+    $scope.onFileClick = function(obj,idx){
+        alert(obj.lfFileName);
+    };
+    ...
+</script>
+
+<lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
+                </xmp>
+
+                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
 
             </md-content>
 
@@ -243,7 +265,7 @@
         <div layout="row" layout-align="center">
             <p>LF &copy; copyright</p>
         </div>
-        
+
 
     </body>
 </html>

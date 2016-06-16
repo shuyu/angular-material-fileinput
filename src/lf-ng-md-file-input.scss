@@ -51,6 +51,9 @@
             float: left;
             text-align: center;
             vertical-align: middle;
+            &:focus{
+                outline: none;
+            }
             >img{
                 height: 160px;
                 width:auto;

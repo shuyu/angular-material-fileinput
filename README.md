@@ -80,7 +80,7 @@ So after you finish select files you need adjust data like below to fit your ser
 ```javascript
 
     app.controller('MyCtrl',function($scope){
-    
+
         ...
 
         $scope.onSubmit = function(){
@@ -104,17 +104,17 @@ So after you finish select files you need adjust data like below to fit your ser
 
 ```
 
-In this example I use node.js( express + formidable ) on server side, "Formidable" is a node module for parsing form data, there has other similar like "Multer". 
+In this example I use node.js( express + formidable ) & ( express + multer ) on server side, "Formidable & Multer" is a node module for parsing form data.
 
 ####server
-
+#####Formidable
 ```javascript
-    
+
     var express = require('express');
     var formidable = require('formidable');
     var app = express();
     app.use(express.static(__dirname + '/public'));
-    
+
     ...
 
     app.post('/upload',function(req,res){
@@ -133,7 +133,38 @@ In this example I use node.js( express + formidable ) on server side, "Formidabl
             //when finish all process    
         });
     });
-    
+
+    ...
+
+```
+
+#####Muliter
+```javascript
+
+    var express = require('express');
+    var multer = require('multer');
+    var app = express();
+    app.use(express.static(__dirname + '/public'));
+
+    ...
+
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, __dirname +'/public/uploads');
+            //modify upload dest
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname);
+            //modify file name
+        }
+    });
+    var upload = multer({ "storage": storage });
+    var type = upload.array('files[]');
+
+    app.post('/upload',type,function(req,res){
+        res.sendStatus(200);
+    });
+
     ...
 
 ```
@@ -253,7 +284,7 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
         <div ng-message="filesize">File size too large.</div>
         <div ng-message="totalsize">Total size too large.</div>
         <div ng-message="mimetype">Mimetype error.</div>
-    </div> 
+    </div>
 </form>
 
 ```
@@ -314,13 +345,20 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.4.7    
+    * File with same name will override.
+    * New attributes : lf-on-file-click.
+* v1.4.6    
+    * Fix IE click event.
+* v1.4.5    
+    * Fix drop event.
 * v1.4.4    
     * Add progress attribute.
 * v1.4.3    
     * Remove console.log calls.
 * v1.4.2    
     * Add lf-capion attribute to customize file caption.
-    * Fix bug when $compileProvider.debugInfoEnabled(false). 
+    * Fix bug when $compileProvider.debugInfoEnabled(false).
 * v1.4.1    
     * Add MIME type validation.
     * Add aria-label.
@@ -333,10 +371,9 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
     * Remove angular-material-icons dependencies and Add new lf-option attribute to make icon changeable.
 * v1.2.0
     * New lf-api attribute bind to interaction with directive.
-* v1.1.0 
-    * New attributes: lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
+* v1.1.0
+    * New attributes : lf-drag-and-drop-label, lf-browse-label and lf-remove-label.
 * v1.0.0
     * Standard features.
 * v0.1.0
     * Initial release.
-
