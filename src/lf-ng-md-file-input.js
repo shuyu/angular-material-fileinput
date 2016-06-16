@@ -584,7 +584,9 @@
 						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
 
 						elFrame.append(elFrameX);
-						elFrame.append(elPreview);
+						if(scope.isPreview) {
+							elFrame.append(elPreview);
+						}
 						elFrame.append(elFooter);
 
 						$compile(elFrame)(scope);
