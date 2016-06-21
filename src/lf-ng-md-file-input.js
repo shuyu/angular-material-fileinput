@@ -314,6 +314,10 @@
                     self.removeAll = function(){
                         scope.removeAllFiles();
                     };
+
+                    self.removeByName = function(name){
+                        scope.removeFileByName(name);
+                    };
                 };
 
                 scope.isFilesNull = true;
