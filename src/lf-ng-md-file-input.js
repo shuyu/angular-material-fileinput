@@ -185,12 +185,12 @@
             restrict: 'E',
             template:  ['<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
                             '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
-                                '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull" >&times;</div>',
+                                '<div class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</div>',
                                 '<div class="lf-ng-md-file-input-drag">',
-                                    '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="isFilesNull && isDrag">',
+                                    '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
                                         '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                                     '</div>',
-                                    '<div class="lf-ng-md-file-input-thumbnails">',
+                                    '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
                                     '</div>',
                                     '<div class="clearfix" style="clear:both"></div>',
                                 '</div>',
@@ -584,9 +584,11 @@
 						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
 
 						elFrame.append(elFrameX);
-						if(scope.isPreview) {
-							elFrame.append(elPreview);
-						}
+						// if(scope.isPreview) {
+						elFrame.append(elPreview);
+						// }else{
+                        //     console.log('no preview');
+                        // }
 						elFrame.append(elFooter);
 
 						$compile(elFrame)(scope);
