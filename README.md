@@ -293,8 +293,9 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ###API
 
 | Name           | Parameter   | Description |
-| :------------- | :---------- | :---------------- |
-| removeAll      |             | Remove all file  |
+| :------------- | :---------- | :--------------------|
+| removeByName   |   string    | Remove file by name  |
+| removeAll      |             | Remove all file      |
 
 ```html
 
