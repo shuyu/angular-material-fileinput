@@ -346,6 +346,9 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.4.8
+    * New api to remove file by name.
+    * Fix preview bug.
 * v1.4.7    
     * File with same name will override.
     * New attributes : lf-on-file-click.
