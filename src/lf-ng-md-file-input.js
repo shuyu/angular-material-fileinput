@@ -194,7 +194,7 @@
                                         '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles">',
                                             '<div class="lf-ng-md-file-input-x">&times;</div>',
                                             // '<img ng-src="{{lffile.lfDataUrl}}" >',
-                                                '<object ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type={{lffile.lfFile.type}}">',
+                                                '<object data="{{lffile.lfDataUrl}}" type="{{lffile.lfFile.type}}">',
                                                     '<div class="lf-ng-md-file-input-preview-default">',
                                                         '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
                                                     '</div>',
@@ -587,7 +587,7 @@
 
 						}else{
 
-                            tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'"><param name="movie" value="'+lfFile.name+'" />',
+                            tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'">',
                                                 '<div class="lf-ng-md-file-input-preview-default">',
                                                     '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
                                                 '</div>',
