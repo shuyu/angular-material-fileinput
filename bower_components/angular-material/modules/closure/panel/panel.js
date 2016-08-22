@@ -2,11 +2,11 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.9
+ * v1.1.0
  */
-goog.provide('ng.material.components.panel');
-goog.require('ng.material.components.backdrop');
-goog.require('ng.material.core');
+goog.provide('ngmaterial.components.panel');
+goog.require('ngmaterial.components.backdrop');
+goog.require('ngmaterial.core');
 /**
  * @ngdoc module
  * @name material.components.panel
@@ -61,7 +61,7 @@ angular
  *       position: panelPosition,
  *       animation: panelAnimation,
  *       targetEvent: $event,
- *       template: 'dialog-template.html',
+ *       templateUrl: 'dialog-template.html',
  *       clickOutsideToClose: true,
  *       escapeToClose: true,
  *       focusOnOpen: true
@@ -90,10 +90,10 @@ angular
  * @description
  * Creates a panel with the specified options.
  *
- * @param opt_config {Object=} Specific configuration object that may contain
+ * @param config {Object=} Specific configuration object that may contain
  * the following properties:
  *
- *   - `template` - `{string=}`: HTML template to show in the dialog. This
+ *   - `template` - `{string=}`: HTML template to show in the panel. This
  *     **must** be trusted HTML with respect to Angular’s
  *     [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *   - `templateUrl` - `{string=}`: The URL that will be used as the content of
@@ -117,6 +117,9 @@ angular
  *   - `attachTo` - `{(string|!angular.JQLite|!Element)=}`: The element to
  *     attach the panel to. Defaults to appending to the root element of the
  *     application.
+ *   - `propagateContainerEvents` - `{boolean=}`: Whether pointer or touch
+ *     events should be allowed to propagate 'go through' the container, aka the
+ *     wrapper, of the panel. Defaults to false.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
  *   - `zIndex` - `{number=}`: The z-index to place the panel at.
@@ -155,13 +158,8 @@ angular
  *     panel is removed from the DOM.
  *   - `origin` - `{(string|!angular.JQLite|!Element)=}`: The element to
  *     focus on when the panel closes. This is commonly the element which triggered
- *     the opening of the panel.
- *
- * TODO(ErinCoughlan): Add the following config options.
- *   - `groupName` - `{string=}`: Name of panel groups. This group name is
- *     used for configuring the number of open panels and identifying specific
- *     behaviors for groups. For instance, all tooltips will be identified
- *     using the same groupName.
+ *     the opening of the panel. If you do not use `origin`, you need to control
+ *     the focus manually.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -177,23 +175,11 @@ angular
  * Instead create the panel, chain promises on the domAdded and openComplete
  * methods, and call open from the returned panelRef.
  *
- * @param {Object=} opt_config Specific configuration object that may contain
+ * @param {Object=} config Specific configuration object that may contain
  * the properties defined in `$mdPanel.create`.
  *
  * @returns {angular.$q.Promise<MdPanelRef>} panelRef A promise that resolves
  * to an instance of the panel.
- */
-
-
-/**
- * @ngdoc method
- * @name $mdPanel#setGroupMaxOpen
- * @description
- * Sets the maximum number of panels in a group that can be opened at a given
- * time.
- *
- * @param groupName {string} The name of the group to configure.
- * @param maxOpen {number} The max number of panels that can be opened.
  */
 
 
@@ -253,7 +239,9 @@ angular
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * Hides and detaches the panel.
+ * Hides and detaches the panel. Note that this will **not** destroy the panel. If you
+ * don't intend on using the panel again, call the {@link #destroy destroy} method
+ * afterwards.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * closed.
@@ -314,6 +302,8 @@ angular
  * Adds a class to the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} newClass Class to be added.
+ * @param {boolean} toElement Whether or not to add the class to the panel
+ *    element instead of the container.
  */
 
 /**
@@ -323,6 +313,8 @@ angular
  * Removes a class from the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} oldClass Class to be removed.
+ * @param {boolean} fromElement Whether or not to remove the class from the
+ * panel element instead of the container.
  */
 
 /**
@@ -332,13 +324,19 @@ angular
  * Toggles a class on the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} toggleClass Class to be toggled.
+ * @param {boolean} onElement Whether or not to remove the class from the panel
+ *    element instead of the container.
  */
 
 /**
  * @ngdoc method
- * @name MdPanelRef#focusOnOpen
+ * @name MdPanelRef#updatePosition
  * @description
- * Focuses the panel content if the focusOnOpen config value is true.
+ * Updates the position configuration of a panel. Use this to update the
+ * position of a panel that is open, without having to close and re-open the
+ * panel.
+ *
+ * @param {!MdPanelPosition} position
  */
 
 
@@ -392,9 +390,9 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#top
  * @description
- * Sets the value of `top` for the panel. Clears any previously set
- * vertical position.
- * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * Sets the value of `top` for the panel. Clears any previously set vertical
+ * position.
+ * @param {string=} top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -402,9 +400,29 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#bottom
  * @description
- * Sets the value of `bottom` for the panel. Clears any previously set
- * vertical position.
- * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * Sets the value of `bottom` for the panel. Clears any previously set vertical
+ * position.
+ * @param {string=} bottom Value of `bottom`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#start
+ * @description
+ * Sets the panel to the start of the page - `left` if `ltr` or `right` for `rtl`. Clears any previously set
+ * horizontal position.
+ * @param {string=} start Value of position. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#end
+ * @description
+ * Sets the panel to the end of the page - `right` if `ltr` or `left` for `rtl`. Clears any previously set
+ * horizontal position.
+ * @param {string=} end Value of position. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -414,7 +432,7 @@ angular
  * @description
  * Sets the value of `left` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @param {string=} left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -424,7 +442,7 @@ angular
  * @description
  * Sets the value of `right` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @param {string=} right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -566,7 +584,7 @@ angular
  * @ngdoc method
  * @name MdPanelAnimation#closeTo
  * @description
- * Specifies where to animate the dialog close. `closeTo` accepts a
+ * Specifies where to animate the panel close. `closeTo` accepts a
  * query selector, DOM element, or a Rect object that is used to determine
  * the bounds.
  *
@@ -634,6 +652,7 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
     focusOnOpen: true,
     fullscreen: false,
     hasBackdrop: false,
+    propagateContainerEvents: false,
     transformTemplate: angular.bind(this, this._wrapTemplate),
     trapFocus: false,
     zIndex: defaultZIndex
@@ -680,11 +699,11 @@ MdPanelService.$inject = ["$rootElement", "$rootScope", "$injector", "$window"];
 
 /**
  * Creates a panel with the specified options.
- * @param {!Object=} opt_config Configuration object for the panel.
+ * @param {!Object=} config Configuration object for the panel.
  * @returns {!MdPanelRef}
  */
-MdPanelService.prototype.create = function(opt_config) {
-  var configSettings = opt_config || {};
+MdPanelService.prototype.create = function(config) {
+  var configSettings = config || {};
 
   this._config = {
     scope: this._$rootScope.$new(true),
@@ -701,11 +720,11 @@ MdPanelService.prototype.create = function(opt_config) {
 
 /**
  * Creates and opens a panel with the specified options.
- * @param {!Object=} opt_config Configuration object for the panel.
+ * @param {!Object=} config Configuration object for the panel.
  * @returns {!angular.$q.Promise<MdPanelRef>} The panel created from create.
  */
-MdPanelService.prototype.open = function(opt_config) {
-  var panelRef = this.create(opt_config);
+MdPanelService.prototype.open = function(config) {
+  var panelRef = this.create(config);
   return panelRef.open().then(function() {
     return panelRef;
   });
@@ -719,7 +738,7 @@ MdPanelService.prototype.open = function(opt_config) {
  * @returns {MdPanelPosition}
  */
 MdPanelService.prototype.newPanelPosition = function() {
-  return new MdPanelPosition(this._$window);
+  return new MdPanelPosition(this._$injector);
 };
 
 
@@ -808,6 +827,9 @@ function MdPanelRef(config, $injector) {
    */
   this.id = config.id;
 
+  /** @type {!Object} */
+  this.config = config;
+
   /**
    * Whether the panel is attached. This is synchronous. When attach is called,
    * isAttached is set to true. When detach is called, isAttached is set to
@@ -817,9 +839,6 @@ function MdPanelRef(config, $injector) {
   this.isAttached = false;
 
   // Private variables.
-  /** @private {!Object} */
-  this._config = config;
-
   /** @private {!angular.JQLite|undefined} */
   this._panelContainer;
 
@@ -847,7 +866,7 @@ function MdPanelRef(config, $injector) {
  * Opens an already created and configured panel. If the panel is already
  * visible, does nothing.
  *
- * @returns {!angular.$q.Promise<MdPanelRef>} A promise that is resolved when
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
  * the panel is opened and animations finish.
  */
 MdPanelRef.prototype.open = function() {
@@ -867,7 +886,7 @@ MdPanelRef.prototype.open = function() {
 /**
  * Closes the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when the panel is
  * closed and animations finish.
  */
 MdPanelRef.prototype.close = function() {
@@ -888,7 +907,7 @@ MdPanelRef.prototype.close = function() {
 /**
  * Attaches the panel. The panel will be hidden afterwards.
  *
- * @returns {!angular.$q.Promise<MdPanelRef>} A promise that is resolved when
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
  * the panel is attached.
  */
 MdPanelRef.prototype.attach = function() {
@@ -899,7 +918,7 @@ MdPanelRef.prototype.attach = function() {
   var self = this;
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
-    var onDomAdded = self._config['onDomAdded'] || angular.noop;
+    var onDomAdded = self.config['onDomAdded'] || angular.noop;
     var addListeners = function(response) {
         self.isAttached = true;
         self._addEventListeners();
@@ -921,7 +940,7 @@ MdPanelRef.prototype.attach = function() {
 /**
  * Only detaches the panel. Will NOT hide the panel first.
  *
- * @returns {!angular.$q.Promise<MdPanelRef>} A promise that is resolved when the panel is
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when the panel is
  * detached.
  */
 MdPanelRef.prototype.detach = function() {
@@ -930,7 +949,7 @@ MdPanelRef.prototype.detach = function() {
   }
 
   var self = this;
-  var onDomRemoved = self._config['onDomRemoved'] || angular.noop;
+  var onDomRemoved = self.config['onDomRemoved'] || angular.noop;
 
   var detachFn = function() {
     self._removeEventListeners();
@@ -972,14 +991,15 @@ MdPanelRef.prototype.detach = function() {
  * Destroys the panel. The Panel cannot be opened again after this.
  */
 MdPanelRef.prototype.destroy = function() {
-  this._config.locals = null;
+  this.config.scope.$destroy();
+  this.config.locals = null;
 };
 
 
 /**
  * Shows the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when the panel has
  * shown and animations finish.
  */
 MdPanelRef.prototype.show = function() {
@@ -1001,7 +1021,7 @@ MdPanelRef.prototype.show = function() {
 
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
-    var onOpenComplete = self._config['onOpenComplete'] || angular.noop;
+    var onOpenComplete = self.config['onOpenComplete'] || angular.noop;
 
     self._$q.all([
       self._backdropRef ? self._backdropRef.show() : self,
@@ -1016,7 +1036,7 @@ MdPanelRef.prototype.show = function() {
 /**
  * Hides the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when the panel has
  * hidden and animations finish.
  */
 MdPanelRef.prototype.hide = function() {
@@ -1034,10 +1054,10 @@ MdPanelRef.prototype.hide = function() {
 
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
-    var onRemoving = self._config['onRemoving'] || angular.noop;
+    var onRemoving = self.config['onRemoving'] || angular.noop;
 
     var focusOnOrigin = function() {
-      var origin = self._config['origin'];
+      var origin = self.config['origin'];
       if (origin) {
         getElement(origin).focus();
       }
@@ -1063,14 +1083,18 @@ MdPanelRef.prototype.hide = function() {
  * Add a class to the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} newClass Class to be added.
+ * @param {boolean} toElement Whether or not to add the class to the panel
+ *    element instead of the container.
  */
-MdPanelRef.prototype.addClass = function(newClass) {
+MdPanelRef.prototype.addClass = function(newClass, toElement) {
   if (!this._panelContainer) {
     throw new Error('Panel does not exist yet. Call open() or attach().');
   }
 
-  if (!this._panelContainer.hasClass(newClass)) {
+  if (!toElement && !this._panelContainer.hasClass(newClass)) {
     this._panelContainer.addClass(newClass);
+  } else if (toElement && !this._panelEl.hasClass(newClass)) {
+    this._panelEl.addClass(newClass);
   }
 };
 
@@ -1079,14 +1103,18 @@ MdPanelRef.prototype.addClass = function(newClass) {
  * Remove a class from the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} oldClass Class to be removed.
+ * @param {boolean} fromElement Whether or not to remove the class from the
+ *    panel element instead of the container.
  */
-MdPanelRef.prototype.removeClass = function(oldClass) {
+MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
   if (!this._panelContainer) {
     throw new Error('Panel does not exist yet. Call open() or attach().');
   }
 
-  if (this._panelContainer.hasClass(oldClass)) {
+  if (!fromElement && this._panelContainer.hasClass(oldClass)) {
     this._panelContainer.removeClass(oldClass);
+  } else if (fromElement && this._panelEl.hasClass(oldClass)) {
+    this._panelEl.removeClass(oldClass);
   }
 };
 
@@ -1095,13 +1123,19 @@ MdPanelRef.prototype.removeClass = function(oldClass) {
  * Toggle a class on the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} toggleClass The class to toggle.
+ * @param {boolean} onElement Whether or not to toggle the class on the panel
+ *    element instead of the container.
  */
-MdPanelRef.prototype.toggleClass = function(toggleClass) {
+MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
   if (!this._panelContainer) {
     throw new Error('Panel does not exist yet. Call open() or attach().');
   }
 
-  this._panelContainer.toggleClass(toggleClass);
+  if (!onElement) {
+    this._panelContainer.toggleClass(toggleClass);
+  } else {
+    this._panelEl.toggleClass(toggleClass);
+  }
 };
 
 
@@ -1116,34 +1150,42 @@ MdPanelRef.prototype._createPanel = function() {
   var self = this;
 
   return this._$q(function(resolve, reject) {
-    if (!self._config.locals) {
-      self._config.locals = {};
+    if (!self.config.locals) {
+      self.config.locals = {};
     }
 
-    self._config.locals.mdPanelRef = self;
-    self._$mdCompiler.compile(self._config)
+    self.config.locals.mdPanelRef = self;
+    self._$mdCompiler.compile(self.config)
         .then(function(compileData) {
-          self._panelContainer = compileData.link(self._config['scope']);
-          getElement(self._config['attachTo']).append(self._panelContainer);
+          self._panelContainer = compileData.link(self.config['scope']);
+          getElement(self.config['attachTo']).append(self._panelContainer);
 
-          if (self._config['disableParentScroll']) {
+          if (self.config['disableParentScroll']) {
             self._restoreScroll = self._$mdUtil.disableScrollAround(
-                null, self._panelContainer);
+              null,
+              self._panelContainer,
+              { disableScrollMask: true }
+            );
           }
 
           self._panelEl = angular.element(
               self._panelContainer[0].querySelector('.md-panel'));
 
-          // Add a custom CSS class.
-          if (self._config['panelClass']) {
-            self._panelEl.addClass(self._config['panelClass']);
+          // Add a custom CSS class to the panel element.
+          if (self.config['panelClass']) {
+            self._panelEl.addClass(self.config['panelClass']);
+          }
+
+          // Handle click and touch events for the panel container.
+          if (self.config['propagateContainerEvents']) {
+            self._panelContainer.css('pointer-events', 'none');
           }
 
           // Panel may be outside the $rootElement, tell ngAnimate to animate
           // regardless.
           if (self._$animate.pin) {
             self._$animate.pin(self._panelContainer,
-                getElement(self._config['attachTo']));
+                getElement(self.config['attachTo']));
           }
 
           self._configureTrapFocus();
@@ -1163,8 +1205,8 @@ MdPanelRef.prototype._createPanel = function() {
 MdPanelRef.prototype._addStyles = function() {
   var self = this;
   return this._$q(function(resolve) {
-    self._panelContainer.css('z-index', self._config['zIndex']);
-    self._panelEl.css('z-index', self._config['zIndex'] + 1);
+    self._panelContainer.css('z-index', self.config['zIndex']);
+    self._panelEl.css('z-index', self.config['zIndex'] + 1);
 
     var hideAndResolve = function() {
       // Remove left: -9999px and add hidden class.
@@ -1173,13 +1215,13 @@ MdPanelRef.prototype._addStyles = function() {
       resolve(self);
     };
 
-    if (self._config['fullscreen']) {
+    if (self.config['fullscreen']) {
       self._panelEl.addClass('_md-panel-fullscreen');
       hideAndResolve();
       return; // Don't setup positioning.
     }
 
-    var positionConfig = self._config['position'];
+    var positionConfig = self.config['position'];
     if (!positionConfig) {
       hideAndResolve();
       return; // Don't setup positioning.
@@ -1197,25 +1239,39 @@ MdPanelRef.prototype._addStyles = function() {
 
 
 /**
+ * Updates the position configuration of a panel
+ * @param {!MdPanelPosition} position
+ */
+MdPanelRef.prototype.updatePosition = function(position) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  this.config['position'] = position;
+  this._updatePosition();
+};
+
+
+/**
  * Calculates and updates the position of the panel.
- * @param {boolean=} opt_init
+ * @param {boolean=} init
  * @private
  */
-MdPanelRef.prototype._updatePosition = function(opt_init) {
-  var positionConfig = this._config['position'];
+MdPanelRef.prototype._updatePosition = function(init) {
+  var positionConfig = this.config['position'];
 
   if (positionConfig) {
     positionConfig._setPanelPosition(this._panelEl);
-    
+
     // Hide the panel now that position is known.
-    if (opt_init) {
+    if (init) {
       this._panelContainer.addClass(MD_PANEL_HIDDEN);
     }
-    
-    this._panelEl.css('top', positionConfig.getTop());
-    this._panelEl.css('bottom', positionConfig.getBottom());
-    this._panelEl.css('left', positionConfig.getLeft());
-    this._panelEl.css('right', positionConfig.getRight());
+
+    this._panelEl.css(MdPanelPosition.absPosition.TOP, positionConfig.getTop());
+    this._panelEl.css(MdPanelPosition.absPosition.BOTTOM, positionConfig.getBottom());
+    this._panelEl.css(MdPanelPosition.absPosition.LEFT, positionConfig.getLeft());
+    this._panelEl.css(MdPanelPosition.absPosition.RIGHT, positionConfig.getRight());
 
     // Use the vendor prefixed version of transform.
     var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
@@ -1229,9 +1285,9 @@ MdPanelRef.prototype._updatePosition = function(opt_init) {
  * @private
  */
 MdPanelRef.prototype._focusOnOpen = function() {
-  if (this._config['focusOnOpen']) {
+  if (this.config['focusOnOpen']) {
     // Wait for the template to finish rendering to guarantee md-autofocus has
-    // finished adding the class _md-autofocus, otherwise the focusable element
+    // finished adding the class md-autofocus, otherwise the focusable element
     // isn't available to focus.
     var self = this;
     this._$rootScope['$$postDigest'](function() {
@@ -1250,20 +1306,20 @@ MdPanelRef.prototype._focusOnOpen = function() {
  * @private
  */
 MdPanelRef.prototype._createBackdrop = function() {
-  if (this._config.hasBackdrop) {
+  if (this.config.hasBackdrop) {
     if (!this._backdropRef) {
       var backdropAnimation = this._$mdPanel.newPanelAnimation()
-          .openFrom(this._config.attachTo)
+          .openFrom(this.config.attachTo)
           .withAnimation({
             open: '_md-opaque-enter',
             close: '_md-opaque-leave'
           });
       var backdropConfig = {
         animation: backdropAnimation,
-        attachTo: this._config.attachTo,
+        attachTo: this.config.attachTo,
         focusOnOpen: false,
         panelClass: '_md-panel-backdrop',
-        zIndex: this._config.zIndex - 1
+        zIndex: this.config.zIndex - 1
       };
       this._backdropRef = this._$mdPanel.create(backdropConfig);
     }
@@ -1293,7 +1349,7 @@ MdPanelRef.prototype._removeEventListeners = function() {
   this._removeListeners && this._removeListeners.forEach(function(removeFn) {
     removeFn();
   });
-  this._removeListeners = null;
+  this._removeListeners = [];
 };
 
 
@@ -1302,8 +1358,8 @@ MdPanelRef.prototype._removeEventListeners = function() {
  * @private
  */
 MdPanelRef.prototype._configureEscapeToClose = function() {
-  if (this._config['escapeToClose']) {
-    var parentTarget = getElement(this._config['attachTo']);
+  if (this.config['escapeToClose']) {
+    var parentTarget = getElement(this.config['attachTo']);
     var self = this;
 
     var keyHandlerFn = function(ev) {
@@ -1333,7 +1389,7 @@ MdPanelRef.prototype._configureEscapeToClose = function() {
  * @private
  */
 MdPanelRef.prototype._configureClickOutsideToClose = function() {
-  if (this._config['clickOutsideToClose']) {
+  if (this.config['clickOutsideToClose']) {
     var target = this._panelContainer;
     var sourceElem;
 
@@ -1347,7 +1403,7 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
 
     // We check if our original element and the target is the backdrop
     // because if the original was the backdrop and the target was inside the
-    // dialog we don't want to dialog to close.
+    // panel we don't want to panel to close.
     var self = this;
     var mouseupHandler = function(ev) {
       if (sourceElem === target[0] && ev.target === target[0]) {
@@ -1381,7 +1437,7 @@ MdPanelRef.prototype._configureScrollListener = function() {
   var self = this;
 
   var onScroll = function() {
-    if (!self._config['disableParentScroll']) {
+    if (!self.config['disableParentScroll']) {
       debouncedUpdatePosition();
     }
   };
@@ -1404,7 +1460,7 @@ MdPanelRef.prototype._configureScrollListener = function() {
 MdPanelRef.prototype._configureTrapFocus = function() {
   // Focus doesn't remain instead of the panel without this.
   this._panelEl.attr('tabIndex', '-1');
-  if (this._config['trapFocus']) {
+  if (this.config['trapFocus']) {
     var element = this._panelEl;
     // Set up elements before and after the panel to capture focus and
     // redirect back into the panel.
@@ -1441,7 +1497,7 @@ MdPanelRef.prototype._configureTrapFocus = function() {
  */
 MdPanelRef.prototype._animateOpen = function() {
   this.addClass('md-panel-is-showing');
-  var animationConfig = this._config['animation'];
+  var animationConfig = this.config['animation'];
   if (!animationConfig) {
     // Promise is in progress, return it.
     this.addClass('_md-panel-shown');
@@ -1469,7 +1525,7 @@ MdPanelRef.prototype._animateOpen = function() {
  * @private
  */
 MdPanelRef.prototype._animateClose = function() {
-  var animationConfig = this._config['animation'];
+  var animationConfig = this.config['animation'];
   if (!animationConfig) {
     this.removeClass('md-panel-is-showing');
     this.removeClass('_md-panel-shown');
@@ -1539,12 +1595,15 @@ MdPanelRef.prototype._done = function(callback, self) {
  *   position: panelPosition
  * });
  *
- * @param {!angular.$window} $window
+ * @param {!angular.$injector} $injector
  * @final @constructor
  */
-function MdPanelPosition($window) {
-  /** @private @const */
-  this._$window = $window;
+function MdPanelPosition($injector) {
+  /** @private @const {!angular.$window} */
+  this._$window = $injector.get('$window');
+
+  /** @private {boolean} */
+  this._isRTL = $injector.get('$mdUtil').bidi() === 'rtl';
 
   /** @private {boolean} */
   this._absolute = false;
@@ -1605,6 +1664,18 @@ MdPanelPosition.yPosition = {
 
 
 /**
+ * Possible values of absolute position.
+ * @enum {string}
+ */
+MdPanelPosition.absPosition = {
+  TOP: 'top',
+  RIGHT: 'right',
+  BOTTOM: 'bottom',
+  LEFT: 'left'
+};
+
+
+/**
  * Sets absolute positioning for the panel.
  * @return {!MdPanelPosition}
  */
@@ -1613,56 +1684,97 @@ MdPanelPosition.prototype.absolute = function() {
   return this;
 };
 
+/**
+ * Sets the value of a position for the panel. Clears any previously set position.
+ * @param {string} position Position to set
+ * @param {string=} value Value of the position. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ * @private
+ */
+MdPanelPosition.prototype._setPosition = function(position, value) {
+  if (position === MdPanelPosition.absPosition.RIGHT || position === MdPanelPosition.absPosition.LEFT) {
+    this._left = this._right = '';
+  }
+  else if (position === MdPanelPosition.absPosition.BOTTOM || position === MdPanelPosition.absPosition.TOP) {
+    this._top = this._bottom = '';
+  }
+  else {
+    var positions = Object.keys(MdPanelPosition.absPosition).join().toLowerCase();
+
+    throw new Error('Position must be one of ' + positions + '.');
+  }
+
+  this['_' +  position] = angular.isString(value) ? value : '0';
+
+  return this;
+};
+
 
 /**
  * Sets the value of `top` for the panel. Clears any previously set vertical
  * position.
- * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * @param {string=} top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.top = function(opt_top) {
-  this._bottom = '';
-  this._top = opt_top || '0';
-  return this;
+MdPanelPosition.prototype.top = function(top) {
+  return this._setPosition(MdPanelPosition.absPosition.TOP, top);
 };
 
 
 /**
  * Sets the value of `bottom` for the panel. Clears any previously set vertical
  * position.
- * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * @param {string=} bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.bottom = function(opt_bottom) {
-  this._top = '';
-  this._bottom = opt_bottom || '0';
-  return this;
+MdPanelPosition.prototype.bottom = function(bottom) {
+  return this._setPosition(MdPanelPosition.absPosition.BOTTOM, bottom);
+};
+
+
+/**
+ * Sets the panel to the start of the page - `left` if `ltr` or `right` for `rtl`. Clears any previously set
+ * horizontal position.
+ * @param {string=} start Value of position. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.start = function(start) {
+  var position = this._isRTL ? MdPanelPosition.absPosition.RIGHT : MdPanelPosition.absPosition.LEFT;
+  return this._setPosition(position, start);
+};
+
+
+/**
+ * Sets the panel to the end of the page - `right` if `ltr` or `left` for `rtl`. Clears any previously set
+ * horizontal position.
+ * @param {string=} end Value of position. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.end = function(end) {
+  var position = this._isRTL ? MdPanelPosition.absPosition.LEFT : MdPanelPosition.absPosition.RIGHT;
+  return this._setPosition(position, end);
 };
 
 
 /**
  * Sets the value of `left` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @param {string=} left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.left = function(opt_left) {
-  this._right = '';
-  this._left = opt_left || '0';
-  return this;
+MdPanelPosition.prototype.left = function(left) {
+  return this._setPosition(MdPanelPosition.absPosition.LEFT, left);
 };
 
 
 /**
  * Sets the value of `right` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @param {string=} right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
- */
-MdPanelPosition.prototype.right = function(opt_right) {
-  this._left = '';
-  this._right = opt_right || '0';
-  return this;
+*/
+MdPanelPosition.prototype.right = function(right) {
+  return this._setPosition(MdPanelPosition.absPosition.RIGHT, right);
 };
 
 
@@ -1924,8 +2036,6 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
     return;
   }
 
-  // TODO(ErinCoughlan): Position panel intelligently to keep it on screen.
-
   if (this._actualPosition) {
     this._calculatePanelPosition(panelEl, this._actualPosition);
     return;
@@ -1939,6 +2049,36 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
     }
   }
 };
+
+
+/**
+ * Switching between 'start' and 'end'
+ * @param {string} position Horizontal position of the panel
+ * @returns {string} Reversed position
+ * @private
+ */
+MdPanelPosition.prototype._reverseXPosition = function(position) {
+  if (position === MdPanelPosition.xPosition.CENTER) {
+    return;
+  }
+
+  var start = 'start';
+  var end = 'end';
+
+  return position.indexOf(start) > -1 ? position.replace(start, end) : position.replace(end, start);
+};
+
+
+/**
+ * Handles horizontal positioning in rtl or ltr environments
+ * @param {string} position Horizontal position of the panel
+ * @returns {string} The correct position according the page direction
+ * @private
+ */
+MdPanelPosition.prototype._bidi = function(position) {
+  return this._isRTL ? this._reverseXPosition(position) : position;
+};
+
 
 /**
  * Calculates the panel position based on the created panel element and the
@@ -1959,13 +2099,11 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl, position) 
   var targetRight = targetBounds.right;
   var targetWidth = targetBounds.width;
 
-  switch (position.x) {
+  switch (this._bidi(position.x)) {
     case MdPanelPosition.xPosition.OFFSET_START:
-      // TODO(ErinCoughlan): Change OFFSET_START for rtl vs ltr.
       this._left = targetLeft - panelWidth + 'px';
       break;
     case MdPanelPosition.xPosition.ALIGN_END:
-      // TODO(ErinCoughlan): Change ALIGN_END for rtl vs ltr.
       this._left = targetRight - panelWidth + 'px';
       break;
     case MdPanelPosition.xPosition.CENTER:
@@ -1973,11 +2111,9 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl, position) 
       this._left = left + 'px';
       break;
     case MdPanelPosition.xPosition.ALIGN_START:
-      // TODO(ErinCoughlan): Change ALIGN_START for rtl vs ltr.
       this._left = targetLeft + 'px';
       break;
     case MdPanelPosition.xPosition.OFFSET_END:
-      // TODO(ErinCoughlan): Change OFFSET_END for rtl vs ltr.
       this._left = targetRight + 'px';
       break;
   }
@@ -2085,7 +2221,7 @@ MdPanelAnimation.prototype.openFrom = function(openFrom) {
 
 
 /**
- * Specifies where to animate the dialog close. `closeTo` accepts a
+ * Specifies where to animate the panel close. `closeTo` accepts a
  * query selector, DOM element, or a Rect object that is used to determine
  * the bounds.
  *
@@ -2197,9 +2333,6 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
           transitionOutClass: this._animationClass['close'],
         };
       }
-
-      // TODO(ErinCoughlan): Combine the user's custom transforms with the
-      // panel transform.
   }
 
   return animator
@@ -2262,9 +2395,6 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
           transitionOutClass: this._animationClass['open']
         };
       }
-
-      // TODO(ErinCoughlan): Combine the user's custom transforms with the
-      // panel transform.
   }
 
   return animator
@@ -2327,4 +2457,4 @@ function getElement(el) {
   return angular.element(queryResult);
 }
 
-ng.material.components.panel = angular.module("material.components.panel");
+ngmaterial.components.panel = angular.module("material.components.panel");

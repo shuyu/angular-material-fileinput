@@ -2,10 +2,10 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.9
+ * v1.1.0
  */
-goog.provide('ng.material.components.gridList');
-goog.require('ng.material.core');
+goog.provide('ngmaterial.components.gridList');
+goog.require('ngmaterial.core');
 /**
  * @ngdoc module
  * @name material.components.gridList
@@ -112,6 +112,8 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
   };
 
   function postLink(scope, element, attrs, ctrl) {
+    element.addClass('_md');     // private md component indicator for styling
+    
     // Apply semantics
     element.attr('role', 'list');
 
@@ -769,4 +771,4 @@ function GridTileCaptionDirective() {
   };
 }
 
-ng.material.components.gridList = angular.module("material.components.gridList");
+ngmaterial.components.gridList = angular.module("material.components.gridList");
