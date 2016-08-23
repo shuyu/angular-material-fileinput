@@ -11,6 +11,15 @@
 
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
 
+    lfNgMdFileinput.directive('html5vfix', function() {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attr) {
+                attr.$set('src', attr.vsrc);
+            }
+        }
+    });
+
     lfNgMdFileinput.run(function($templateCache){
         $templateCache.put('lfNgMdFileinput.html', [
                     '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
@@ -21,9 +30,16 @@
                                     '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                                 '</div>',
                                 '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
-                                    '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles">',
+                                    '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType">',
                                         '<div class="lf-ng-md-file-input-x">&times;</div>',
-                                            '<object data="{{lffile.lfDataUrl}}" type="{{lffile.lfFile.type}}">',
+                                            '<img ng-switch-when="image" ng-src="lffile.lfDataUrl" >',
+                                            '<video ng-switch-when="video" controls>',
+                								'<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
+                							'</video>',
+                                            '<audio ng-switch-when="audio" controls>',
+                								'<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
+                							'</audio>',
+                                            '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
                                                 '<div class="lf-ng-md-file-input-preview-default">',
                                                     '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
                                                 '</div>',
@@ -562,7 +578,8 @@
                             "key":genLfObjId(),
                             "lfFile":lfFile,
                             "lfFileName":lfFileName,
-                            "lfDataUrl":lfDataUrl
+                            "lfDataUrl":lfDataUrl,
+                            "lfTagType":lfTagType
                         };
 
 						scope.lfFiles.push(lfFileObj);
@@ -604,11 +621,9 @@
 						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
 
 						elFrame.append(elFrameX);
-						// if(scope.isPreview) {
+
 						elFrame.append(elPreview);
-						// }else{
-                        //     console.log('no preview');
-                        // }
+
 						elFrame.append(elFooter);
 
 						$compile(elFrame)(scope);
