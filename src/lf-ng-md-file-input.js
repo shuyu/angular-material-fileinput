@@ -576,6 +576,7 @@
             var lfFile = file;
             var lfFileName = file.name;
             var lfFileType = file.type;
+            var lfFilePath = file.path;
             var lfTagType = parseFileType(file);
             var lfDataUrl = window.URL.createObjectURL(file);
 
@@ -583,6 +584,7 @@
               'key': genLfObjId(),
               'lfFile': lfFile,
               'lfFileName': lfFileName,
+              'lfFilePath': lfFilePath,
               'lfDataUrl': lfDataUrl,
               'lfTagType': lfTagType
             };
