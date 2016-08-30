@@ -28,27 +28,12 @@
       '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</md-button>',
       '<div class="lf-ng-md-file-input-drag">',
       '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
-      '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
+      '<div class="lf-ng-md-file-input-drag-text">',
+      '<span ng-if="isTranslate">{{strCaptionDragAndDrop|translate}}</span>',
+      '<span ng-if="!isTranslate">{{strCaptionDragAndDrop}}</span>',
+      '</div>',
       '</div>',
       '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
-      '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType">',
-      '<div class="lf-ng-md-file-input-x">&times;</div>',
-      '<img ng-switch-when="image" ng-src="lffile.lfDataUrl" >',
-      '<video ng-switch-when="video" controls>',
-      '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
-      '</video>',
-      '<audio ng-switch-when="audio" controls>',
-      '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
-      '</audio>',
-      '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
-      '<div class="lf-ng-md-file-input-preview-default">',
-      '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-      '</div>',
-      '</object>',
-      '<div class="lf-ng-md-file-input-frame-footer">',
-      '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
-      '</div>',
-      '</div>',
       '</div>',
       '<div class="clearfix" style="clear:both"></div>',
       '</div>',
@@ -57,20 +42,24 @@
       '<div class="lf-ng-md-file-input-caption" layout="row" layout-align="start center" flex ng-class="{\'disabled\':isDisabled}" >',
       '<md-icon class="lf-icon" ng-class="strCaptionIconCls"></md-icon>',
       '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
-      '{{strCaptionPlaceholder}}',
+      '<span ng-if="isTranslate">{{strCaptionPlaceholder|translate}}</span>',
+      '<span ng-if="!isTranslate">{{strCaptionPlaceholder}}</span>',
       '</div>',
       '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
-      '{{strCaption}}',
+      '<span ng-if="isTranslate">{{strCaption|translate}}</span>',
+      '<span ng-if="!isTranslate">{{strCaption}}</span>',
       '</div>',
       '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
       '</div>',
       '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
       '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
-      '{{strCaptionRemove}}',
+      '<span ng-if="isTranslate">{{strCaptionRemove|translate}}</span>',
+      '<span ng-if="!isTranslate">{{strCaptionRemove}}</span>',
       '</md-button>',
       '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
       '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
-      '{{strCaptionBrowse}}',
+      '<span ng-if="isTranslate">{{strCaptionBrowse|translate}}</span>',
+      '<span ng-if="!isTranslate">{{strCaptionBrowse}}</span>',
       '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />', //,onchange="angular.element(this).scope().onFileChanged(this)"/>',
       '</md-button>',
       '</div>',
@@ -280,6 +269,7 @@
 
         scope.isPreview = false;
         scope.isDrag = false;
+        scope.isTranslate = false;
         scope.isMutiple = false;
         scope.isProgress = false;
 
@@ -289,6 +279,10 @@
 
         if (angular.isDefined(attrs.drag)) {
           scope.isDrag = true;
+        };
+
+        if (angular.isDefined(attrs.lfTranslate)) {
+          scope.isTranslate = true;
         };
 
         if (angular.isDefined(attrs.multiple)) {
