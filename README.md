@@ -280,8 +280,8 @@ Corresponding javascript controller
     {
         /**
          * Do stuff
+         * ...
          */
-         ...
          /**
           * Reset the contents of file input
           */
