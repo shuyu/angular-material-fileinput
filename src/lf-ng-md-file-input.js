@@ -11,7 +11,7 @@
 
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
 
-    lfNgMdFileinput.directive('html5vfix', function() {
+    lfNgMdFileinput.directive('srcfix', function() {
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
@@ -22,59 +22,59 @@
 
     lfNgMdFileinput.run(function($templateCache){
         $templateCache.put('lfNgMdFileinput.html', [
-                    '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
-                        '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
-                            '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</md-button>',
-                            '<div class="lf-ng-md-file-input-drag">',
-                                '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
-                                    '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
-                                '</div>',
-                                '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
-                                    '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType">',
-                                        '<div class="lf-ng-md-file-input-x">&times;</div>',
-                                            '<img ng-switch-when="image" ng-src="lffile.lfDataUrl" >',
-                                            '<video ng-switch-when="video" controls>',
-                								'<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
-                							'</video>',
-                                            '<audio ng-switch-when="audio" controls>',
-                								'<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" html5vfix>',
-                							'</audio>',
-                                            '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
-                                                '<div class="lf-ng-md-file-input-preview-default">',
-                                                    '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-                                                '</div>',
-                                            '</object>',
-                                        '<div class="lf-ng-md-file-input-frame-footer">',
-                                            '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
+            '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
+                '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
+                    '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</md-button>',
+                    '<div class="lf-ng-md-file-input-drag">',
+                        '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
+                            '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
+                        '</div>',
+                        '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
+                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType" ng-click="onFileClick(lffile.lfFileName)">',
+                                '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFileByName(lffile.lfFileName,$event)">&times;</div>',
+                                    '<img ng-switch-when="image" ng-src="{{lffile.lfDataUrl}}" >',
+                                    '<video ng-switch-when="video" controls>',
+                                        '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+        							'</video>',
+                                    '<audio ng-switch-when="audio" controls>',
+                                        '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+        							'</audio>',
+                                    '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
+                                        '<div class="lf-ng-md-file-input-preview-default">',
+                                            '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
                                         '</div>',
-                                    '</div>',
+                                    '</object>',
+                                '<div class="lf-ng-md-file-input-frame-footer">',
+                                    '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
                                 '</div>',
-                                '<div class="clearfix" style="clear:both"></div>',
                             '</div>',
                         '</div>',
-                        '<div layout="row" class="lf-ng-md-file-input-container" >',
-                            '<div class="lf-ng-md-file-input-caption" layout="row" layout-align="start center" flex ng-class="{\'disabled\':isDisabled}" >',
-                                '<md-icon class="lf-icon" ng-class="strCaptionIconCls"></md-icon>',
-                                '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
-                                    '{{strCaptionPlaceholder}}',
-                                '</div>',
-                                '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
-                                    '{{strCaption}}',
-                                '</div>',
-                                '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
-                            '</div>',
-                            '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
-                                '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
-                                '{{strCaptionRemove}}',
-                            '</md-button>',
-                            '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
-                                '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
-                                '{{strCaptionBrowse}}',
-                                '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',//,onchange="angular.element(this).scope().onFileChanged(this)"/>',
-                            '</md-button>',
+                        '<div class="clearfix" style="clear:both"></div>',
+                    '</div>',
+                '</div>',
+                '<div layout="row" class="lf-ng-md-file-input-container" >',
+                    '<div class="lf-ng-md-file-input-caption" layout="row" layout-align="start center" flex ng-class="{\'disabled\':isDisabled}" >',
+                        '<md-icon class="lf-icon" ng-class="strCaptionIconCls"></md-icon>',
+                        '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
+                            '{{strCaptionPlaceholder}}',
                         '</div>',
-                    '</div>'
-                ].join(''));
+                        '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
+                            '{{strCaption}}',
+                        '</div>',
+                        '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
+                    '</div>',
+                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
+                        '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
+                        '{{strCaptionRemove}}',
+                    '</md-button>',
+                    '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
+                        '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
+                        '{{strCaptionBrowse}}',
+                        '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',//,onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                    '</md-button>',
+                '</div>',
+            '</div>'
+        ].join(''));
     });
 
     lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
@@ -549,10 +549,10 @@
 
                 elFileinput.bind("change",scope.onFileChanged);
 
-                scope.onFileClick = function(key){
+                scope.onFileClick = function(name){
                     if(angular.isFunction(scope.lfOnFileClick)){
                         scope.lfFiles.every(function(obj,idx){
-                            if(obj.key == key){
+                            if(obj.lfFileName == name){
                                 scope.lfOnFileClick(obj,idx);
                                 return false;
                             }else{
@@ -584,7 +584,7 @@
 
 						scope.lfFiles.push(lfFileObj);
 
-						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame" ng-click="onFileClick(\''+lfFileObj.key+'\')"></div>');
+						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame" ng-click="onFileClick(\''+lfFileObj.lfFileName+'\')"></div>');
 
 						var elFrameX = angular.element('<div aria-label="remove '+file.name+'" class="lf-ng-md-file-input-x" ng-click="removeFileByName(\''+file.name+'\',$event)">&times;<div>');
 
