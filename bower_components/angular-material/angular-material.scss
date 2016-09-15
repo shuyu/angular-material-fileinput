@@ -1207,12 +1207,6 @@ input {
     @include layout-for-name($name);
 }
 
-/* IE10-IE11 column-flex bug fix (set proper default value) */
-.layout-column > .flex {
-	-ms-flex-basis: auto;
-	flex-basis: auto;
-}
-
 $autocomplete-option-height: 48px !default;
 
 @keyframes md-autocomplete-list-out {
@@ -2011,7 +2005,8 @@ md-card {
   }
 
   > img,
-  > md-card-header img {
+  > md-card-header img,
+  md-card-title-media img {
     box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
@@ -2169,77 +2164,6 @@ md-card {
   }
 }
 
-
-//$checkbox-width: 20px !default;
-//$checkbox-height: $checkbox-width !default;
-//$checkbox-border-radius: 2px !default;
-//$checkbox-border-width: 2px !default;
-//
-// ^^ defined in variables.scss
-//
-$checkbox-margin: 16px !default;
-$checkbox-text-margin: 10px !default;
-$checkbox-top: 12px !default;
-
-.md-inline-form {
-  md-checkbox {
-    margin: 19px 0 18px;
-  }
-}
-
-md-checkbox {
-  box-sizing: border-box;
-  display: inline-block;
-  margin-bottom: $checkbox-margin;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-  position: relative;
-  min-width: $checkbox-width;
-  min-height: $checkbox-width;
-  @include rtl(margin-left, 0, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, 0);
-
-  &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  &.md-focused:not([disabled]) {
-    .md-container:before {
-      left: -8px;
-      top: -8px;
-      right: -8px;
-      bottom: -8px;
-    }
-
-    &:not(.md-checked) {
-      .md-container:before {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  &.md-align-top-left > div.md-container {
-    top: $checkbox-top;
-  }
-
-  @include checkbox-container;
-
-  .md-label {
-    box-sizing: border-box;
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    white-space: normal;
-    user-select: text;
-
-    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
-
-  }
-}
 
 $chip-font-size: rem(1.6) !default;
 $chip-height: rem(3.2) !default;
@@ -2452,6 +2376,77 @@ $contact-chip-name-width: rem(12) !default;
 }
 
 
+//$checkbox-width: 20px !default;
+//$checkbox-height: $checkbox-width !default;
+//$checkbox-border-radius: 2px !default;
+//$checkbox-border-width: 2px !default;
+//
+// ^^ defined in variables.scss
+//
+$checkbox-margin: 16px !default;
+$checkbox-text-margin: 10px !default;
+$checkbox-top: 12px !default;
+
+.md-inline-form {
+  md-checkbox {
+    margin: 19px 0 18px;
+  }
+}
+
+md-checkbox {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-bottom: $checkbox-margin;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  position: relative;
+  min-width: $checkbox-width;
+  min-height: $checkbox-width;
+  @include rtl(margin-left, 0, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, 0);
+
+  &:last-of-type {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  &.md-focused:not([disabled]) {
+    .md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+
+    &:not(.md-checked) {
+      .md-container:before {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  &.md-align-top-left > div.md-container {
+    top: $checkbox-top;
+  }
+
+  @include checkbox-container;
+
+  .md-label {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    user-select: text;
+
+    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
+    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
+
+  }
+}
+
 md-content {
 
   display: block;
@@ -2494,10 +2489,9 @@ $md-calendar-height:
     ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height !default;
 
 // Styles for date cells, including day-of-the-week header cells.
-@mixin md-calendar-cell() {
-  height: $md-calendar-cell-size;
+@mixin md-calendar-cell($height: $md-calendar-cell-size) {
+  height: $height;
   width: $md-calendar-cell-size;
-
   text-align: center;
 
   // Remove all padding and borders so we can completely
@@ -2612,7 +2606,7 @@ md-calendar {
   }
 
   md-icon {
-    transform: rotate(180deg);
+    @include rtl(transform, rotate(180deg), none);
   }
 
   span {
@@ -2625,9 +2619,8 @@ md-calendar {
   @include md-calendar-table();
 
   th {
-    @include md-calendar-cell();
+    @include md-calendar-cell($md-calendar-header-height);
     font-weight: normal;
-    height: $md-calendar-header-height;
   }
 }
 
@@ -2713,6 +2706,7 @@ md-datepicker {
   @include md-flat-input();
   min-width: 120px;
   max-width: $md-calendar-width - $md-datepicker-button-gap;
+  padding: 0 0 $md-datepicker-border-bottom-gap;
 }
 
 // If the datepicker is inside of a md-input-container
@@ -2754,7 +2748,6 @@ md-datepicker {
   // Position relative in order to absolutely position the down-triangle button within.
   position: relative;
 
-  padding-bottom: $md-datepicker-border-bottom-gap;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
@@ -2799,27 +2792,14 @@ md-datepicker {
 
 // Portion of the floating panel that sits, invisibly, on top of the input.
 .md-datepicker-input-mask {
-  // It needs to be 1px shorter because of the datepicker-input-container's bottom border,
-  // which can cause a slight hole in the mask when it's inside a md-input-container.
-  height: $md-datepicker-input-mask-height - 1px;
+  height: $md-datepicker-input-mask-height;
   width: $md-calendar-width;
   position: relative;
+  overflow: hidden;
 
   background: transparent;
   pointer-events: none;
   cursor: text;
-}
-
-.md-datepicker-input-mask-opaque {
-  position: absolute;
-  right: 0;
-  left: 120px;
-  height: 100%;
-
-  // The margin pulls it an extra pixel to the left, which gives it a slight overlap
-  // with the input container. This ensures that there are no gaps between the two
-  // elements.
-  margin-left: -1px;
 }
 
 // The calendar portion of the floating pane (vs. the input mask).
@@ -2891,26 +2871,8 @@ md-datepicker[disabled] {
 .md-datepicker-open {
   overflow: hidden;
 
-  .md-datepicker-input-container {
-    // The negative bottom margin prevents the content around the datepicker
-    // from jumping when it gets opened.
-    margin-bottom: -$md-datepicker-border-bottom-gap;
-  }
-
-  .md-icon-button + .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap, auto);
-  }
-
-  .md-datepicker-input,
-  label:not(.md-no-float):not(.md-container-ignore) {
-    margin-bottom: -$md-datepicker-border-bottom-gap;
-  }
-
-  // This needs some extra specificity in order to override
-  // the focused/invalid border colors.
-  input.md-datepicker-input {
-    @include rtl-prop(margin-left, margin-right, 24px, auto);
-    height: $md-datepicker-input-mask-height;
+  .md-datepicker-input-container,
+  input.md-input {
     border-bottom-color: transparent;
   }
 
@@ -3552,16 +3514,6 @@ md-input-container {
     min-width: 1px;
   }
 
-  .md-resize-handle {
-    position: absolute;
-    bottom: $input-error-height - $input-border-width-default * 2;
-    left: 0;
-    height: $input-resize-handle-height;
-    background: transparent;
-    width: 100%;
-    cursor: ns-resize;
-  }
-
   > md-icon {
     position: absolute;
     top: $icon-top-offset;
@@ -3887,6 +3839,21 @@ md-input-container {
       }
     }
   }
+}
+
+.md-resize-wrapper {
+  @include pie-clearfix();
+  position: relative;
+}
+
+.md-resize-handle {
+  position: absolute;
+  bottom: $input-resize-handle-height / -2;
+  left: 0;
+  height: $input-resize-handle-height;
+  background: transparent;
+  width: 100%;
+  cursor: ns-resize;
 }
 
 @media screen and (-ms-high-contrast: active) {
@@ -4474,12 +4441,21 @@ md-toolbar {
 }
 
 
-md-toolbar.md-menu-toolbar {
-  h2.md-toolbar-tools {
-    line-height: 1rem;
-    height: auto;
-    padding: 3.5 * $baseline-grid;
-    padding-bottom: 1.5 * $baseline-grid;
+md-toolbar {
+  &.md-menu-toolbar {
+    h2.md-toolbar-tools {
+      line-height: 1rem;
+      height: auto;
+      padding: 3.5 * $baseline-grid;
+      padding-bottom: 1.5 * $baseline-grid;
+    }
+  }
+
+  // Used to allow hovering from one menu to the
+  // next when inside of a toolbar.
+  &.md-has-open-menu {
+    position: relative;
+    z-index: $z-index-menu;
   }
 }
 
@@ -4542,7 +4518,6 @@ md-menu-content.md-menu-bar-menu.md-dense {
 
   md-menu-item > .md-button, .md-menu > .md-button {
     @include rtl(text-align, left, right);
-    text-align: start;
   }
 
   .md-menu {
@@ -5211,7 +5186,7 @@ md-input-container > md-select {
 // NOTE: When the input has a value and uses a floating label, the floating label will show the
 // asterisk denoting that it is required
 md-input-container:not(.md-input-has-value) {
-  md-select[required], md-select.ng-required {
+  md-select[required]:not(.md-no-asterisk), md-select.ng-required:not(.md-no-asterisk) {
     .md-select-value span:first-child:after {
       content: ' *';
       font-size: 13px;
@@ -5234,7 +5209,7 @@ md-select {
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
 
   &[required], &.ng-required {
-    &.ng-invalid {
+    &.ng-invalid:not(.md-no-asterisk) {
       .md-select-value span:first-child:after {
         content: ' *';
         font-size: 13px;
@@ -5993,8 +5968,8 @@ md-slider {
   }
   &[md-invert] {
     &:not([md-vertical]) .md-track-fill {
-      @include rtl-prop(left, right, auto, auto);
-      @include rtl-prop(right, left, 0, auto);
+      @include rtl(left, auto, 0);
+      @include rtl(right, 0, auto);
     }
     &[md-vertical] {
       .md-track-fill {
@@ -7062,7 +7037,7 @@ md-tooltip {
     }
     &.md-show, &.md-show-add-active {
       transform: scale(1);
-      opacity: 1;
+      opacity: 0.9;
       transform-origin: center top;
     }
     &.md-show-remove {

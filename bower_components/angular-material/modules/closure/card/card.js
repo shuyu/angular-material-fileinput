@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0
+ * v1.1.1
  */
 goog.provide('ngmaterial.components.card');
 goog.require('ngmaterial.core');
@@ -13,6 +13,7 @@ goog.require('ngmaterial.core');
  * @description
  * Card components.
  */
+mdCardDirective.$inject = ["$mdTheming"];
 angular.module('material.components.card', [
     'material.core'
   ])
@@ -137,6 +138,5 @@ function mdCardDirective($mdTheming) {
     }
   };
 }
-mdCardDirective.$inject = ["$mdTheming"];
 
 ngmaterial.components.card = angular.module("material.components.card");

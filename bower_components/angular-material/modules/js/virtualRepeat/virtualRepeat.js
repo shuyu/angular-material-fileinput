@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0
+ * v1.1.1
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -11,6 +11,9 @@
  * @ngdoc module
  * @name material.components.virtualRepeat
  */
+VirtualRepeatContainerController.$inject = ["$$rAF", "$mdUtil", "$parse", "$rootScope", "$window", "$scope", "$element", "$attrs"];
+VirtualRepeatController.$inject = ["$scope", "$element", "$attrs", "$browser", "$document", "$rootScope", "$$rAF", "$mdUtil"];
+VirtualRepeatDirective.$inject = ["$parse"];
 angular.module('material.components.virtualRepeat', [
   'material.core',
   'material.components.showHide'
@@ -33,14 +36,20 @@ angular.module('material.components.virtualRepeat', [
  * Once an element is not visible anymore, the VirtualRepeat recycles it and will reuse it for
  * another visible item by replacing the previous dataset with the new one.
  *
- * **Common Issues**
+ * ### Common Issues
+ *
  * > When having one-time bindings inside of the view template, the VirtualRepeat will not properly
  * > update the bindings for new items, since the view will be recycled.
  *
- * **Notes:**
+ * ### Notes
+ *
  * > The VirtualRepeat is a similar implementation to the Android
  * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
  *
+ * <!-- This comment forces a break between blockquotes //-->
+ *
+ * > Please also review the <a ng-href="api/directive/mdVirtualRepeat">VirtualRepeat</a>
+ * documentation for more information.
  *
  *
  * @usage
@@ -179,7 +188,6 @@ function VirtualRepeatContainerController(
     $scope.$on('$md-resize', boundUpdateSize);
   }));
 }
-VirtualRepeatContainerController.$inject = ["$$rAF", "$mdUtil", "$parse", "$rootScope", "$window", "$scope", "$element", "$attrs"];
 
 
 /** Called by the md-virtual-repeat inside of the container at startup. */
@@ -432,6 +440,10 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * Arrays, but not objects are supported for iteration.
  * Track by, as alias, and (key, value) syntax are not supported.
  *
+ * > <b>Note:</b> Please also review the
+ *   <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> documentation
+ *   for more information.
+ *
  * @usage
  * <hljs lang="html">
  * <md-virtual-repeat-container>
@@ -481,7 +493,6 @@ function VirtualRepeatDirective($parse) {
     }
   };
 }
-VirtualRepeatDirective.$inject = ["$parse"];
 
 
 /** ngInject */
@@ -542,7 +553,6 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
 
   $scope.$on('$destroy', angular.bind(this, this.cleanupBlocks_));
 }
-VirtualRepeatController.$inject = ["$scope", "$element", "$attrs", "$browser", "$document", "$rootScope", "$$rAF", "$mdUtil"];
 
 
 /**
@@ -708,13 +718,12 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   var itemsLength = items && items.length || 0;
   var lengthChanged = false;
 
-  // If the number of items shrank
+  // If the number of items shrank, keep the scroll position.
   if (this.items && itemsLength < this.items.length && this.container.getScrollOffset() !== 0) {
     this.items = items;
     var previousScrollOffset = this.container.getScrollOffset();
     this.container.resetScroll();
     this.container.scrollTo(previousScrollOffset);
-    return;
   }
 
   if (itemsLength !== this.itemsLength) {

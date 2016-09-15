@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0
+ * v1.1.1
  */
 html, body {
   height: 100%;
@@ -284,12 +284,6 @@ input {
 *
 *
 */
-/* IE10-IE11 column-flex bug fix (set proper default value) */
-.layout-column > .flex {
-  -ms-flex-basis: auto;
-  -webkit-flex-basis: auto;
-          flex-basis: auto; }
-
 @-webkit-keyframes md-autocomplete-list-out {
   0% {
     -webkit-animation-timing-function: linear;
@@ -302,7 +296,6 @@ input {
   100% {
     height: 0;
     opacity: 0; } }
-
 @keyframes md-autocomplete-list-out {
   0% {
     -webkit-animation-timing-function: linear;
@@ -983,7 +976,8 @@ md-card {
       md-card md-card-header md-card-header-text .md-subhead {
         font-size: 14px; }
   md-card > img,
-  md-card > md-card-header img {
+  md-card > md-card-header img,
+  md-card md-card-title-media img {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
@@ -1119,151 +1113,6 @@ md-card {
 .md-image-no-fill > img {
   width: auto;
   height: auto; }
-
-.md-inline-form md-checkbox {
-  margin: 19px 0 18px; }
-
-md-checkbox {
-  box-sizing: border-box;
-  display: inline-block;
-  margin-bottom: 16px;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  position: relative;
-  min-width: 20px;
-  min-height: 20px;
-  margin-left: 0;
-  margin-right: 16px; }
-  [dir=rtl] md-checkbox {
-    margin-left: 16px; }
-  [dir=rtl] md-checkbox {
-    margin-right: 0; }
-  md-checkbox:last-of-type {
-    margin-left: 0;
-    margin-right: 0; }
-  md-checkbox.md-focused:not([disabled]) .md-container:before {
-    left: -8px;
-    top: -8px;
-    right: -8px;
-    bottom: -8px; }
-  md-checkbox.md-focused:not([disabled]):not(.md-checked) .md-container:before {
-    background-color: rgba(0, 0, 0, 0.12); }
-  md-checkbox.md-align-top-left > div.md-container {
-    top: 12px; }
-  md-checkbox .md-container {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-    box-sizing: border-box;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    left: 0;
-    right: auto; }
-    [dir=rtl] md-checkbox .md-container {
-      left: auto; }
-    [dir=rtl] md-checkbox .md-container {
-      right: 0; }
-    md-checkbox .md-container:before {
-      box-sizing: border-box;
-      background-color: transparent;
-      border-radius: 50%;
-      content: '';
-      position: absolute;
-      display: block;
-      height: auto;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      -webkit-transition: all 0.5s;
-      transition: all 0.5s;
-      width: auto; }
-    md-checkbox .md-container:after {
-      box-sizing: border-box;
-      content: '';
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px; }
-    md-checkbox .md-container .md-ripple-container {
-      position: absolute;
-      display: block;
-      width: auto;
-      height: auto;
-      left: -15px;
-      top: -15px;
-      right: -15px;
-      bottom: -15px; }
-  md-checkbox .md-icon {
-    box-sizing: border-box;
-    -webkit-transition: 240ms;
-    transition: 240ms;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 2px; }
-  md-checkbox.md-checked .md-icon {
-    border-color: transparent; }
-    md-checkbox.md-checked .md-icon:after {
-      box-sizing: border-box;
-      -webkit-transform: rotate(45deg);
-              transform: rotate(45deg);
-      position: absolute;
-      left: 4.66667px;
-      top: 0.22222px;
-      display: table;
-      width: 6.66667px;
-      height: 13.33333px;
-      border-width: 2px;
-      border-style: solid;
-      border-top: 0;
-      border-left: 0;
-      content: ''; }
-  md-checkbox[disabled] {
-    cursor: default; }
-  md-checkbox.md-indeterminate .md-icon:after {
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-    display: table;
-    width: 12px;
-    height: 2px;
-    border-width: 2px;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: ''; }
-  md-checkbox .md-label {
-    box-sizing: border-box;
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    white-space: normal;
-    -webkit-user-select: text;
-       -moz-user-select: text;
-        -ms-user-select: text;
-            user-select: text;
-    margin-left: 30px;
-    margin-right: 0; }
-    [dir=rtl] md-checkbox .md-label {
-      margin-left: 0; }
-    [dir=rtl] md-checkbox .md-label {
-      margin-right: 30px; }
 
 .md-contact-chips .md-chips md-chip {
   padding: 0 25px 0 0; }
@@ -1446,6 +1295,151 @@ md-checkbox {
   .md-chip-input-container md-autocomplete {
     border: none; } }
 
+.md-inline-form md-checkbox {
+  margin: 19px 0 18px; }
+
+md-checkbox {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-bottom: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: relative;
+  min-width: 20px;
+  min-height: 20px;
+  margin-left: 0;
+  margin-right: 16px; }
+  [dir=rtl] md-checkbox {
+    margin-left: 16px; }
+  [dir=rtl] md-checkbox {
+    margin-right: 0; }
+  md-checkbox:last-of-type {
+    margin-left: 0;
+    margin-right: 0; }
+  md-checkbox.md-focused:not([disabled]) .md-container:before {
+    left: -8px;
+    top: -8px;
+    right: -8px;
+    bottom: -8px; }
+  md-checkbox.md-focused:not([disabled]):not(.md-checked) .md-container:before {
+    background-color: rgba(0, 0, 0, 0.12); }
+  md-checkbox.md-align-top-left > div.md-container {
+    top: 12px; }
+  md-checkbox .md-container {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+    box-sizing: border-box;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    right: auto; }
+    [dir=rtl] md-checkbox .md-container {
+      left: auto; }
+    [dir=rtl] md-checkbox .md-container {
+      right: 0; }
+    md-checkbox .md-container:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      -webkit-transition: all 0.5s;
+      transition: all 0.5s;
+      width: auto; }
+    md-checkbox .md-container:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px; }
+    md-checkbox .md-container .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px; }
+  md-checkbox .md-icon {
+    box-sizing: border-box;
+    -webkit-transition: 240ms;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 2px; }
+  md-checkbox.md-checked .md-icon {
+    border-color: transparent; }
+    md-checkbox.md-checked .md-icon:after {
+      box-sizing: border-box;
+      -webkit-transform: rotate(45deg);
+              transform: rotate(45deg);
+      position: absolute;
+      left: 4.66667px;
+      top: 0.22222px;
+      display: table;
+      width: 6.66667px;
+      height: 13.33333px;
+      border-width: 2px;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: ''; }
+  md-checkbox[disabled] {
+    cursor: default; }
+  md-checkbox.md-indeterminate .md-icon:after {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    display: table;
+    width: 12px;
+    height: 2px;
+    border-width: 2px;
+    border-style: solid;
+    border-top: 0;
+    border-left: 0;
+    content: ''; }
+  md-checkbox .md-label {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    -webkit-user-select: text;
+       -moz-user-select: text;
+        -ms-user-select: text;
+            user-select: text;
+    margin-left: 30px;
+    margin-right: 0; }
+    [dir=rtl] md-checkbox .md-label {
+      margin-left: 0; }
+    [dir=rtl] md-checkbox .md-label {
+      margin-right: 30px; }
+
 md-content {
   display: block;
   position: relative;
@@ -1530,6 +1524,9 @@ md-calendar {
   .md-calendar-month-label md-icon {
     -webkit-transform: rotate(180deg);
             transform: rotate(180deg); }
+    [dir=rtl] .md-calendar-month-label md-icon {
+      -webkit-transform: none;
+              transform: none; }
   .md-calendar-month-label span {
     vertical-align: middle; }
 
@@ -1538,13 +1535,13 @@ md-calendar {
   border-spacing: 0;
   border-collapse: collapse; }
   .md-calendar-day-header th {
+    height: 40px;
     width: 44px;
     text-align: center;
     padding: 0;
     border: none;
     box-sizing: content-box;
-    font-weight: normal;
-    height: 40px; }
+    font-weight: normal; }
     .md-calendar-day-header th:first-child {
       padding-left: 16px; }
       [dir=rtl] .md-calendar-day-header th:first-child {
@@ -1609,7 +1606,8 @@ md-datepicker {
   outline: none;
   background: transparent;
   min-width: 120px;
-  max-width: 328px; }
+  max-width: 328px;
+  padding: 0 0 5px; }
   .md-datepicker-input::-ms-clear {
     display: none; }
 
@@ -1640,7 +1638,6 @@ md-datepicker {
 
 .md-datepicker-input-container {
   position: relative;
-  padding-bottom: 5px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   display: inline-block;
@@ -1677,19 +1674,13 @@ md-datepicker {
             transform: scale(1); }
 
 .md-datepicker-input-mask {
-  height: 39px;
+  height: 40px;
   width: 340px;
   position: relative;
+  overflow: hidden;
   background: transparent;
   pointer-events: none;
   cursor: text; }
-
-.md-datepicker-input-mask-opaque {
-  position: absolute;
-  right: 0;
-  left: 120px;
-  height: 100%;
-  margin-left: -1px; }
 
 .md-datepicker-calendar {
   opacity: 0;
@@ -1739,23 +1730,9 @@ md-datepicker[disabled] .md-datepicker-triangle-button {
 
 .md-datepicker-open {
   overflow: hidden; }
-  .md-datepicker-open .md-datepicker-input-container {
-    margin-bottom: -5px; }
-  .md-datepicker-open .md-icon-button + .md-datepicker-input-container {
-    margin-left: -12px; }
-    [dir=rtl] .md-datepicker-open .md-icon-button + .md-datepicker-input-container {
-      margin-left: auto;
-      margin-right: -12px; }
-  .md-datepicker-open .md-datepicker-input,
-  .md-datepicker-open label:not(.md-no-float):not(.md-container-ignore) {
-    margin-bottom: -5px; }
-  .md-datepicker-open input.md-datepicker-input {
-    margin-left: 24px;
-    height: 40px;
+  .md-datepicker-open .md-datepicker-input-container,
+  .md-datepicker-open input.md-input {
     border-bottom-color: transparent; }
-    [dir=rtl] .md-datepicker-open input.md-datepicker-input {
-      margin-left: auto;
-      margin-right: 24px; }
   .md-datepicker-open .md-datepicker-triangle-button,
   .md-datepicker-open.md-input-has-value > label,
   .md-datepicker-open.md-input-has-placeholder > label {
@@ -2299,14 +2276,6 @@ md-input-container {
     min-width: 1px; }
     [dir=rtl] md-input-container .md-errors-spacer {
       float: left; }
-  md-input-container .md-resize-handle {
-    position: absolute;
-    bottom: 22px;
-    left: 0;
-    height: 10px;
-    background: transparent;
-    width: 100%;
-    cursor: ns-resize; }
   md-input-container > md-icon {
     position: absolute;
     top: 8px;
@@ -2576,6 +2545,22 @@ md-input-container {
     md-input-container.md-icon-left.md-icon-right > label:not(.md-no-float):not(.md-container-ignore),
     md-input-container.md-icon-left.md-icon-right > label .md-placeholder {
       width: calc(100% - (36px * 2)); }
+
+.md-resize-wrapper {
+  position: relative; }
+  .md-resize-wrapper:after {
+    content: '';
+    display: table;
+    clear: both; }
+
+.md-resize-handle {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  height: 10px;
+  background: transparent;
+  width: 100%;
+  cursor: ns-resize; }
 
 @media screen and (-ms-high-contrast: active) {
   md-input-container.md-default-theme > md-icon {
@@ -3130,6 +3115,10 @@ md-toolbar.md-menu-toolbar h2.md-toolbar-tools {
   padding: 28px;
   padding-bottom: 12px; }
 
+md-toolbar.md-has-open-menu {
+  position: relative;
+  z-index: 100; }
+
 md-menu-bar {
   padding: 0 20px;
   display: block;
@@ -3187,7 +3176,7 @@ md-menu-content.md-menu-bar-menu.md-dense {
   md-menu-content.md-menu-bar-menu.md-dense md-menu-divider {
     margin: 8px 0; }
   md-menu-content.md-menu-bar-menu.md-dense md-menu-item > .md-button, md-menu-content.md-menu-bar-menu.md-dense .md-menu > .md-button {
-    text-align: start; }
+    text-align: left; }
     [dir=rtl] md-menu-content.md-menu-bar-menu.md-dense md-menu-item > .md-button, [dir=rtl] md-menu-content.md-menu-bar-menu.md-dense .md-menu > .md-button {
       text-align: right; }
   md-menu-content.md-menu-bar-menu.md-dense .md-menu {
@@ -3807,7 +3796,7 @@ md-input-container > md-select {
   -webkit-order: 2;
           order: 2; }
 
-md-input-container:not(.md-input-has-value) md-select[required] .md-select-value span:first-child:after, md-input-container:not(.md-input-has-value) md-select.ng-required .md-select-value span:first-child:after {
+md-input-container:not(.md-input-has-value) md-select[required]:not(.md-no-asterisk) .md-select-value span:first-child:after, md-input-container:not(.md-input-has-value) md-select.ng-required:not(.md-no-asterisk) .md-select-value span:first-child:after {
   content: ' *';
   font-size: 13px;
   vertical-align: top; }
@@ -3821,7 +3810,7 @@ md-select {
   display: -webkit-flex;
   display: flex;
   margin: 20px 0 26px 0; }
-  md-select[required].ng-invalid .md-select-value span:first-child:after, md-select.ng-required.ng-invalid .md-select-value span:first-child:after {
+  md-select[required].ng-invalid:not(.md-no-asterisk) .md-select-value span:first-child:after, md-select.ng-required.ng-invalid:not(.md-no-asterisk) .md-select-value span:first-child:after {
     content: ' *';
     font-size: 13px;
     vertical-align: top; }
@@ -4570,11 +4559,9 @@ md-slider {
     left: auto;
     right: 0; }
     [dir=rtl] md-slider[md-invert]:not([md-vertical]) .md-track-fill {
-      left: auto;
-      right: auto; }
-    [dir=rtl] md-slider[md-invert]:not([md-vertical]) .md-track-fill {
-      right: auto;
       left: 0; }
+    [dir=rtl] md-slider[md-invert]:not([md-vertical]) .md-track-fill {
+      right: auto; }
   md-slider[md-invert][md-vertical] .md-track-fill {
     bottom: auto;
     top: 0; }
@@ -5492,7 +5479,7 @@ md-tooltip {
     md-tooltip .md-content.md-show, md-tooltip .md-content.md-show-add-active {
       -webkit-transform: scale(1);
               transform: scale(1);
-      opacity: 1;
+      opacity: 0.9;
       -webkit-transform-origin: center top;
               transform-origin: center top; }
     md-tooltip .md-content.md-show-remove {
