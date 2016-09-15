@@ -262,6 +262,34 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
+###Reset internal lfFiles
+
+```html
+
+<lf-ng-md-file-input lf-files="files" drag lf-api="lfApi"></lf-ng-md-file-input>
+
+```
+
+Corresponding javascript controller
+
+```javascript
+    /**
+     * Upload using your own API
+     */
+    upload().then(function(response)
+    {
+        /**
+         * Do stuff
+         * ...
+         */
+         /**
+          * Reset the contents of file input
+          */
+         $scope.lfApi.removeAll();
+    });
+```
+
+
 ###Validation
 
 | Attribute      | Description |
