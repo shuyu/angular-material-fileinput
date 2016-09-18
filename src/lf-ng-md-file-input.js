@@ -44,6 +44,7 @@
                                             '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
                                         '</div>',
                                     '</object>',
+                                    '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
                                 '<div class="lf-ng-md-file-input-frame-footer">',
                                     '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
                                 '</div>',
@@ -501,7 +502,7 @@
 
 					scope.lfFiles.every(function(obj,idx){
 						if(obj.lfFileName == name){
-                            obj.element.remove();
+                            // obj.element.remove();
 							scope.lfFiles.splice(idx,1);
 							return false;
 						}
@@ -583,54 +584,6 @@
                         };
 
 						scope.lfFiles.push(lfFileObj);
-
-						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame" ng-click="onFileClick(\''+lfFileObj.lfFileName+'\')"></div>');
-
-						var elFrameX = angular.element('<div aria-label="remove '+file.name+'" class="lf-ng-md-file-input-x" ng-click="removeFileByName(\''+file.name+'\',$event)">&times;<div>');
-
-						var tplPreview = '';
-
-						if(lfTagType == 'image'){
-
-							tplPreview = '<img src="'+lfDataUrl+'" >';
-
-						}else if(lfTagType == 'video'){
-
-							tplPreview  =  ['<video controls>',
-								'<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
-							'</video>'].join('');
-
-						}else if(lfTagType == 'audio'){
-
-							tplPreview  =  ['<audio controls>',
-								'<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
-							'</audio>'].join('');
-
-						}else{
-
-                            tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'">',
-                                                '<div class="lf-ng-md-file-input-preview-default">',
-                                                    '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-                                                '</div>',
-                                            '</object>'].join('');
-
-						}
-
-						var elPreview = angular.element(tplPreview);
-
-						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
-
-						elFrame.append(elFrameX);
-
-						elFrame.append(elPreview);
-
-						elFrame.append(elFooter);
-
-						$compile(elFrame)(scope);
-
-						elThumbnails.append(elFrame);
-
-                        lfFileObj.element = elFrame;
 
 						updateTextCaption();
 
