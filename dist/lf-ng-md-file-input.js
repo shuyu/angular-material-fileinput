@@ -541,12 +541,14 @@
 						var lfFileType = file.type;
 						var lfTagType = parseFileType(file);
 						var lfDataUrl = window.URL.createObjectURL(file);
+                        var lfId = genLfObjId();
 
                         var lfFileObj = {
-                            "key":genLfObjId(),
+                            "key":lfId,
                             "lfFile":lfFile,
                             "lfFileName":lfFileName,
-                            "lfDataUrl":lfDataUrl
+                            "lfDataUrl":lfDataUrl,
+                            "counterId" : 'counter'+lfId
                         };
 
 						scope.lfFiles.push(lfFileObj);
@@ -584,15 +586,17 @@
 						}
 
 						var elPreview = angular.element(tplPreview);
-
-						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
+                        var fileProgressId = lfFileObj.key + '-uploadFileProgress';
+                        lfFileObj.uploadFileProgress = 0;
+                        scope[lfFileObj.counterId] = 0;
+                        $interval(function() {
+                            scope[lfFileObj.counterId]  = lfFileObj.uploadFileProgress;
+                            scope.$digest();
+                        }, 100, 0, false);
+                        var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><md-progress-linear id="' + fileProgressId + '" md-mode="determinate" value="{{'+lfFileObj.counterId+'}}"></md-progress-linear><div class="lf-ng-md-file-input-frame-caption">' + lfFile.name + '</div></div>');
 
 						elFrame.append(elFrameX);
-						// if(scope.isPreview) {
 						elFrame.append(elPreview);
-						// }else{
-                        //     console.log('no preview');
-                        // }
 						elFrame.append(elFooter);
 
 						$compile(elFrame)(scope);
