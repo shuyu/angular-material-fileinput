@@ -32,19 +32,19 @@
                         '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
                             '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType" ng-click="onFileClick(lffile.lfFileName)">',
                                 '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFileByName(lffile.lfFileName,$event)">&times;</div>',
-                                    '<img ng-switch-when="image" ng-src="{{lffile.lfDataUrl}}" >',
-                                    '<video ng-switch-when="video" controls>',
-                                        '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
-        							'</video>',
-                                    '<audio ng-switch-when="audio" controls>',
-                                        '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
-        							'</audio>',
-                                    '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
-                                        '<div class="lf-ng-md-file-input-preview-default">',
-                                            '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-                                        '</div>',
-                                    '</object>',
-                                    '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
+                                '<img ng-switch-when="image" ng-src="{{lffile.lfDataUrl}}" >',
+                                '<video ng-switch-when="video" controls>',
+                                    '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+    							'</video>',
+                                '<audio ng-switch-when="audio" controls>',
+                                    '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+    							'</audio>',
+                                '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
+                                    '<div class="lf-ng-md-file-input-preview-default">',
+                                        '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
+                                    '</div>',
+                                '</object>',
+                                // '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
                                 '<div class="lf-ng-md-file-input-frame-footer">',
                                     '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
                                 '</div>',
@@ -450,7 +450,9 @@
                                 if(names.indexOf(file.name) != -1){
                                     scope.removeFileByName(file.name);
                                 }
-                                setTimeout(readFile(file), i*100);
+                                setTimeout(function(){
+                                    readFile(file);
+                                }, i*100);
                             }
                         }
                     }else{
@@ -459,7 +461,9 @@
                             var file = files[i];
                             if(file.type.match(regexp)){
                                 scope.removeAllFiles();
-                                setTimeout(readFile(file), 100);
+                                setTimeout(function(){
+                                    readFile(file);
+                                }, i*100);
                                 break;
                             }
                         }
