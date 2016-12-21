@@ -3,11 +3,49 @@
     'use strict';
 
     var genLfObjId = function(){
-    	return 	'lfobjxxxxxxxx'.replace(/[xy]/g, function(c) {
+    	return 	'lfobjyxxxxxxxx'.replace(/[xy]/g, function(c) {
 	    			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 	    			return v.toString(16);
 				});
     };
+
+    var parseFileType = function (file){
+        var type =  file.type;
+        var name =  file.name;
+        if(isImageType(type,name)){
+            return "image";
+        }else if(isVideoType(type,name)){
+            return "video";
+        }else if(isAudioType(type,name)){
+            return "audio";
+        }
+        return "object";
+    };
+
+    var isImageType = function(type,name){
+        return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
+    };
+
+    var isVideoType = function(type,name){
+        return (type.match('video.*') || name.match(/\.(og?|mp4|webm|3gp)$/i)) ? true : false;
+    };
+
+    var isAudioType = function(type,name){
+        return (type.match('audio.*') || name.match(/\.(ogg|mp3|wav)$/i)) ? true : false;
+    };
+
+    var genLfFileObj = function(file, isRemote){
+        var lfFileObj = {
+            "key":genLfObjId(),
+            "lfFile":file,
+            "lfFileName":file.name,
+            "lfFileType":file.type,
+            "lfTagType":parseFileType(file),
+            "lfDataUrl":window.URL.createObjectURL(file),
+            "isRemote" : isRemote
+        };
+        return lfFileObj;
+    }
 
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
 
@@ -20,6 +58,41 @@
         }
     });
 
+    lfNgMdFileinput.directive('lfFile', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                lfFileObj: '=',
+                lfUnknowClass: '='
+            },
+            link: function(scope, element, attrs) {
+                console.log(scope.lfFileObj);
+                console.log(scope);
+                console.log(attrs);
+                console.log(element);
+
+                var src = scope.lfFileObj.lfDataUrl;
+                var fileType = scope.lfFileObj.lfFileType;
+                var tagType = scope.lfFileObj.lfTagType;
+                var unKnowClass = scope.lfUnknowClass;
+                switch(tagType){
+                    // case 'image': {
+                    //     break;
+                    // }
+                    default : {
+                        element.replaceWith(
+                            '<object type="' + fileType + '" data="' + src + '">' +
+                                '<div class="lf-ng-md-file-input-preview-default">' +
+                                    '<md-icon class="lf-ng-md-file-input-preview-icon '+unKnowClass+'"></md-icon>' +
+                                '</div>' +
+                            '</object>'
+                        );
+                    }
+                }
+            }
+        };
+    });
+
     lfNgMdFileinput.run(function($templateCache){
         $templateCache.put('lfNgMdFileinput.html', [
             '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
@@ -29,22 +102,31 @@
                         '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
                             '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                         '</div>',
-                        '<div class="lf-ng-md-file-input-thumbnails" ng-show="isPreview">',
-                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-switch on="lffile.lfTagType" ng-click="onFileClick(lffile.lfFileName)">',
+                        '<div class="lf-ng-md-file-input-thumbnails" ng-if="isPreview == true">',
+                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-click="onFileClick(lffile.lfFileName)">',
+
+                            //ng-switch on="lffile.lfTagType"
+
                                 '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFileByName(lffile.lfFileName,$event)">&times;</div>',
-                                '<img ng-switch-when="image" ng-src="{{lffile.lfDataUrl}}" >',
-                                '<video ng-switch-when="video" controls>',
-                                    '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
-    							'</video>',
-                                '<audio ng-switch-when="audio" controls>',
-                                    '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
-    							'</audio>',
-                                '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
-                                    '<div class="lf-ng-md-file-input-preview-default">',
-                                        '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-                                    '</div>',
-                                '</object>',
+
+                                // '<img ng-if="lffile.lfTagType == \'image\'" ng-src="{{lffile.lfDataUrl}}" >',
+                                // '<video ng-switch-when="video" controls>',
+                                //     '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+    							// '</video>',
+                                // '<audio ng-switch-when="audio" controls>',
+                                //     '<source vsrc="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}" srcfix>',
+    							// '</audio>',
+
+                                '<lf-file lf-file-obj="lffile" lf-unknow-class="strUnknowIconCls"/>',
+
+//                                 '<object ng-switch-when="object" ng-attr-data="{{lffile.lfDataUrl}}" ng-attr-type="{{lffile.lfFile.type}}">',
+// -                                    '<div class="lf-ng-md-file-input-preview-default">',
+// -                                        '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
+// -                                    '</div>',
+// -                                '</object>',
+
                                 // '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
+
                                 '<div class="lf-ng-md-file-input-frame-footer">',
                                     '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
                                 '</div>',
@@ -351,6 +433,10 @@
                     self.removeByName = function(name){
                         scope.removeFileByName(name);
                     };
+
+                    self.addRemoteUrl = function(url){
+
+                    };
                 };
 
                 scope.isFilesNull = true;
@@ -468,7 +554,6 @@
                             }
                         }
                     }
-
 				});
 
 				scope.openDialog = function(event, el) {
@@ -476,9 +561,9 @@
 						$timeout(function() {
 							event.preventDefault();
 							event.stopPropagation();
-							var elFileinput = event.target.children[2];
-							if(elFileinput !== undefined) {
-								elFileinput.click();
+							var children = event.target.children[2];
+							if(children !== undefined) {
+								elFileinput[0].click();
 							}
 						}, 0);
 					}
@@ -572,25 +657,10 @@
                     scope.intLoading++;
 
 					readAsDataURL(file).then(function(result){
-
-						var lfFile = file;
-						var lfFileName = file.name;
-						var lfFileType = file.type;
-						var lfTagType = parseFileType(file);
-						var lfDataUrl = window.URL.createObjectURL(file);
-
-                        var lfFileObj = {
-                            "key":genLfObjId(),
-                            "lfFile":lfFile,
-                            "lfFileName":lfFileName,
-                            "lfDataUrl":lfDataUrl,
-                            "lfTagType":lfTagType
-                        };
-
-						scope.lfFiles.push(lfFileObj);
-
+                        var obj = genLfFileObj(file, false);
+						scope.lfFiles.push(obj);
+                        console.log(scope.lfFiles);
 						updateTextCaption();
-
 					},function(error){
 
 					},function(notify){
@@ -612,35 +682,10 @@
 						scope.isFilesNull  = false;
 					}else{
                         if(!isCustomCaption){
-						  scope.strCaption = '';
+						    scope.strCaption = '';
                         }
 						scope.isFilesNull  = true;
 					}
-				};
-
-				var parseFileType = function (file){
-					var type =  file.type;
-					var name =  file.name;
-					if(isImageType(type,name)){
-						return "image";
-					}else if(isVideoType(type,name)){
-						return "video";
-					}else if(isAudioType(type,name)){
-						return "audio";
-					}
-					return "object";
-				};
-
-				var isImageType = function(type,name){
-					return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
-				};
-
-				var isVideoType = function(type,name){
-					return (type.match('video.*') || name.match(/\.(og?|mp4|webm|3gp)$/i)) ? true : false;
-				};
-
-				var isAudioType = function(type,name){
-					return (type.match('audio.*') || name.match(/\.(ogg|mp3|wav)$/i)) ? true : false;
 				};
 
 				var readAsDataURL = function (file,index) {
