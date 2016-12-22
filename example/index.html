@@ -30,7 +30,7 @@
                 // $mdThemingProvider.theme('default')
             }]);
 
-            app.controller('DemoController',function($scope){
+            app.controller('DemoController',function($scope, $timeout){
                 $scope.$watch('files02.length',function(newVal,oldVal){
                     console.log($scope.files02);
                 });
@@ -42,9 +42,15 @@
                 };
                 $scope.onFileClick = function(obj,idx){
                     alert(obj.lfFileName);
-                    $scope.api999.addRemoteFile('https://yt3.ggpht.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/s900-c-k-no-mo-rj-c0xffffff/photo.jpg','photo','image');
+
 
                 };
+
+                $timeout(
+                    function(){
+                        $scope.api999.addRemoteFile('https://yt3.ggpht.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/s900-c-k-no-mo-rj-c0xffffff/photo.jpg','photo','image');
+                    }
+                )
 
 
             });

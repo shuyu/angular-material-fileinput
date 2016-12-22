@@ -130,10 +130,10 @@
     lfNgMdFileinput.run(function($templateCache){
         $templateCache.put('lfNgMdFileinput.html', [
             '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
-                '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
-                    '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</md-button>',
+                '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && lfFiles.length)">',
+                    '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="!lfFiles.length || !isPreview" >&times;</md-button>',
                     '<div class="lf-ng-md-file-input-drag">',
-                        '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(isFilesNull || !isPreview) && isDrag">',
+                        '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(!lfFiles.length || !isPreview) && isDrag">',
                             '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                         '</div>',
                         '<div class="lf-ng-md-file-input-thumbnails" ng-if="isPreview == true">',
@@ -152,15 +152,15 @@
                 '<div layout="row" class="lf-ng-md-file-input-container" >',
                     '<div class="lf-ng-md-file-input-caption" layout="row" layout-align="start center" flex ng-class="{\'disabled\':isDisabled}" >',
                         '<md-icon class="lf-icon" ng-class="strCaptionIconCls"></md-icon>',
-                        '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="isFilesNull">',
+                        '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="!lfFiles.length">',
                             '{{strCaptionPlaceholder}}',
                         '</div>',
-                        '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="isFilesNull">',
+                        '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="!lfFiles.length">',
                             '{{strCaption}}',
                         '</div>',
                         '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
                     '</div>',
-                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="isFilesNull || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
+                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="!lfFiles.length || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
                         '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
                         '{{strCaptionRemove}}',
                     '</md-button>',
@@ -454,7 +454,7 @@
                     };
                 };
 
-                scope.isFilesNull = true;
+                // scope.isFilesNull = true;
 
                 scope.strCaption = '';
 
@@ -689,17 +689,17 @@
                         if(!isCustomCaption){
                             scope.strCaption = '' + scope.lfFiles[0].lfFileName;
                         }
-						scope.isFilesNull  = false;
+						// scope.isFilesNull  = false;
 					}else if(scope.lfFiles.length > 1){
                         if(!isCustomCaption){
     						scope.strCaption = '' + scope.lfFiles.length + ' files selected';
                         }
-						scope.isFilesNull  = false;
+						// scope.isFilesNull  = false;
 					}else{
                         if(!isCustomCaption){
 						    scope.strCaption = '';
                         }
-						scope.isFilesNull  = true;
+						// scope.isFilesNull  = true;
 					}
 				};
 
