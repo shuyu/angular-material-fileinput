@@ -42,7 +42,11 @@
                 };
                 $scope.onFileClick = function(obj,idx){
                     alert(obj.lfFileName);
+                    $scope.api999.addRemoteFile('https://yt3.ggpht.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/s900-c-k-no-mo-rj-c0xffffff/photo.jpg','photo','image');
+
                 };
+
+
             });
 
         </script>
@@ -254,7 +258,7 @@
 <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-api="api999" preview drag multiple></lf-ng-md-file-input>
 
             </md-content>
 
