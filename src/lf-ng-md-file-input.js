@@ -606,8 +606,6 @@
                     });
                     scope.floatProgress = 0;
 					if(scope.isMutiple){
-
-
                         intFilesCount = files.length;
                         scope.intLoading = intFilesCount;
                         for(var i=0;i<files.length;i++){
