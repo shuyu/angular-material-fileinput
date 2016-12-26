@@ -88,7 +88,7 @@
                     case 'video': {
                         element.replaceWith(
                             '<video controls>' +
-                                '<source src="' + src + '" type="' + fileType + '" >' +
+                                '<source src="' + src + '"">' +
                             '</video>'
                         );
                         break;
@@ -96,7 +96,7 @@
                     case 'audio': {
                         element.replaceWith(
                             '<audio controls>' +
-                                '<source src="' + src + '" type="' + fileType + '" >' +
+                                '<source src="' + src + '"">' +
                             '</audio>'
                         );
                         break;
