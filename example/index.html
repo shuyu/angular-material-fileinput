@@ -41,9 +41,10 @@
                     "unknowIconCls":"myUnknow"
                 };
                 $scope.onFileClick = function(obj,idx){
-                    alert(obj.lfFileName);
-
-
+                    console.log(obj);
+                };
+                $scope.onFileRemove = function(obj,idx){
+                    console.log(obj);
                 };
 
                 $timeout(
@@ -264,7 +265,7 @@
 <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-api="api999" preview drag multiple></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" lf-api="api999" preview drag multiple></lf-ng-md-file-input>
 
             </md-content>
 

@@ -128,8 +128,8 @@
                             '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
                         '</div>',
                         '<div class="lf-ng-md-file-input-thumbnails" ng-if="isPreview == true">',
-                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-click="onFileClick(lffile.lfFileName)">',
-                                '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFileByName(lffile.lfFileName,$event)">&times;</div>',
+                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-click="onFileClick(lffile)">',
+                                '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFile(lffile,$event)">&times;</div>',
                                 '<lf-file lf-file-obj="lffile" lf-unknow-class="strUnknowIconCls"/>',
                                 // '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
                                 '<div class="lf-ng-md-file-input-frame-footer">',
@@ -354,6 +354,7 @@
 				lfBrowseLabel: '@?',
 				lfRemoveLabel: '@?',
                 lfOnFileClick: '=?',
+                lfOnFileRemove: '=?',
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -521,10 +522,24 @@
                     executeValidate();
 				};
 
-                scope.onFileClick = function(name) {
+                scope.removeFile = function(lfFile) {
+                    scope.lfFiles.every(function(obj,idx){
+						if(obj.key == lfFile.key){
+                            if(angular.isFunction(scope.lfOnFileRemove)){
+                                scope.lfOnFileRemove(obj,idx);
+                            }
+							scope.lfFiles.splice(idx,1);
+							return false;
+						}
+						return true;
+					});
+                    executeValidate();
+                };
+                //call back function
+                scope.onFileClick = function(lfFile) {
                     if(angular.isFunction(scope.lfOnFileClick)){
                         scope.lfFiles.every(function(obj,idx){
-                            if(obj.lfFileName == name){
+                            if(obj.key == lfFile.key){
                                 scope.lfOnFileClick(obj,idx);
                                 return false;
                             }else{
@@ -533,6 +548,8 @@
                         });
                     }
                 };
+
+                // scope.onFileRemove =
 
                 elDragview.bind("dragover", function(e){
                     e.stopPropagation();
