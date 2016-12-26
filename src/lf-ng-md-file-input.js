@@ -156,7 +156,10 @@
                             '{{strCaptionPlaceholder}}',
                         '</div>',
                         '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="!lfFiles.length">',
-                            '{{strCaption}}',
+                            '<span ng-if="isCustomCaption">{{strCaption}}</span>',
+                            '<span ng-if="!isCustomCaption">',
+                                '{{ lfFiles.length == 1 ? lfFiles[0].lfFileName : lfFiles.length+" files selected" }}',
+                            '</span>',
                         '</div>',
                         '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
                     '</div>',
@@ -368,8 +371,10 @@
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
 
-                var isCustomCaption = false;
+                // var isCustomCaption = false;
                 var intFilesCount = 0;
+
+                scope.isCustomCaption = false;
 
                 scope.intLoading = 0;
                 scope.floatProgress = 0;
@@ -479,7 +484,8 @@
                 }
 
                 if (angular.isDefined(attrs.lfCaption) ) {
-                    isCustomCaption = true;
+                    // isCustomCaption = true;
+                    scope.isCustomCaption = true;
                     scope.$watch('lfCaption', function(newVal) {
                         scope.strCaption = newVal;
                     });
@@ -531,6 +537,9 @@
                     }
 
 					var files = e.target.files || e.dataTransfer.files;
+
+                    // console.log(files);
+
 					var i = 0;
 
 					if(files.length <= 0){
@@ -551,9 +560,11 @@
                                 if(names.indexOf(file.name) != -1){
                                     scope.removeFileByName(file.name);
                                 }
-                                setTimeout(function(){
-                                    readFile(file);
-                                }, i*100);
+                                (function(index){
+                                    setTimeout(function(){
+                                        readFile(files[index]);
+                                    }, index*100);
+                                })(i);
                             }
                         }
                     }else{
@@ -562,9 +573,11 @@
                             var file = files[i];
                             if(file.type.match(regexp)){
                                 scope.removeAllFiles();
-                                setTimeout(function(){
-                                    readFile(file);
-                                }, i*100);
+                                (function(index){
+                                    setTimeout(function(){
+                                        readFile(files[index]);
+                                    }, index*100);
+                                })(i);
                                 break;
                             }
                         }
@@ -594,8 +607,6 @@
 
 					elThumbnails.empty();
 
-					updateTextCaption();
-
 				};
 
 				scope.removeFileByName = function(name,event){
@@ -612,8 +623,6 @@
 						}
 						return true;
 					});
-
-					updateTextCaption();
 
 				};
 
@@ -674,33 +683,12 @@
 					readAsDataURL(file).then(function(result){
                         var obj = genLfFileObj(file);
 						scope.lfFiles.push(obj);
-                        console.log(scope.lfFiles);
-						updateTextCaption();
 					},function(error){
 
 					},function(notify){
 
 					});
 
-				};
-
-				var updateTextCaption = function(){
-					if(scope.lfFiles.length == 1){
-                        if(!isCustomCaption){
-                            scope.strCaption = '' + scope.lfFiles[0].lfFileName;
-                        }
-						// scope.isFilesNull  = false;
-					}else if(scope.lfFiles.length > 1){
-                        if(!isCustomCaption){
-    						scope.strCaption = '' + scope.lfFiles.length + ' files selected';
-                        }
-						// scope.isFilesNull  = false;
-					}else{
-                        if(!isCustomCaption){
-						    scope.strCaption = '';
-                        }
-						// scope.isFilesNull  = true;
-					}
 				};
 
 				var readAsDataURL = function (file,index) {
