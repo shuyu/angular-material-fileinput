@@ -239,7 +239,7 @@
                 </xmp>
 
                 <form name="testForm" layout="column">
-                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
+                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*,audio/*" multiple drag preview></lf-ng-md-file-input>
                     <div ng-messages="testForm.files00.$error" style="color:red;">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="maxcount">Too many files.</div>
