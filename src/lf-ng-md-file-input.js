@@ -210,10 +210,14 @@
                                     '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
                                     '{{strCaptionRemove}}',
                                 '</md-button>',
-                                '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
+                                '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" ng-class="strBrowseButtonCls" ng-show="lfFiles.length == 0">',
                                     '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
                                     '{{strCaptionBrowse}}',
                                     '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',//,onchange="angular.element(this).scope().onFileChanged(this)"/>',
+                                '</md-button>',
+                                '<md-button id="submitButton" ng-disabled="isDisabled" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" ng-class="strSubmitButtonCls" ng-show="lfFiles.length > 0">',
+                                    '<md-icon class="lf-icon" ng-class="strSubmitIconCls"></md-icon> ',
+                                    '{{strCaptionSubmit}}',
                                 '</md-button>',
                             '</div>',
 
@@ -229,7 +233,9 @@
 				lfDragAndDropLabel:'@?',
 				lfBrowseLabel: '@?',
 				lfRemoveLabel: '@?',
+                lfSubmitLabel: '@?',
                 lfOnFileClick: '=?',
+                lfSubmit: '&',
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -241,6 +247,8 @@
 
                 var isCustomCaption = false;
                 var intFilesCount = 0;
+
+                var submitHandler = scope.lfSubmit();
 
                 scope.intLoading = 0;
                 scope.floatProgress = 0;
@@ -280,7 +288,11 @@
                 scope.strBrowseIconCls = "lf-browse";
                 scope.strRemoveIconCls = "lf-remove";
                 scope.strCaptionIconCls = "lf-caption";
+                scope.strSubmitIconCls = "lf-submit";
                 scope.strUnknowIconCls = "lf-unknow";
+                scope.strBrowseButtonCls = "md-primary";
+                scope.strRemoveButtonCls = "";
+                scope.strSubmitButtonCls = "md-accent";
 
                 if(angular.isDefined(attrs.lfOption)){
                     if(angular.isObject(scope.lfOption)){
@@ -295,6 +307,18 @@
                         }
                         if(scope.lfOption.hasOwnProperty('unknowIconCls')){
                             scope.strUnknowIconCls = scope.lfOption.unknowIconCls;
+                        }
+                        if(scope.lfOption.hasOwnProperty('strSubmitIconCls')){
+                            scope.strSubmitIconCls = scope.lfOption.strSubmitIconCls;
+                        }
+                        if(scope.lfOption.hasOwnProperty('strBrowseButtonCls')){
+                            scope.strBrowseButtonCls = scope.lfOption.strBrowseButtonCls;
+                        }
+                        if(scope.lfOption.hasOwnProperty('strRemoveButtonCls')){
+                            scope.strRemoveButtonCls = scope.lfOption.strRemoveButtonCls;
+                        }
+                        if(scope.lfOption.hasOwnProperty('strSubmitButtonCls')){
+                            scope.strSubmitButtonCls = scope.lfOption.strSubmitButtonCls;
                         }
                     }
                 }
@@ -332,6 +356,8 @@
 
 				scope.strCaptionRemove = 'Remove';
 
+                scope.strCaptionSubmit = 'Submit';
+
                 scope.strAriaLabel = "";
 
                 if (angular.isDefined(attrs.ariaLabel)) {
@@ -362,6 +388,15 @@
 				if(scope.lfRemoveLabel){
 					scope.strCaptionRemove = scope.lfRemoveLabel;
 				}
+
+				if(scope.lfSubmitLabel) {
+                    scope.strCaptionSubmit = scope.lfSubmitLabel;
+                }
+
+                if(angular.isDefined(attrs.lfSubmit)) {
+                    var submitButton = angular.element(element[0].querySelector('#submitButton'));
+                    submitButton.on('click', submitHandler);
+                }
 
                 elDragview.bind("dragover", function(e){
                     e.stopPropagation();
@@ -692,7 +727,6 @@
 
 					return deferred.promise;
 				};
-
 			}
 
 		};
