@@ -407,7 +407,7 @@ The file add by addRemoteFile API will also exist in lf-files array but with a p
     * Fix validation bug.
     * Fix browse button not work on Firefox
     * Deep check when file has same name.
-    * lf-mimetype can work with "," ex: image/\*,video/\*
+    * lf-mimetype can work with "," ex: image/\*,video/\*.
 * v1.4.8
     * New api to remove file by name.
     * Fix preview bug.
