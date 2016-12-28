@@ -322,13 +322,31 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 | Name           | Parameter   | Description |
 | :------------- | :---------- | :--------------------|
-| removeByName   |   string    | Remove file by name  |
+| removeByName   |  name(string)    | Remove file by name  |
 | removeAll      |             | Remove all file      |
+| addRemoteFile  | url(string), name(string), type(string) | Add remote url file for preview  |
 
 ```html
 
 <lf-ng-md-file-input lf-files="files" lf-api="api"></lf-ng-md-file-input>
 <md-button class="md-raised md-warn" ng-click="api.removeAll()">remove all</md-button>
+
+```
+
+```javascript
+
+<script>
+    ...
+    $timeout(
+        function(){
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.jpg','sample.jpg','image');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp4','sample.mp4','vedio');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp3','sample.mp3','audio');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.pdf','sample.pdf','other');
+        }
+    )
+    ...
+</script>
 
 ```
 

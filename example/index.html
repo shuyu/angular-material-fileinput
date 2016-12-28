@@ -267,7 +267,7 @@
     ...
 </script>
 
-<lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" preview drag multiple></lf-ng-md-file-input>
 </xmp>
 
                 <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" lf-api="api999" preview drag multiple></lf-ng-md-file-input>
@@ -283,6 +283,7 @@
             $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.jpg','sample.jpg','image');
             $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp4','sample.mp4','vedio');
             $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp3','sample.mp3','audio');
+            $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.pdf','sample.pdf','other');
         }
     )
     ...
