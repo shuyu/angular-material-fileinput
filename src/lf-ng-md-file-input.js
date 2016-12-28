@@ -439,7 +439,7 @@
 						$timeout(function() {
 							event.preventDefault();
 							event.stopPropagation();
-							var elFileinput = event.target.children[2];
+							var elFileinput = angular.element(event.target).querySelector('input[type=file]');
 							if(elFileinput !== undefined) {
 								elFileinput.click();
 							}
