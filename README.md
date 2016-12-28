@@ -86,7 +86,9 @@ So after you finish select files you need adjust data like below to fit your ser
         $scope.onSubmit = function(){
             var formData = new FormData();
             angular.forEach($scope.files,function(obj){
-                formData.append('files[]', obj.lfFile);
+                if(!obj.isRemote){
+                    formData.append('files[]', obj.lfFile);
+                }
             });
             $http.post('./upload', formData, {
                 transformRequest: angular.identity,
@@ -350,7 +352,7 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 ```
 
-Currently addRemoteFile only support 4 types include image、video、audio and other.
+Currently addRemoteFile only support 4 types include "image"、"video"、"audio" and "other".
 The file add by addRemoteFile API will also exist in lf-files array but with a property isRemote:true, so when you upload files, you should do one more job to check the isRemote is true or false, if true then should ignore it.
 
 ![screensho 3](http://shuyu.github.io/angular-material-fileinput/example/screenshot/screenshot_2.png)
