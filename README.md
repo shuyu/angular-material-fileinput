@@ -400,6 +400,8 @@ The file add by addRemoteFile API will also exist in lf-files array but with a p
 ```
 
 ## Release History
+* v1.5.1
+    * Fix fail due to missing injector.
 * v1.5.0
     * Massive code architecture change.
     * Add addRemoteFile api.
