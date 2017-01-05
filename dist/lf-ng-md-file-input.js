@@ -118,7 +118,7 @@
         };
     });
 
-    lfNgMdFileinput.run(function($templateCache){
+    lfNgMdFileinput.run(['$templateCache', function($templateCache){
         $templateCache.put('lfNgMdFileinput.html', [
             '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
                 '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && lfFiles.length)">',
@@ -166,7 +166,7 @@
                 '</div>',
             '</div>'
         ].join(''));
-    });
+    }]);
 
     lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
         return function(url) {
