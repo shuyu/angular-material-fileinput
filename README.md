@@ -86,7 +86,9 @@ So after you finish select files you need adjust data like below to fit your ser
         $scope.onSubmit = function(){
             var formData = new FormData();
             angular.forEach($scope.files,function(obj){
-                formData.append('files[]', obj.lfFile);
+                if(!obj.isRemote){
+                    formData.append('files[]', obj.lfFile);
+                }
             });
             $http.post('./upload', formData, {
                 transformRequest: angular.identity,
@@ -262,6 +264,34 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
+###Reset internal lfFiles
+
+```html
+
+<lf-ng-md-file-input lf-files="files" drag lf-api="lfApi"></lf-ng-md-file-input>
+
+```
+
+Corresponding javascript controller
+
+```javascript
+    /**
+     * Upload using your own API
+     */
+    upload().then(function(response)
+    {
+        /**
+         * Do stuff
+         * ...
+         */
+         /**
+          * Reset the contents of file input
+          */
+         $scope.lfApi.removeAll();
+    });
+```
+
+
 ###Validation
 
 | Attribute      | Description |
@@ -294,8 +324,9 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 | Name           | Parameter   | Description |
 | :------------- | :---------- | :--------------------|
-| removeByName   |   string    | Remove file by name  |
+| removeByName   |  name(string)    | Remove file by name  |
 | removeAll      |             | Remove all file      |
+| addRemoteFile  | url(string), name(string), type(string) | Add remote url file for preview  |
 
 ```html
 
@@ -303,6 +334,29 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 <md-button class="md-raised md-warn" ng-click="api.removeAll()">remove all</md-button>
 
 ```
+
+```javascript
+
+<script>
+    ...
+    $timeout(
+        function(){
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.jpg','sample.jpg','image');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp4','sample.mp4','video');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp3','sample.mp3','audio');
+            $scope.api.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.pdf','sample.pdf','other');
+        }
+    )
+    ...
+</script>
+
+```
+
+Currently addRemoteFile only support 4 types include "image"、"video"、"audio" and "other".
+The file add by addRemoteFile API will also exist in lf-files array but with a property isRemote:true, so when you upload files, you should do one more job to check the isRemote is true or false, if true then should ignore it.
+
+![screensho 3](http://shuyu.github.io/angular-material-fileinput/example/screenshot/screenshot_2.png)
+
 
 ###OPTION
 
@@ -346,6 +400,16 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 ## Release History
+* v1.5.1
+    * Fix fail due to missing injector.
+* v1.5.0
+    * Massive code architecture change.
+    * Add addRemoteFile api.
+    * Add callback for removeFile.
+    * Fix validation bug.
+    * Fix browse button not work on Firefox
+    * Deep check when file has same name.
+    * lf-mimetype can work with "," ex: image/\*,video/\*.
 * v1.4.8
     * New api to remove file by name.
     * Fix preview bug.

@@ -3,13 +3,170 @@
     'use strict';
 
     var genLfObjId = function(){
-    	return 	'lfobjxxxxxxxx'.replace(/[xy]/g, function(c) {
+    	return 	'lfobjyxxxxxxxx'.replace(/[xy]/g, function(c) {
 	    			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 	    			return v.toString(16);
 				});
     };
 
+    var parseFileType = function (file){
+        var type =  file.type;
+        var name =  file.name;
+        if(isImageType(type,name)){
+            return "image";
+        }else if(isVideoType(type,name)){
+            return "video";
+        }else if(isAudioType(type,name)){
+            return "audio";
+        }
+        return "object";
+    };
+
+    var isImageType = function(type,name){
+        return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
+    };
+
+    var isVideoType = function(type,name){
+        return (type.match('video.*') || name.match(/\.(og?|mp4|webm|3gp)$/i)) ? true : false;
+    };
+
+    var isAudioType = function(type,name){
+        return (type.match('audio.*') || name.match(/\.(ogg|mp3|wav)$/i)) ? true : false;
+    };
+
+    var genLfFileObj = function(file) {
+        var lfFileObj = {
+            "key":genLfObjId(),
+            "lfFile":file,
+            "lfFileName":file.name,
+            "lfFileType":file.type,
+            "lfTagType":parseFileType(file),
+            "lfDataUrl":window.URL.createObjectURL(file),
+            "isRemote":false
+        };
+        return lfFileObj;
+    }
+
+    var genRemoteLfFileObj = function(url, fileName, fileType) {
+        var vitrualFile = {
+            "name":fileName,
+            "type":fileType
+        }
+        var lfFileObj = {
+            "key":genLfObjId(),
+            "lfFile":void 0,
+            "lfFileName":fileName,
+            "lfFileType":fileType,
+            "lfTagType":parseFileType(vitrualFile),
+            "lfDataUrl":url,
+            "isRemote":true
+        };
+        return lfFileObj;
+    }
+
     var lfNgMdFileinput = angular.module('lfNgMdFileInput', ['ngMaterial']);
+
+    lfNgMdFileinput.directive('lfFile', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                lfFileObj: '=',
+                lfUnknowClass: '='
+            },
+            link: function(scope, element, attrs) {
+                var src = scope.lfFileObj.lfDataUrl;
+                var fileType = scope.lfFileObj.lfFileType;
+                var tagType = scope.lfFileObj.lfTagType;
+                var unKnowClass = scope.lfUnknowClass;
+                switch(tagType){
+                    case 'image': {
+                        element.replaceWith(
+                            '<img src="' + src + '" />'
+                        );
+                        break;
+                    }
+                    case 'video': {
+                        element.replaceWith(
+                            '<video controls>' +
+                                '<source src="' + src + '"">' +
+                            '</video>'
+                        );
+                        break;
+                    }
+                    case 'audio': {
+                        element.replaceWith(
+                            '<audio controls>' +
+                                '<source src="' + src + '"">' +
+                            '</audio>'
+                        );
+                        break;
+                    }
+                    default : {
+                        if(scope.lfFileObj.lfFile == void 0){
+                            fileType = 'unknown/unknown';
+                        }
+                        element.replaceWith(
+                            '<object type="' + fileType + '" data="' + src + '">' +
+                                '<div class="lf-ng-md-file-input-preview-default">' +
+                                    '<md-icon class="lf-ng-md-file-input-preview-icon '+unKnowClass+'"></md-icon>' +
+                                '</div>' +
+                            '</object>'
+                        );
+                    }
+                }
+            }
+        };
+    });
+
+    lfNgMdFileinput.run(['$templateCache', function($templateCache){
+        $templateCache.put('lfNgMdFileinput.html', [
+            '<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
+                '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && lfFiles.length)">',
+                    '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="!lfFiles.length || !isPreview" >&times;</md-button>',
+                    '<div class="lf-ng-md-file-input-drag">',
+                        '<div layout="row" layout-align="center center" class="lf-ng-md-file-input-drag-text-container" ng-show="(!lfFiles.length || !isPreview) && isDrag">',
+                            '<div class="lf-ng-md-file-input-drag-text">{{strCaptionDragAndDrop}}</div>',
+                        '</div>',
+                        '<div class="lf-ng-md-file-input-thumbnails" ng-if="isPreview == true">',
+                            '<div class="lf-ng-md-file-input-frame" ng-repeat="lffile in lfFiles" ng-click="onFileClick(lffile)">',
+                                '<div class="lf-ng-md-file-input-x" aria-label="remove {{lffile.lfFileName}}" ng-click="removeFile(lffile,$event)">&times;</div>',
+                                '<lf-file lf-file-obj="lffile" lf-unknow-class="strUnknowIconCls"/>',
+                                // '<md-progress-linear md-mode="indeterminate"></md-progress-linear>',
+                                '<div class="lf-ng-md-file-input-frame-footer">',
+                                    '<div class="lf-ng-md-file-input-frame-caption">{{lffile.lfFileName}}</div>',
+                                '</div>',
+                            '</div>',
+                        '</div>',
+                        '<div class="clearfix" style="clear:both"></div>',
+                    '</div>',
+                '</div>',
+                '<div layout="row" class="lf-ng-md-file-input-container" >',
+                    '<div class="lf-ng-md-file-input-caption" layout="row" layout-align="start center" flex ng-class="{\'disabled\':isDisabled}" >',
+                        '<md-icon class="lf-icon" ng-class="strCaptionIconCls"></md-icon>',
+                        '<div flex class="lf-ng-md-file-input-caption-text-default" ng-show="!lfFiles.length">',
+                            '{{strCaptionPlaceholder}}',
+                        '</div>',
+                        '<div flex class="lf-ng-md-file-input-caption-text" ng-hide="!lfFiles.length">',
+                            '<span ng-if="isCustomCaption">{{strCaption}}</span>',
+                            '<span ng-if="!isCustomCaption">',
+                                '{{ lfFiles.length == 1 ? lfFiles[0].lfFileName : lfFiles.length+" files selected" }}',
+                            '</span>',
+                        '</div>',
+                        '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
+                    '</div>',
+                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="!lfFiles.length || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
+                        '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
+                        '{{strCaptionRemove}}',
+                    '</md-button>',
+                    '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
+                        '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
+                        '{{strCaptionBrowse}}',
+                        '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',
+                    '</md-button>',
+                '</div>',
+            '</div>'
+        ].join(''));
+    }]);
 
     lfNgMdFileinput.filter('lfTrusted', ['$sce', function ($sce) {
         return function(url) {
@@ -158,7 +315,8 @@
                 }
                 var reg;
                 attrs.$observe('lfMimetype', function(value) {
-                    reg = new RegExp(value, "i");
+                    var lfAccept = value.replace(/,/g,'|');
+                    reg = new RegExp(lfAccept, "i");
                     ctrl.$validate();
                 });
                 ctrl.$validators.mimetype = function(modelValue,viewValue) {
@@ -183,6 +341,7 @@
     lfNgMdFileinput.directive('lfNgMdFileInput',['$q','$compile','$timeout', function($q,$compile,$timeout){
         return {
             restrict: 'E',
+<<<<<<< HEAD
             template:  ['<div layout="column" class="lf-ng-md-file-input" ng-model="'+genLfObjId()+'">',
                             '<div layout="column" class="lf-ng-md-file-input-preview-container" ng-class="{\'disabled\':isDisabled}" ng-show="isDrag || (isPreview && !isFilesNull)">',
                                 '<md-button aria-label="remove all files" class="close lf-ng-md-file-input-x" ng-click="removeAllFiles($event)" ng-hide="isFilesNull || !isPreview" >&times;</md-button>',
@@ -222,6 +381,9 @@
                             '</div>',
 
                         '</div>'].join(''),
+=======
+            templateUrl: 'lfNgMdFileinput.html',
+>>>>>>> master
             replace: true,
             require:"ngModel",
             scope:{
@@ -235,7 +397,11 @@
 				lfRemoveLabel: '@?',
                 lfSubmitLabel: '@?',
                 lfOnFileClick: '=?',
+<<<<<<< HEAD
                 lfSubmit: '&',
+=======
+                lfOnFileRemove: '=?',
+>>>>>>> master
                 accept:'@?',
                 ngDisabled:'=?'
             },
@@ -244,8 +410,6 @@
                 var elFileinput = angular.element(element[0].querySelector('.lf-ng-md-file-input-tag'));
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
-
-                var isCustomCaption = false;
                 var intFilesCount = 0;
 
                 var submitHandler = scope.lfSubmit();
@@ -257,6 +421,7 @@
                 scope.isDrag = false;
                 scope.isMutiple = false;
                 scope.isProgress = false;
+                scope.isCustomCaption = false;
 
                 if(angular.isDefined(attrs.preview)){
                     scope.isPreview = true;
@@ -329,10 +494,6 @@
 
                 scope[attrs.ngModel] = scope.lfFiles;
 
-                scope.$watch('lfFiles.length',function(newVal,oldVal){
-            		ctrl.$validate();
-            	});
-
                 scope.lfApi = new function(){
                     var self = this;
                     self.removeAll = function(){
@@ -342,9 +503,12 @@
                     self.removeByName = function(name){
                         scope.removeFileByName(name);
                     };
-                };
 
-                scope.isFilesNull = true;
+                    self.addRemoteFile = function(url, name, type){
+                        var obj = genRemoteLfFileObj(url, name, type);
+                        scope.lfFiles.push(obj);
+                    };
+                };
 
                 scope.strCaption = '';
 
@@ -371,7 +535,7 @@
                 }
 
                 if (angular.isDefined(attrs.lfCaption) ) {
-                    isCustomCaption = true;
+                    scope.isCustomCaption = true;
                     scope.$watch('lfCaption', function(newVal) {
                         scope.strCaption = newVal;
                     });
@@ -389,6 +553,7 @@
 					scope.strCaptionRemove = scope.lfRemoveLabel;
 				}
 
+<<<<<<< HEAD
 				if(scope.lfSubmitLabel) {
                     scope.strCaptionSubmit = scope.lfSubmitLabel;
                 }
@@ -470,92 +635,62 @@
 				});
 
 				scope.openDialog = function(event, el) {
+=======
+                scope.openDialog = function(event, el) {
+>>>>>>> master
 					if(event){
 						$timeout(function() {
 							event.preventDefault();
 							event.stopPropagation();
-							var elFileinput = event.target.children[2];
-							if(elFileinput !== undefined) {
-								elFileinput.click();
+							var children = event.target.children[2];
+							if(children !== undefined) {
+								elFileinput[0].click();
 							}
 						}, 0);
 					}
 				};
 
 				scope.removeAllFiles = function(event){
-
 					if(scope.isDisabled){
 						return;
 					}
-
 					scope.lfFiles.length = 0;
-
 					elThumbnails.empty();
-
-					updateTextCaption();
-
+                    executeValidate();
 				};
 
 				scope.removeFileByName = function(name,event){
-
 					if(scope.isDisabled){
 						return;
 					}
-
 					scope.lfFiles.every(function(obj,idx){
 						if(obj.lfFileName == name){
-                            obj.element.remove();
 							scope.lfFiles.splice(idx,1);
 							return false;
 						}
 						return true;
 					});
-
-					updateTextCaption();
-
+                    executeValidate();
 				};
 
-				scope.onFileChanged = function(e){
-
-					var files = e.files || e.target.files;
-
-					var names = scope.lfFiles.map(function(obj){return obj.lfFileName;});
-
-					if(files.length <= 0){
-						return;
-					}
-
-                    scope.floatProgress = 0;
-
-					if(scope.isMutiple){
-                        intFilesCount = files.length;
-                        for(var i=0;i<files.length;i++){
-                            var file = files[i];
-                            if(names.indexOf(file.name) != -1){
-                                scope.removeFileByName(file.name);
+                scope.removeFile = function(lfFile) {
+                    scope.lfFiles.every(function(obj,idx){
+						if(obj.key == lfFile.key){
+                            if(angular.isFunction(scope.lfOnFileRemove)){
+                                scope.lfOnFileRemove(obj,idx);
                             }
-                            setTimeout(readFile(file), i*100);
-                        }
-                    }else{
-                        intFilesCount = 1;
-                        for(var i=0;i<files.length;i++){
-                            var file = files[i];
-                            scope.removeAllFiles();
-                            setTimeout(readFile(file), 100);
-                            break;
-                        }
-                    }
-
-					elFileinput.val('');
-
-				};
-
-                elFileinput.bind("change",scope.onFileChanged);
-
-                scope.onFileClick = function(key){
+							scope.lfFiles.splice(idx,1);
+							return false;
+						}
+						return true;
+					});
+                    executeValidate();
+                };
+                //call back function
+                scope.onFileClick = function(lfFile) {
                     if(angular.isFunction(scope.lfOnFileClick)){
                         scope.lfFiles.every(function(obj,idx){
-                            if(obj.key == key){
+                            if(obj.key == lfFile.key){
                                 scope.lfOnFileClick(obj,idx);
                                 return false;
                             }else{
@@ -565,129 +700,117 @@
                     }
                 };
 
+                // scope.onFileRemove =
+
+                elDragview.bind("dragover", function(e){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if(scope.isDisabled || !scope.isDrag){
+                        return;
+                    }
+                    elDragview.addClass("lf-ng-md-file-input-drag-hover");
+                });
+
+				elDragview.bind("dragleave", function(e){
+					e.stopPropagation();
+					e.preventDefault();
+					if(scope.isDisabled || !scope.isDrag){
+						return;
+					}
+					elDragview.removeClass("lf-ng-md-file-input-drag-hover");
+				});
+
+				elDragview.bind("drop", function(e){
+					e.stopPropagation();
+					e.preventDefault();
+					if(scope.isDisabled || !scope.isDrag){
+						return;
+					}
+					elDragview.removeClass("lf-ng-md-file-input-drag-hover");
+                    if(angular.isObject(e.originalEvent)){
+                        e = e.originalEvent;
+                    }
+					var files = e.target.files || e.dataTransfer.files;
+					var i = 0;
+                    var lfAccept = scope.accept.replace(/,/g,'|');
+					var regexp = new RegExp(lfAccept, "i");
+                    var regFiles = [];
+                    angular.forEach(files,function(file,idx){
+      					if(file.type.match(regexp)) {
+                            regFiles.push(file);
+                        }
+      				});
+                    onFileChanged(regFiles);
+				});
+
+                elFileinput.bind("change",function(e) {
+                    var files = e.files || e.target.files;
+                    onFileChanged(files);
+                });
+
+                var onFileChanged = function(files) {
+					if(files.length <= 0){
+						return;
+					}
+                    var names = scope.lfFiles.map(function(obj){
+                        return obj.lfFileName;
+                    });
+                    scope.floatProgress = 0;
+					if(scope.isMutiple){
+                        intFilesCount = files.length;
+                        scope.intLoading = intFilesCount;
+                        for(var i=0;i<files.length;i++){
+                            var file = files[i];
+                            setTimeout(readFile(file), i*100);
+                        }
+                    }else{
+                        intFilesCount = 1;
+                        scope.intLoading = intFilesCount;
+                        for(var i=0;i<files.length;i++){
+                            var file = files[i];
+                            scope.removeAllFiles();
+                            readFile(file);
+                            break;
+                        }
+                    }
+					elFileinput.val('');
+                }
+
+                var executeValidate = function() {
+                    ctrl.$validate();
+                }
+
 				var readFile = function(file){
-
-                    scope.intLoading++;
-
 					readAsDataURL(file).then(function(result){
 
-						var lfFile = file;
-						var lfFileName = file.name;
-						var lfFileType = file.type;
-						var lfTagType = parseFileType(file);
-						var lfDataUrl = window.URL.createObjectURL(file);
+                        var isFileAreadyExist = false;
 
-                        var lfFileObj = {
-                            "key":genLfObjId(),
-                            "lfFile":lfFile,
-                            "lfFileName":lfFileName,
-                            "lfDataUrl":lfDataUrl
-                        };
+                        scope.lfFiles.every(function(obj,idx){
+                            var lfFile = obj.lfFile;
+							if(lfFile.name == file.name) {
+								if(lfFile.size == file.size) {
+                                    if(lfFile.lastModified == file.lastModified) {
+                                        isFileAreadyExist = true;
+                                    }
+                                }
+								return false;
+							}else{
+								return true;
+							}
+						});
 
-						scope.lfFiles.push(lfFileObj);
-
-						var elFrame = angular.element('<div class="lf-ng-md-file-input-frame" ng-click="onFileClick(\''+lfFileObj.key+'\')"></div>');
-
-						var elFrameX = angular.element('<div aria-label="remove '+file.name+'" class="lf-ng-md-file-input-x" ng-click="removeFileByName(\''+file.name+'\',$event)">&times;<div>');
-
-						var tplPreview = '';
-
-						if(lfTagType == 'image'){
-
-							tplPreview = '<img src="'+lfDataUrl+'" >';
-
-						}else if(lfTagType == 'video'){
-
-							tplPreview  =  ['<video controls>',
-								'<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
-							'</video>'].join('');
-
-						}else if(lfTagType == 'audio'){
-
-							tplPreview  =  ['<audio controls>',
-								'<source src="'+lfDataUrl+'" type="'+lfFileType+'">',
-							'</audio>'].join('');
-
-						}else{
-
-                            tplPreview = [  '<object data="'+lfDataUrl+'" type="'+lfFileType+'"><param name="movie" value="'+lfFile.name+'" />',
-                                                '<div class="lf-ng-md-file-input-preview-default">',
-                                                    '<md-icon class="lf-ng-md-file-input-preview-icon" ng-class="strUnknowIconCls"></md-icon>',
-                                                '</div>',
-                                            '</object>'].join('');
-
-						}
-
-						var elPreview = angular.element(tplPreview);
-
-						var elFooter = angular.element('<div class="lf-ng-md-file-input-frame-footer"><div class="lf-ng-md-file-input-frame-caption">'+lfFile.name+'</div></div>');
-
-						elFrame.append(elFrameX);
-						// if(scope.isPreview) {
-						elFrame.append(elPreview);
-						// }else{
-                        //     console.log('no preview');
-                        // }
-						elFrame.append(elFooter);
-
-						$compile(elFrame)(scope);
-
-						elThumbnails.append(elFrame);
-
-                        lfFileObj.element = elFrame;
-
-						updateTextCaption();
-
+                        if(!isFileAreadyExist){
+                            var obj = genLfFileObj(file);
+						    scope.lfFiles.push(obj);
+                        }
+                        if(scope.intLoading==0) {
+                            executeValidate();
+                        }
 					},function(error){
 
 					},function(notify){
 
 					});
-
-				};
-
-				var updateTextCaption = function(){
-					if(scope.lfFiles.length == 1){
-                        if(!isCustomCaption){
-                            scope.strCaption = '' + scope.lfFiles[0].lfFileName;
-                        }
-						scope.isFilesNull  = false;
-					}else if(scope.lfFiles.length > 1){
-                        if(!isCustomCaption){
-    						scope.strCaption = '' + scope.lfFiles.length + ' files selected';
-                        }
-						scope.isFilesNull  = false;
-					}else{
-                        if(!isCustomCaption){
-						  scope.strCaption = '';
-                        }
-						scope.isFilesNull  = true;
-					}
-				};
-
-				var parseFileType = function (file){
-					var type =  file.type;
-					var name =  file.name;
-					if(isImageType(type,name)){
-						return "image";
-					}else if(isVideoType(type,name)){
-						return "video";
-					}else if(isAudioType(type,name)){
-						return "audio";
-					}
-					return "object";
-				};
-
-				var isImageType = function(type,name){
-					return (type.match('image.*') || name.match(/\.(gif|png|jpe?g)$/i)) ? true : false;
-				};
-
-				var isVideoType = function(type,name){
-					return (type.match('video.*') || name.match(/\.(og?|mp4|webm|3gp)$/i)) ? true : false;
-				};
-
-				var isAudioType = function(type,name){
-					return (type.match('audio.*') || name.match(/\.(ogg|mp3|wav)$/i)) ? true : false;
 				};
 
 				var readAsDataURL = function (file,index) {

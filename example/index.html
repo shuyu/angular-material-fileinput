@@ -27,10 +27,10 @@
 
             app.config(['$compileProvider','$mdThemingProvider', function ($compileProvider,$mdThemingProvider) {
                 $compileProvider.debugInfoEnabled(false);
-                // $mdThemingProvider.theme('default').primaryPalette('teal');
+                // $mdThemingProvider.theme('default')
             }]);
 
-            app.controller('DemoController',function($scope){
+            app.controller('DemoController',function($scope, $timeout){
                 $scope.$watch('files02.length',function(newVal,oldVal){
                     console.log($scope.files02);
                 });
@@ -41,12 +41,26 @@
                     "unknowIconCls":"myUnknow"
                 };
                 $scope.onFileClick = function(obj,idx){
-                    alert(obj.lfFileName);
+                    console.log(obj);
                 };
 
                 $scope.onSubmit = function() {
                     alert("Form submitted");
                 }
+                $scope.onFileRemove = function(obj,idx){
+                    console.log(obj);
+                };
+
+                $timeout(
+                    function(){
+                        $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.jpg','sample.jpg','image');
+                        $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp4','sample.mp4','video');
+                        $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp3','sample.mp3','audio');
+                        $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.pdf','sample.pdf','other');
+                    }
+                )
+
+
             });
 
         </script>
@@ -236,7 +250,7 @@
                 </xmp>
 
                 <form name="testForm" layout="column">
-                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*" multiple drag preview></lf-ng-md-file-input>
+                    <lf-ng-md-file-input name="files00" lf-files="files09" lf-api="api09" lf-required lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="image/*,audio/*" multiple drag preview></lf-ng-md-file-input>
                     <div ng-messages="testForm.files00.$error" style="color:red;">
                         <div ng-message="required">This is required.</div>
                         <div ng-message="maxcount">Too many files.</div>
@@ -247,24 +261,48 @@
                     <md-button type="button" ng-disabled="testForm.$invalid" class="md-raised md-primary" ng-click="api09.removeAll()">Submit</md-button>
                 </form>
 
-                <h2>FileClick</h2>
+                <h2>Callback function</h2>
 
-                <xmp class="prettyprint lang-html">
+<xmp class="prettyprint lang-html">
 <script>
     ...
     $scope.onFileClick = function(obj,idx){
-        alert(obj.lfFileName);
+        console.log(obj);
+    };
+    $scope.onFileRemove = function(obj,idx){
+        console.log(obj);
     };
     ...
 </script>
 
-<lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
-                </xmp>
+<lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" preview drag multiple></lf-ng-md-file-input>
+</xmp>
 
-                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" preview drag multiple></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="filesOnFileClick" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" lf-api="api999" preview drag multiple></lf-ng-md-file-input>
+
+
+                <h2>Add remote file</h2>
+
+<xmp class="prettyprint lang-html">
+<script>
+    ...
+    $timeout(
+        function(){
+            $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.jpg','sample.jpg','image');
+            $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp4','sample.mp4','video');
+            $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.mp3','sample.mp3','audio');
+            $scope.addRemoteFilesApi.addRemoteFile('http://shuyu.github.io/angular-material-fileinput/example/resources/sample.pdf','sample.pdf','other');
+        }
+    )
+    ...
+</script>
+
+<lf-ng-md-file-input lf-files="addRemoteFiles" lf-api="addRemoteFilesApi" preview drag multiple></lf-ng-md-file-input>
+</xmp>
+
+                <lf-ng-md-file-input lf-files="addRemoteFiles" lf-api="addRemoteFilesApi" preview drag multiple></lf-ng-md-file-input>
 
             </md-content>
-
 
         </div>
 
