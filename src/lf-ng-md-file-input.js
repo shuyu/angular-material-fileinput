@@ -154,18 +154,18 @@
                         '</div>',
                         '<md-progress-linear md-mode="determinate" value="{{floatProgress}}" ng-show="intLoading && isProgress"></md-progress-linear>',
                     '</div>',
-                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="!lfFiles.length || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" >',
+                    '<md-button aria-label="remove all files" ng-disabled="isDisabled" ng-click="removeAllFiles()" ng-hide="!lfFiles.length || intLoading" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-remove" ng-class="strRemoveButtonCls">',
                         '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
                         '{{strCaptionRemove}}',
                     '</md-button>',
-                    '<md-button ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised md-primary lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" >',
+					'<md-button ng-disabled="isDisabled" ng-click="onSubmitClick()" class="md-raised md-warn lf-ng-md-file-input-button lf-ng-md-file-input-button-submit" ng-class="strSubmitButtonCls" ng-show="lfFiles.length && !intLoading && isSubmit">',
+                        '<md-icon aria-label="submit" class="lf-icon" ng-class="strSubmitIconCls"></md-icon> ',
+                        '{{strCaptionSubmit}}',
+                    '</md-button>',
+                    '<md-button aria-label="browse" ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" ng-class="strBrowseButtonCls">',
                         '<md-icon class="lf-icon" ng-class="strBrowseIconCls"></md-icon> ',
                         '{{strCaptionBrowse}}',
                         '<input type="file" aria-label="{{strAriaLabel}}" accept="{{accept}}" ng-disabled="isDisabled" class="lf-ng-md-file-input-tag" />',
-                    '</md-button>',
-                    '<md-button id="submitButton" ng-disabled="isDisabled" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" ng-class="strSubmitButtonCls" ng-show="lfFiles.length > 0">',
-                        '<md-icon class="lf-icon" ng-class="strSubmitIconCls"></md-icon> ',
-                        '{{strCaptionSubmit}}',
                     '</md-button>',
                 '</div>',
             '</div>'
@@ -359,10 +359,11 @@
 				lfRemoveLabel: '@?',
                 lfSubmitLabel: '@?',
                 lfOnFileClick: '=?',
-                lfSubmit: '&',
+				lfOnSubmitClick: '=?',
                 lfOnFileRemove: '=?',
                 accept:'@?',
-                ngDisabled:'=?'
+                ngDisabled:'=?',
+				ngChange: '&?'
             },
             link: function(scope,element,attrs,ctrl){
 
@@ -370,8 +371,6 @@
                 var elDragview  = angular.element(element[0].querySelector('.lf-ng-md-file-input-drag'));
                 var elThumbnails = angular.element(element[0].querySelector('.lf-ng-md-file-input-thumbnails'));
                 var intFilesCount = 0;
-
-                var submitHandler = scope.lfSubmit();
 
                 scope.intLoading = 0;
                 scope.floatProgress = 0;
@@ -381,6 +380,7 @@
                 scope.isMutiple = false;
                 scope.isProgress = false;
                 scope.isCustomCaption = false;
+                scope.isSubmit = false;
 
                 if(angular.isDefined(attrs.preview)){
                     scope.isPreview = true;
@@ -401,6 +401,10 @@
                     scope.isProgress = true;
                 }
 
+                if(angular.isDefined(attrs.submit)){
+                    scope.isSubmit = true;
+                }
+
                 scope.isDisabled = false;
 
                 if (angular.isDefined(attrs.ngDisabled) ) {
@@ -414,6 +418,7 @@
                 scope.strCaptionIconCls = "lf-caption";
                 scope.strSubmitIconCls = "lf-submit";
                 scope.strUnknowIconCls = "lf-unknow";
+
                 scope.strBrowseButtonCls = "md-primary";
                 scope.strRemoveButtonCls = "";
                 scope.strSubmitButtonCls = "md-accent";
@@ -516,11 +521,6 @@
                     scope.strCaptionSubmit = scope.lfSubmitLabel;
                 }
 
-                if(angular.isDefined(attrs.lfSubmit)) {
-                    var submitButton = angular.element(element[0].querySelector('#submitButton'));
-                    submitButton.on('click', submitHandler);
-                }
-
                 scope.openDialog = function(event, el) {
 					if(event){
 						$timeout(function() {
@@ -534,12 +534,16 @@
 					}
 				};
 
-				scope.removeAllFiles = function(event){
+				scope.removeAllFilesWithoutVaildate = function() {
 					if(scope.isDisabled){
 						return;
 					}
 					scope.lfFiles.length = 0;
 					elThumbnails.empty();
+				}
+
+				scope.removeAllFiles = function(event){
+					scope.removeAllFilesWithoutVaildate();
                     executeValidate();
 				};
 
@@ -570,8 +574,9 @@
 					});
                     executeValidate();
                 };
-                //call back function
-                scope.onFileClick = function(lfFile) {
+
+				//call back function
+				scope.onFileClick = function(lfFile) {
                     if(angular.isFunction(scope.lfOnFileClick)){
                         scope.lfFiles.every(function(obj,idx){
                             if(obj.key == lfFile.key){
@@ -584,7 +589,11 @@
                     }
                 };
 
-                // scope.onFileRemove =
+				scope.onSubmitClick = function(){
+					if(angular.isFunction(scope.lfOnSubmitClick)){
+                        scope.lfOnSubmitClick(scope.lfFiles);
+                    }
+				};
 
                 elDragview.bind("dragover", function(e){
                     e.stopPropagation();
@@ -652,7 +661,7 @@
                         scope.intLoading = intFilesCount;
                         for(var i=0;i<files.length;i++){
                             var file = files[i];
-                            scope.removeAllFiles();
+                            scope.removeAllFilesWithoutVaildate();
                             readFile(file);
                             break;
                         }
@@ -661,6 +670,9 @@
                 }
 
                 var executeValidate = function() {
+					if(angular.isFunction(scope.ngChange)){
+						scope.ngChange();
+					}
                     ctrl.$validate();
                 }
 

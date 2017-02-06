@@ -44,9 +44,14 @@
                     console.log(obj);
                 };
 
-                $scope.onSubmit = function() {
-                    alert("Form submitted");
+                $scope.onSubmitClick = function(files) {
+                    console.log(files);
                 }
+
+				$scope.onSubmitFilesChange = function() {
+					console.log($scope.submitButtonFiles);
+                }
+
                 $scope.onFileRemove = function(obj,idx){
                     console.log(obj);
                 };
@@ -123,14 +128,14 @@
                 <h2>Basic</h2>
 
                 <xmp class="prettyprint lang-html">
-<lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01" lf-submit="onSubmit"></lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01" ></lf-ng-md-file-input>
 <md-button class="md-raised md-warn" ng-click="api01.removeAll()">remove all file outside</md-button>
 <md-checkbox ng-model="disabled01" aria-label="disabled01">
     Disable
 </md-checkbox>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01" lf-submit="onSubmit"></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="files01" lf-api="api01" ng-disabled="disabled01"></lf-ng-md-file-input>
 
                 <br>
 
@@ -140,16 +145,24 @@
                     Disable
                 </md-checkbox>
 
-                <h2>Multiple</h2>
+                <h2>Submit button</h2>
 
                 <xmp class="prettyprint lang-html">
-<lf-ng-md-file-input lf-files="files02" lf-api="api02" multiple></lf-ng-md-file-input>
-<md-button class="md-raised md-warn" ng-click="api02.removeAll()">remove all file outside</md-button>
+<lf-ng-md-file-input lf-files="submitButtonFiles" lf-on-submit-click="onSubmitClick" submit ng-change="onSubmitFilesChange()"></lf-ng-md-file-input>
                 </xmp>
 
-                <lf-ng-md-file-input lf-files="files02" lf-api="api02" multiple></lf-ng-md-file-input>
+                <lf-ng-md-file-input lf-files="submitButtonFiles" lf-on-submit-click="onSubmitClick" submit ng-change="onSubmitFilesChange()"></lf-ng-md-file-input>
 
-                <md-button class="md-raised md-warn" ng-click="api02.removeAll()">remove all file outside</md-button>
+				<h2>Multiple</h2>
+
+				<xmp class="prettyprint lang-html">
+<lf-ng-md-file-input lf-files="files02" lf-api="api02" multiple></lf-ng-md-file-input>
+<md-button class="md-raised md-warn" ng-click="api02.removeAll()">remove all file outside</md-button>
+				</xmp>
+
+				<lf-ng-md-file-input lf-files="files02" lf-api="api02" multiple></lf-ng-md-file-input>
+
+				<md-button class="md-raised md-warn" ng-click="api02.removeAll()">remove all file outside</md-button>
 
                 <h2>Progress</h2>
 

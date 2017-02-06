@@ -5,8 +5,8 @@
     margin-bottom: 5px;
 
     .lf-ng-md-file-input-preview-container{
-        @include border-radius(5px);
-        @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
+        @include border-radius(3px);
+        @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.2));
         border: 1px solid #ddd;
         padding: 5px;
         margin-bottom: 10px;
@@ -23,7 +23,7 @@
             }
         }
         .lf-ng-md-file-input-drag{
-            @include border-radius(7px);
+            @include border-radius(4px);
             border: 2px dashed #DDD;
         }
         .lf-ng-md-file-input-drag-hover{
@@ -39,7 +39,7 @@
             }
         }
         .lf-ng-md-file-input-frame{
-            @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
+            @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.2));
             display: table;
             margin: 8px;
             height: 160px;
@@ -94,10 +94,12 @@
 
     .lf-ng-md-file-input-container{
         @include border-radius(3px);
-        @include box-shadow(0 2px 5px 0 rgba(0, 0, 0, 0.26));
+        @include box-shadow(0 1px 1px 1px rgba(0, 0, 0, 0.2));
         background-color: #FFFFFF;
+		overflow: hidden;
+		z-index: 3;
         .lf-ng-md-file-input-caption{
-            @include border-radius(5px 0 0 5px);
+            @include border-radius(0 0 0 0);
             position: relative;
             overflow: hidden;
             z-index: 2;
@@ -111,7 +113,7 @@
             }
             .lf-ng-md-file-input-caption-text-default{
                 margin-left:8px;
-                color: black;
+                color: rgba(0,0,0,0.4);
                 font-weight: 400;
             }
         }
@@ -124,6 +126,7 @@
             background-size:cover;
         }
         .md-raised{
+			z-index: 2;
             &.lf-ng-md-file-input-button{
                 @include inline-block;
                 @include box-shadow(none);
@@ -132,12 +135,14 @@
                 padding:0px 8px 0px 8px;
                 min-height: initial;
                 min-width: 100px;
+				&.lf-ng-md-file-input-button-submit{
+                    @include border-radius(0 0 0 0);
+                }
                 &.lf-ng-md-file-input-button-brower{
-                    @include border-radius(0 3px 3px 0);
+                    @include border-radius(0 0 0 0);
                 }
                 &.lf-ng-md-file-input-button-remove{
                     @include border-radius(0 0 0 0);
-                    z-index:2;
                 }
                 .lf-ng-md-file-input-tag{
                     @include opacity(0);
@@ -178,12 +183,12 @@
         background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iNTEycHgiIGlkPSJMYXllcl8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgd2lkdGg9IjUxMnB4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48Zz48cGF0aCBkPSJNNDEzLjcsMTMzLjRjLTIuNC05LTQtMTQtNC0xNGMtMi42LTkuMy05LjItOS4zLTE5LTEwLjlsLTUzLjEtNi43Yy02LjYtMS4xLTYuNi0xLjEtOS4yLTYuOGMtOC43LTE5LjYtMTEuNC0zMS0yMC45LTMxICAgaC0xMDNjLTkuNSwwLTEyLjEsMTEuNC0yMC44LDMxLjFjLTIuNiw1LjYtMi42LDUuNi05LjIsNi44bC01My4yLDYuN2MtOS43LDEuNi0xNi43LDIuNS0xOS4zLDExLjhjMCwwLTEuMiw0LjEtMy43LDEzICAgYy0zLjIsMTEuOS00LjUsMTAuNiw2LjUsMTAuNmgzMDIuNEM0MTguMiwxNDQuMSw0MTcsMTQ1LjMsNDEzLjcsMTMzLjR6Ii8+PHBhdGggZD0iTTM3OS40LDE3NkgxMzIuNmMtMTYuNiwwLTE3LjQsMi4yLTE2LjQsMTQuN2wxOC43LDI0Mi42YzEuNiwxMi4zLDIuOCwxNC44LDE3LjUsMTQuOGgyMDcuMmMxNC43LDAsMTUuOS0yLjUsMTcuNS0xNC44ICAgbDE4LjctMjQyLjZDMzk2LjgsMTc4LjEsMzk2LDE3NiwzNzkuNCwxNzZ6Ii8+PC9nPjwvc3ZnPg==);
     }
 
-    .lf-unknow{
-        background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiBoZWlnaHQ9IjI0cHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxwYXRoIGQ9Ik0yMi41LDZjLTItMi01LjItMi03LjIsMGwtOC43LDguNmMtMS4yLDEuMi0xLjIsMy4xLDAsNC4zYzEuMiwxLjIsMy4xLDEuMiw0LjMsMGw3LjItNy4yYzAuNC0wLjQsMC40LTEsMC0xLjQgIGMtMC40LTAuNC0xLTAuNC0xLjQsMGwtNy4yLDcuMmMtMC40LDAuNC0xLDAuNC0xLjQsMGMtMC40LTAuNC0wLjQtMSwwLTEuNGw4LjctOC43YzEuMi0xLjIsMy4xLTEuMiw0LjMsMGMxLjIsMS4yLDEuMiwzLjEsMCw0LjMgIGwtOC43LDguNmMtMiwyLTUuMiwyLTcuMiwwYy0yLTItMi01LjIsMC03LjJMMTYuNywxLjdjMC40LTAuNCwwLjQtMSwwLTEuNHMtMS0wLjQtMS40LDBMMy43LDExLjhjLTIuOCwyLjgtMi44LDcuMywwLDEwLjEgIGMyLjgsMi44LDcuMywyLjgsMTAuMSwwbDguNy04LjZDMjQuNCwxMS4zLDI0LjQsOCwyMi41LDZ6Ii8+PC9zdmc+);
-    }
-
     .lf-submit{
         background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTkuMzUgMTAuMDRDMTguNjcgNi41OSAxNS42NCA0IDEyIDQgOS4xMSA0IDYuNiA1LjY0IDUuMzUgOC4wNCAyLjM0IDguMzYgMCAxMC45MSAwIDE0YzAgMy4zMSAyLjY5IDYgNiA2aDEzYzIuNzYgMCA1LTIuMjQgNS01IDAtMi42NC0yLjA1LTQuNzgtNC42NS00Ljk2ek0xNCAxM3Y0aC00di00SDdsNS01IDUgNWgtM3oiLz48L3N2Zz4=);
+    }
+
+    .lf-unknow{
+        background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiBoZWlnaHQ9IjI0cHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxwYXRoIGQ9Ik0yMi41LDZjLTItMi01LjItMi03LjIsMGwtOC43LDguNmMtMS4yLDEuMi0xLjIsMy4xLDAsNC4zYzEuMiwxLjIsMy4xLDEuMiw0LjMsMGw3LjItNy4yYzAuNC0wLjQsMC40LTEsMC0xLjQgIGMtMC40LTAuNC0xLTAuNC0xLjQsMGwtNy4yLDcuMmMtMC40LDAuNC0xLDAuNC0xLjQsMGMtMC40LTAuNC0wLjQtMSwwLTEuNGw4LjctOC43YzEuMi0xLjIsMy4xLTEuMiw0LjMsMGMxLjIsMS4yLDEuMiwzLjEsMCw0LjMgIGwtOC43LDguNmMtMiwyLTUuMiwyLTcuMiwwYy0yLTItMi01LjIsMC03LjJMMTYuNywxLjdjMC40LTAuNCwwLjQtMSwwLTEuNHMtMS0wLjQtMS40LDBMMy43LDExLjhjLTIuOCwyLjgtMi44LDcuMywwLDEwLjEgIGMyLjgsMi44LDcuMywyLjgsMTAuMSwwbDguNy04LjZDMjQuNCwxMS4zLDI0LjQsOCwyMi41LDZ6Ii8+PC9zdmc+);
     }
 
 }
