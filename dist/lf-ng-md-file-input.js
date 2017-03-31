@@ -598,7 +598,7 @@
                 });
 
                 var onFileChanged = function(files) {
-					if(files.length <= 0){
+					if(files.length <= 0 || !scope.lfFiles || !scope.lfFiles.map){ //Check for scope.lfFiles.map needed because if file is set to NULL, map doesn't exist
 						return;
 					}
                     var names = scope.lfFiles.map(function(obj){
