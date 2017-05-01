@@ -1,8 +1,8 @@
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.4
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -14,7 +14,7 @@
  * @description
  * Scrollable content
  */
-mdContentDirective.$inject = ["$mdTheming"];
+mdContentDirective['$inject'] = ["$mdTheming"];
 angular.module('material.components.content', [
   'material.core'
 ])

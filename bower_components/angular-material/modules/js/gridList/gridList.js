@@ -1,8 +1,8 @@
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.4
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -11,10 +11,10 @@
  * @ngdoc module
  * @name material.components.gridList
  */
-GridListController.$inject = ["$mdUtil"];
-GridLayoutFactory.$inject = ["$mdUtil"];
-GridListDirective.$inject = ["$interpolate", "$mdConstant", "$mdGridLayout", "$mdMedia"];
-GridTileDirective.$inject = ["$mdMedia"];
+GridListController['$inject'] = ["$mdUtil"];
+GridLayoutFactory['$inject'] = ["$mdUtil"];
+GridListDirective['$inject'] = ["$interpolate", "$mdConstant", "$mdGridLayout", "$mdMedia"];
+GridTileDirective['$inject'] = ["$mdMedia"];
 angular.module('material.components.gridList', ['material.core'])
        .directive('mdGridList', GridListDirective)
        .directive('mdGridTile', GridTileDirective)
@@ -283,8 +283,17 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
 
       // The width and horizontal position of each tile is always calculated the same way, but the
       // height and vertical position depends on the rowMode.
-      var style = {
-        left: POSITION({ unit: hUnit, offset: position.col, gutter: gutter }),
+      var ltr = document.dir != 'rtl' && document.body.dir != 'rtl';
+      var style = ltr ? {
+          left: POSITION({ unit: hUnit, offset: position.col, gutter: gutter }),
+          width: DIMENSION({ unit: hUnit, span: spans.col, gutter: gutter }),
+          // resets
+          paddingTop: '',
+          marginTop: '',
+          top: '',
+          height: ''
+        } : {
+        right: POSITION({ unit: hUnit, offset: position.col, gutter: gutter }),
         width: DIMENSION({ unit: hUnit, span: spans.col, gutter: gutter }),
         // resets
         paddingTop: '',

@@ -1,8 +1,8 @@
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.4
  */
 goog.provide('ngmaterial.components.switch');
 goog.require('ngmaterial.components.checkbox');
@@ -12,7 +12,7 @@ goog.require('ngmaterial.core');
  * @name material.components.switch
  */
 
-MdSwitch.$inject = ["mdCheckboxDirective", "$mdUtil", "$mdConstant", "$parse", "$$rAF", "$mdGesture", "$timeout"];
+MdSwitch['$inject'] = ["mdCheckboxDirective", "$mdUtil", "$mdConstant", "$parse", "$$rAF", "$mdGesture", "$timeout"];
 angular.module('material.components.switch', [
   'material.core',
   'material.components.checkbox'
@@ -35,10 +35,11 @@ angular.module('material.components.switch', [
  * @param {string=} name Property name of the form under which the control is published.
  * @param {expression=} ng-true-value The value to which the expression should be set when selected.
  * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change Angular expression to be executed when input changes due to user interaction with the input element.
+ * @param {string=} ng-change AngularJS expression to be executed when input changes due to user interaction with the input element.
  * @param {expression=} ng-disabled En/Disable based on the expression.
  * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects.
  * @param {string=} aria-label Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.
+ * @param {boolean=} md-invert When set to true, the switch will be inverted.
  *
  * @usage
  * <hljs lang="html">
@@ -61,7 +62,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
   return {
     restrict: 'E',
-    priority: 210, // Run before ngAria
+    priority: $mdConstant.BEFORE_NG_ARIA,
     transclude: true,
     template:
       '<div class="md-container">' +
@@ -71,7 +72,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         '</div>'+
       '</div>' +
       '<div ng-transclude class="md-label"></div>',
-    require: '?ngModel',
+    require: ['^?mdInputContainer', '?ngModel', '?^form'],
     compile: mdSwitchCompile
   };
 
@@ -80,8 +81,10 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
     // No transition on initial load.
     element.addClass('md-dragging');
 
-    return function (scope, element, attr, ngModel) {
-      ngModel = ngModel || $mdUtil.fakeNgModel();
+    return function (scope, element, attr, ctrls) {
+      var containerCtrl = ctrls[0];
+      var ngModel = ctrls[1] || $mdUtil.fakeNgModel();
+      var formCtrl = ctrls[2];
 
       var disabledGetter = null;
       if (attr.disabled != null) {
@@ -92,19 +95,29 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
       var thumbContainer = angular.element(element[0].querySelector('.md-thumb-container'));
       var switchContainer = angular.element(element[0].querySelector('.md-container'));
+      var labelContainer = angular.element(element[0].querySelector('.md-label'));
 
       // no transition on initial load
       $$rAF(function() {
         element.removeClass('md-dragging');
       });
 
-      checkboxLink(scope, element, attr, ngModel);
+      checkboxLink(scope, element, attr, ctrls);
 
       if (disabledGetter) {
         scope.$watch(disabledGetter, function(isDisabled) {
           element.attr('tabindex', isDisabled ? -1 : 0);
         });
       }
+
+      attr.$observe('mdInvert', function(newValue) {
+        var isInverted = $mdUtil.parseAttributeBoolean(newValue);
+
+        isInverted ? element.prepend(labelContainer) : element.prepend(switchContainer);
+
+        // Toggle a CSS class to update the margin.
+        element.toggleClass('md-inverted', isInverted);
+      });
 
       // These events are triggered by setup drag
       $mdGesture.register(switchContainer, 'drag');

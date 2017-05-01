@@ -1,8 +1,8 @@
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.4
  */
 goog.provide('ngmaterial.components.colors');
 goog.require('ngmaterial.core');
@@ -13,8 +13,8 @@ goog.require('ngmaterial.core');
    *  Use a RegExp to check if the `md-colors="<expression>"` is static string
    *  or one that should be observed and dynamically interpolated.
    */
-  MdColorsDirective.$inject = ["$mdColors", "$mdUtil", "$log", "$parse"];
-  MdColorsService.$inject = ["$mdTheming", "$mdUtil", "$log"];
+  MdColorsDirective['$inject'] = ["$mdColors", "$mdUtil", "$log", "$parse"];
+  MdColorsService['$inject'] = ["$mdTheming", "$mdUtil", "$log"];
   var STATIC_COLOR_EXPRESSION = /^{((\s|,)*?["'a-zA-Z-]+?\s*?:\s*?('|")[a-zA-Z0-9-.]*('|"))+\s*}$/;
   var colorPalettes = null;
 
@@ -36,7 +36,7 @@ goog.require('ngmaterial.core');
    * @module material.components.colors
    *
    * @description
-   * With only defining themes, one couldn't get non ngMaterial elements colored with Material colors,
+   * With only defining themes, one couldn't get non AngularJS Material elements colored with Material colors,
    * `$mdColors` service is used by the md-color directive to convert the 1..n color expressions to RGBA values and will apply
    * those values to element as CSS property values.
    *

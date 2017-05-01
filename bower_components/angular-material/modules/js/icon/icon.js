@@ -1,8 +1,8 @@
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.4
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -57,7 +57,7 @@ angular
  * like `"social:cake"`.
  *
  * When using SVGs, both external SVGs (via URLs) or sets of SVGs [from icon sets] can be
- * easily loaded and used.When use font-icons, developers must following three (3) simple steps:
+ * easily loaded and used. When using font-icons, developers must follow three (3) simple steps:
  *
  * <ol>
  * <li>Load the font library. e.g.<br/>
@@ -65,13 +65,18 @@ angular
  *    rel="stylesheet">`
  * </li>
  * <li>
- *   Use either (a) font-icon class names or (b) font ligatures to render the font glyph by using
- *   its textual name
+ *   Use either (a) font-icon class names or (b) a fontset and a font ligature to render the font glyph by
+ *   using its textual name _or_ numerical character reference. Note that `material-icons` is the default fontset when
+ *   none is specified.
  * </li>
- * <li>
- *   Use `<md-icon md-font-icon="classname" />` or <br/>
- *   use `<md-icon md-font-set="font library classname or alias"> textual_name </md-icon>` or <br/>
- *   use `<md-icon md-font-set="font library classname or alias"> numerical_character_reference </md-icon>`
+ * <li> Use any of the following templates: <br/>
+ *   <ul>
+ *     <li>`<md-icon md-font-icon="classname"></md-icon>`</li>
+ *     <li>`<md-icon md-font-set="font library classname or alias">textual_name</md-icon>`</li>
+ *     <li>`<md-icon> numerical_character_reference </md-icon>`</li>
+ *     <li>`<md-icon ng_bind="'textual_name'"></md-icon>`</li>
+ *     <li>`<md-icon ng-bind="scopeVariable"></md-icon>`</li>
+ *   </ul>
  * </li>
  * </ol>
  *
@@ -88,6 +93,19 @@ angular
  * <ul>
  * <li>https://design.google.com/icons/</li>
  * <li>https://design.google.com/icons/#ic_accessibility</li>
+ * </ul>
+ *
+ * ### Localization
+ *
+ * Because an `md-icon` element's text content is not intended to translated, it is recommended to declare the text
+ * content for an `md-icon` element in its start tag. Instead of using the HTML text content, consider using `ng-bind`
+ * with a scope variable or literal string.
+ *
+ * Examples:
+ *
+ * <ul>
+ *   <li>`<md-icon ng-bind="myIconVariable"></md-icon>`</li>
+ *   <li>`<md-icon ng-bind="'menu'"></md-icon>`
  * </ul>
  *
  * <h2 id="material_design_icons">Material Design Icons</h2>
@@ -217,20 +235,29 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
     // If using a font-icon, then the textual name of the icon itself
     // provides the aria-label.
 
-    var label = attr.alt || attr.mdFontIcon || attr.mdSvgIcon || element.text();
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
 
-    if ( !attr['aria-label'] ) {
+    /* Provide a default accessibility role of img */
+    if (!attr.role) {
+      $mdAria.expect(element, 'role', 'img');
+      /* manually update attr variable */
+      attr.role = 'img';
+    }
 
-      if (label !== '' && !parentsHaveText() ) {
-
-        $mdAria.expect(element, 'aria-label', label);
-        $mdAria.expect(element, 'role', 'img');
-
-      } else if ( !element.text() ) {
-        // If not a font-icon with ligature, then
-        // hide from the accessibility layer.
-
+    /* Don't process ARIA if already valid */
+    if ( attr.role === "img" && !attr.ariaHidden && !$mdAria.hasAriaLabel(element) ) {
+      var iconName;
+      if (attr.alt) {
+        /* Use alt text by default if available */
+        $mdAria.expect(element, 'aria-label', attr.alt);
+      } else if ($mdAria.parentHasAriaLabel(element, 2)) {
+        /* Parent has ARIA so we will assume it will describe the image */
+        $mdAria.expect(element, 'aria-hidden', 'true');
+      } else if (iconName = (attr.mdFontIcon || attr.mdSvgIcon || element.text())) {
+        /* Use icon name as aria-label */
+        $mdAria.expect(element, 'aria-label', iconName);
+      } else {
+        /* No label found */
         $mdAria.expect(element, 'aria-hidden', 'true');
       }
     }
@@ -246,19 +273,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
             element.append(svg);
           });
         }
-
       });
-    }
-
-    function parentsHaveText() {
-      var parent = element.parent();
-      if (parent.attr('aria-label') || parent.text()) {
-        return true;
-      }
-      else if(parent.parent().attr('aria-label') || parent.parent().text()) {
-        return true;
-      }
-      return false;
     }
 
     function prepareForFontIcon() {
@@ -294,7 +309,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
 }
 
   
-MdIconService.$inject = ["config", "$templateRequest", "$q", "$log", "$mdUtil", "$sce"];angular
+MdIconService['$inject'] = ["config", "$templateRequest", "$q", "$log", "$mdUtil", "$sce"];angular
     .module('material.components.icon')
     .constant('$$mdSvgRegistry', {
         'mdTabsArrow':   'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnPjxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyICIvPjwvZz48L3N2Zz4=',
@@ -498,7 +513,7 @@ MdIconService.$inject = ["config", "$templateRequest", "$q", "$log", "$mdUtil", 
  * @name $mdIconProvider#defaultFontSet
  *
  * @description
- * When using Font-Icons, Angular Material assumes the the Material Design icons will be used and automatically
+ * When using Font-Icons, AngularJS Material assumes the the Material Design icons will be used and automatically
  * configures the default font-set == 'material-icons'. Note that the font-set references the font-icon library
  * class style that should be applied to the `<md-icon>`.
  *
