@@ -158,8 +158,8 @@
                         '<md-icon class="lf-icon" ng-class="strRemoveIconCls"></md-icon> ',
                         '{{strCaptionRemove}}',
                     '</md-button>',
-					'<md-button ng-disabled="isDisabled" ng-click="onSubmitClick()" class="md-raised md-warn lf-ng-md-file-input-button lf-ng-md-file-input-button-submit" ng-class="strSubmitButtonCls" ng-show="lfFiles.length && !intLoading && isSubmit">',
-                        '<md-icon aria-label="submit" class="lf-icon" ng-class="strSubmitIconCls"></md-icon> ',
+					'<md-button aria-label="submit" ng-disabled="isDisabled" ng-click="onSubmitClick()" class="md-raised md-warn lf-ng-md-file-input-button lf-ng-md-file-input-button-submit" ng-class="strSubmitButtonCls" ng-show="lfFiles.length && !intLoading && isSubmit">',
+                        '<md-icon class="lf-icon" ng-class="strSubmitIconCls"></md-icon> ',
                         '{{strCaptionSubmit}}',
                     '</md-button>',
                     '<md-button aria-label="browse" ng-disabled="isDisabled" ng-click="openDialog($event, this)" class="md-raised lf-ng-md-file-input-button lf-ng-md-file-input-button-brower" ng-class="strBrowseButtonCls">',
@@ -437,8 +437,8 @@
                         if(scope.lfOption.hasOwnProperty('unknowIconCls')){
                             scope.strUnknowIconCls = scope.lfOption.unknowIconCls;
                         }
-                        if(scope.lfOption.hasOwnProperty('strSubmitIconCls')){
-                            scope.strSubmitIconCls = scope.lfOption.strSubmitIconCls;
+                        if(scope.lfOption.hasOwnProperty('submitIconCls')){
+                            scope.strSubmitIconCls = scope.lfOption.submitIconCls;
                         }
                         if(scope.lfOption.hasOwnProperty('strBrowseButtonCls')){
                             scope.strBrowseButtonCls = scope.lfOption.strBrowseButtonCls;
