@@ -326,6 +326,36 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 
 ```
 
+### Function binding
+| Name           | Parameter   | Description |
+| :------------- | :---------- | :--------------------|
+| lf-on-file-click   | file, index    | When click specific file  |
+| lf-on-file-remove  | file, index    | Remove all file      	  |
+| lf-on-submit-click | files 		  | When submit button click  |
+
+```html
+
+<lf-ng-md-file-input lf-files="files" lf-on-file-click="onFileClick" lf-on-file-remove="onFileRemove" lf-on-submit-click="onSubmitClick" submit></lf-ng-md-file-input>
+
+```
+
+```javascript
+
+<script>
+    ...
+	$scope.onFileClick = function(obj,idx){
+		console.log(obj);
+	};
+	$scope.onFileRemove = function(obj,idx){
+		console.log(obj);
+	};
+	$scope.onSubmitClick = function(files) {
+		console.log(files);
+	}
+    ...
+</script>
+
+```
 
 ### API
 
