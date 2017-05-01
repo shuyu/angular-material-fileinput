@@ -175,7 +175,14 @@ In this example I use node.js( express + formidable ) & ( express + multer ) on 
 
 ```html
 
-<lf-ng-md-file-input lf-files="files"></lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files="files" ng-change="onFilesChange()"></lf-ng-md-file-input>
+
+```
+
+###Submit button
+```html
+
+<lf-ng-md-file-input lf-files="files" submit lf-on-submit-click="onSubmitClick"></lf-ng-md-file-input>
 
 ```
 
@@ -400,6 +407,9 @@ The file add by addRemoteFile API will also exist in lf-files array but with a p
 ```
 
 ## Release History
+* v1.6.2
+	* Support ng-change
+	* add submit button
 * v1.5.1
     * Fix fail due to missing injector.
 * v1.5.0
