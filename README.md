@@ -43,7 +43,7 @@ Add `lfNgMdFileInput` as a module dependency for your module.
 var app = angular.module('app', ['ngMaterial','lfNgMdFileInput']);
 ```
 
-##Usage
+## Usage
 
 This angular directive is focus on make material look and upload file base on ajax.
 
@@ -53,7 +53,7 @@ The "lf-files" data is an array variable, object in array contain properties wit
 
 You can observe "lf-files" by using $watch.
 
-####html
+#### html
 
 ```html
 
@@ -61,7 +61,7 @@ You can observe "lf-files" by using $watch.
 
 ```
 
-####javascript
+#### javascript
 
 ```javascript
 
@@ -75,7 +75,7 @@ You can observe "lf-files" by using $watch.
 
 So after you finish select files you need adjust data like below to fit your server side.
 
-####client
+#### client
 
 ```javascript
 
@@ -108,8 +108,8 @@ So after you finish select files you need adjust data like below to fit your ser
 
 In this example I use node.js( express + formidable ) & ( express + multer ) on server side, "Formidable & Multer" is a node module for parsing form data.
 
-####server
-#####Formidable
+#### server
+##### Formidable
 ```javascript
 
     var express = require('express');
@@ -140,7 +140,7 @@ In this example I use node.js( express + formidable ) & ( express + multer ) on 
 
 ```
 
-#####Muliter
+##### Muliter
 ```javascript
 
     var express = require('express');
@@ -171,7 +171,7 @@ In this example I use node.js( express + formidable ) & ( express + multer ) on 
 
 ```
 
-###Basic
+### Basic
 
 ```html
 
@@ -179,21 +179,21 @@ In this example I use node.js( express + formidable ) & ( express + multer ) on 
 
 ```
 
-###Submit button
+### Submit button
 ```html
 
 <lf-ng-md-file-input lf-files="files" submit lf-on-submit-click="onSubmitClick"></lf-ng-md-file-input>
 
 ```
 
-###Aria-label
+### Aria-label
 ```html
 
 <lf-ng-md-file-input lf-files="files" aria-label="fileupload"></lf-ng-md-file-input>
 
 ```
 
-###Accept
+### Accept
 
 Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , video/mp4)
 
@@ -203,7 +203,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Multiple
+### Multiple
 
 ```html
 
@@ -211,7 +211,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Progress
+### Progress
 
 ```html
 
@@ -219,7 +219,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Placeholder
+### Placeholder
 
 ```html
 
@@ -227,7 +227,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Caption
+### Caption
 
 ```html
 
@@ -235,7 +235,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Preview
+### Preview
 
 ```html
 
@@ -243,7 +243,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Drag
+### Drag
 
 ```html
 
@@ -251,7 +251,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Change labels
+### Change labels
 
 ```html
 
@@ -271,7 +271,7 @@ Accept attribute only support MIME type (e.g: image/* , image/jpeg , video/* , v
 
 ```
 
-###Reset internal lfFiles
+### Reset internal lfFiles
 
 ```html
 
@@ -299,7 +299,7 @@ Corresponding javascript controller
 ```
 
 
-###Validation
+### Validation
 
 | Attribute      | Description |
 | :------------- | :---------------- |
@@ -327,7 +327,7 @@ lf-filesize and lf-totalsize must require number with unit . (e.g: 5Byte, 100KB,
 ```
 
 
-###API
+### API
 
 | Name           | Parameter   | Description |
 | :------------- | :---------- | :--------------------|
@@ -365,7 +365,7 @@ The file add by addRemoteFile API will also exist in lf-files array but with a p
 ![screensho 3](http://shuyu.github.io/angular-material-fileinput/example/screenshot/screenshot_2.png)
 
 
-###OPTION
+### OPTION
 
 | Name           | Description |
 | :------------- | :---------------- |
