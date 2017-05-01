@@ -437,7 +437,7 @@ The file add by addRemoteFile API will also exist in lf-files array but with a p
 ```
 
 ## Release History
-* v1.6.2
+* v1.5.2
 	* Support ng-change
 	* add submit button
 * v1.5.1
