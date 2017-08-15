@@ -686,7 +686,7 @@
                             if(obj.isRemote) {
                                 return true;
                             }
-							if(lfFile.name !== undefined && lfFile.name == file.name) {
+							if(lfFile !== undefined && lfFile.name == file.name) {
 								if(lfFile.size == file.size) {
                                     if(lfFile.lastModified == file.lastModified) {
                                         isFileAreadyExist = true;
