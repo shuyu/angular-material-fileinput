@@ -329,6 +329,9 @@
                     }
                     var boolValid = true;
                     modelValue.every(function(obj,idx){
+			 if(obj.lfFile === undefined){
+                            return true;
+                        }   
                          if(obj.lfFile !== undefined && obj.lfFile.type.match(reg)){
                             return true;
                         }else{
