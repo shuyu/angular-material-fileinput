@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shuyu/angular-material-fileinput.git"
+    "url": "git+https://github.com/mohamednizar/angular-material-fileinput.git"
   },
   "keywords": [
     "angular",
@@ -19,9 +19,9 @@
   "author": "shuyu <lfshuyu@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shuyu/angular-material-fileinput/issues"
+    "url": "https://github.com/mohamednizar/angular-material-fileinput/issues"
   },
-  "homepage": "https://github.com/shuyu/angular-material-fileinput#readme",
+  "homepage": "https://github.com/mohamednizar/angular-material-fileinput#readme",
   "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.0",
