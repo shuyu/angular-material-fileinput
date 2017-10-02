@@ -329,6 +329,9 @@
                     }
                     var boolValid = true;
                     modelValue.every(function(obj,idx){
+			 if(obj.lfFile === undefined){
+                            return true;
+                        }   
                          if(obj.lfFile !== undefined && obj.lfFile.type.match(reg)){
                             return true;
                         }else{
@@ -686,7 +689,7 @@
                             if(obj.isRemote) {
                                 return true;
                             }
-							if(lfFile.name !== undefined && lfFile.name == file.name) {
+							if(lfFile !== undefined && lfFile.name == file.name) {
 								if(lfFile.size == file.size) {
                                     if(lfFile.lastModified == file.lastModified) {
                                         isFileAreadyExist = true;

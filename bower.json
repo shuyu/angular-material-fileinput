@@ -1,8 +1,8 @@
 {
-  "name": "lf-ng-md-file-input",
+  "name": "angular-file-input-cm",
   "version": "1.5.2",
   "authors": [
-    "shuyu <lfshuyu@gmail.com>"
+    "nizar <nizarucsc@gmail.com>"
   ],
   "description": "angular material file input with more feature.",
   "keywords": [
@@ -30,7 +30,7 @@
   "dependencies": {
     "angular-material": "^1.0.9"
   },
-  "homepage": "https://github.com/shuyu/angular-material-fileinput",
+  "homepage": "https://github.com/mohamednizar/angular-material-fileinput",
   "main": [
     "./dist/lf-ng-md-file-input.css",
     "./dist/lf-ng-md-file-input.js"
