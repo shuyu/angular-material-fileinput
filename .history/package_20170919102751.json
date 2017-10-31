@@ -1,0 +1,36 @@
+{
+  "name": "angular-file-input-cm",
+  "version": "1.5.2",
+  "description": "angular material file input with more feature.",
+  "main": "./dist/lf-ng-md-file-input.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamednizar/angular-material-fileinput.git"
+  },
+  "keywords": [
+    "angular",
+    "material",
+    "file",
+    "input"
+  ],
+  "author": " "nizar <nizarucsc@gmail.com>"",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohamednizar/angular-material-fileinput/issues"
+  },
+  "homepage": "https://github.com/mohamednizar/angular-material-fileinput#readme",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-minify-css": "^1.2.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  },
+  "dependencies": {
+
+  }
+}
